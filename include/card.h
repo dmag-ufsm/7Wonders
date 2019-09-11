@@ -24,6 +24,7 @@ private:
 public:
     Card();
     Card(int, std::string, int, int);
+    std::string GetName();
 };
 
 }

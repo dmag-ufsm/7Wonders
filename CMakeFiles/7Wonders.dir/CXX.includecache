@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/jio/workspace/dmag/7Wonders/include/player.h
+
+/home/jio/workspace/dmag/7Wonders/main.cpp
+iostream
+-
+card.h
+-
+
+/home/jio/workspace/dmag/7Wonders/src/card.cpp
+card.h
+/home/jio/workspace/dmag/7Wonders/src/card.h
+
+/home/jio/workspace/dmag/7Wonders/src/deck.cpp
+deck.h
+-
+stack
+-
+
+/home/jio/workspace/dmag/7Wonders/src/player.cpp
+../include/player.h
+/home/jio/workspace/dmag/7Wonders/include/player.h
+
+include/card.h
+string
+-
+
+include/deck.h
+card.h
+-
+stack
+-
+

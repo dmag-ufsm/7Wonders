@@ -71,3 +71,8 @@ Thumbs.db
 *.dll
 *.exe
 
+# Other
+# --------
+*.user
+compile_commands.json
+CMakeLists.txt.user
