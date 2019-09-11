@@ -7,7 +7,7 @@ This implementation will be used for testing data mining and bots.
 # Compilation
 Run
 ```
-cmake
+cmake .
 make
 ```
  on the project root, and you'll end up with a "7Wonders" binary file.
