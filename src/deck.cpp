@@ -25,6 +25,11 @@ void Deck::Shuffle(){
 
 void Deck::IncludeGuild(){
 
+    //add the cards
+
+    // and then shuffle
+    this->Shuffle();
+
 }
 
 Card Deck::GetTop(){

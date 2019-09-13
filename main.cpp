@@ -2,11 +2,16 @@
 #include <card.h>
 #include <player.h>
 #include <deck.h>
+#include <amqpcpp.h>
 
 using namespace std;
 using namespace DMAG;
 
 void game_loop(Deck _d){
+
+    // create connection with RabbitMQ
+
+
     //show info
 
     while(!_d.IsEmpty()){
@@ -19,7 +24,7 @@ void game_loop(Deck _d){
     //end game?
 }
 
-int main(int argc, char **argv)
+int main()
 {
     Deck d = Deck();
     game_loop(d);

@@ -6,7 +6,10 @@
 namespace CARD_TYPE {
 enum type{
     guild,
-    research
+    research,
+    army,
+    resource,
+
 };
 
 }

@@ -4,9 +4,11 @@ namespace DMAG {
 Player::Player()
 {
     this->score = 0;
+    this->victory_points = 0;
 }
 
 void Player::CalculateScore(){
+
     return;
 }
 
