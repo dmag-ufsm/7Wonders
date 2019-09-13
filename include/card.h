@@ -28,6 +28,7 @@ public:
     Card();
     Card(int, std::string, int, int);
     std::string GetName();
+    int GetValue();
 };
 
 }

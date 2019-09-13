@@ -8,8 +8,13 @@ Player::Player()
 }
 
 void Player::CalculateScore(){
-
-    return;
+    int _score = 0;
+    Card _c;
+    do{
+        _c = _deck.GetTop();
+        _score += _c.GetValue();
+    }while(!_deck.IsEmpty());
+    this->score = _score;
 }
 
 int Player::GetScore(){

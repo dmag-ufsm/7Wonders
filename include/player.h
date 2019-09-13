@@ -12,7 +12,7 @@ class Player
 private:
     int score,
         victory_points;
-    Deck _deck;
+        Deck _deck;
 public:
     Player();
     void CalculateScore();

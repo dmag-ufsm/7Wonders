@@ -2,21 +2,32 @@
 #include <card.h>
 #include <player.h>
 #include <deck.h>
-#include <amqpcpp.h>
+#include <amqp.h> // The rabbit-mq broker library
+#include <list>
 
 using namespace std;
 using namespace DMAG;
 
-void game_loop(Deck _d){
+// define global variables
+Deck d;
+list<Player> player_list;
+
+// Initiate global variables
+
+void game_init(int _players){
+    d = Deck();
+    for(int i = 0; i<_players; i++){
+        player_list.push_back(Player());
+    }
+    return;
+}
+
+void game_loop(){
 
     // create connection with RabbitMQ
 
-
     //show info
 
-    while(!_d.IsEmpty()){
-       cout << _d.GetTop().GetName() << endl;
-    }
     //get commands
 
     //calculate stuff
@@ -26,8 +37,8 @@ void game_loop(Deck _d){
 
 int main()
 {
-    Deck d = Deck();
-    game_loop(d);
+    game_init(3);
+    game_loop();
     return 0;
 }
 

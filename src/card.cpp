@@ -18,4 +18,8 @@ Card::Card(int _id, std::string _name, int _value, int _type){
 std::string Card::GetName(){
     return this->_name;
 }
+
+int Card::GetValue() {
+    return this->_value;
+}
 }
