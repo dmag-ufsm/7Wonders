@@ -3,6 +3,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/7Wonders.dir/src/card.cpp.o"
   "CMakeFiles/7Wonders.dir/src/player.cpp.o"
   "CMakeFiles/7Wonders.dir/src/deck.cpp.o"
+  "CMakeFiles/7Wonders.dir/src/messager.cpp.o"
   "7Wonders.pdb"
   "7Wonders"
 )

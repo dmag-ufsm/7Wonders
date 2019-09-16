@@ -7,6 +7,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/jio/workspace/dmag/7Wonders/main.cpp" "/home/jio/workspace/dmag/7Wonders/CMakeFiles/7Wonders.dir/main.cpp.o"
   "/home/jio/workspace/dmag/7Wonders/src/card.cpp" "/home/jio/workspace/dmag/7Wonders/CMakeFiles/7Wonders.dir/src/card.cpp.o"
   "/home/jio/workspace/dmag/7Wonders/src/deck.cpp" "/home/jio/workspace/dmag/7Wonders/CMakeFiles/7Wonders.dir/src/deck.cpp.o"
+  "/home/jio/workspace/dmag/7Wonders/src/messager.cpp" "/home/jio/workspace/dmag/7Wonders/CMakeFiles/7Wonders.dir/src/messager.cpp.o"
   "/home/jio/workspace/dmag/7Wonders/src/player.cpp" "/home/jio/workspace/dmag/7Wonders/CMakeFiles/7Wonders.dir/src/player.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")

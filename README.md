@@ -11,3 +11,6 @@ cmake .
 make
 ```
  on the project root, and you'll end up with a "7Wonders" binary file.
+
+
+# ToDo

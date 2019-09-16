@@ -11,12 +11,12 @@ set(SOURCES
     src/card.cpp
     src/player.cpp
     src/deck.cpp
-    )
+    src/messager.cpp)
 
 set(HEADERS
     include/card.h
     include/player.h
     include/deck.h
-    )
+    include/messager.h)
 
 add_executable(7Wonders main.cpp ${SOURCES} ${HEADERS})
