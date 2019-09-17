@@ -1,3 +1,4 @@
 /home/jio/workspace/dmag/7Wonders/CMakeFiles/rebuild_cache.dir
-/home/jio/workspace/dmag/7Wonders/CMakeFiles/7Wonders.dir
 /home/jio/workspace/dmag/7Wonders/CMakeFiles/edit_cache.dir
+/home/jio/workspace/dmag/7Wonders/CMakeFiles/7Wonders.dir
+/home/jio/workspace/dmag/7Wonders/CMakeFiles/tests.dir

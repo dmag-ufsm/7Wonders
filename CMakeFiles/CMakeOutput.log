@@ -1105,3 +1105,35 @@ make[1]: Leaving directory '/home/jio/workspace/dmag/7Wonders/CMakeFiles/CMakeTm
     Feature record: CXX_FEATURE:0cxx_variable_templates
     Feature record: CXX_FEATURE:0cxx_variadic_macros
     Feature record: CXX_FEATURE:0cxx_variadic_templates
+Determining if the include file pthread.h exists passed with the following output:
+Change Dir: /home/jio/workspace/dmag/7Wonders/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_80d42/fast 
+make[1]: Entering directory '/home/jio/workspace/dmag/7Wonders/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_80d42.dir/build.make CMakeFiles/cmTC_80d42.dir/build
+make[2]: Entering directory '/home/jio/workspace/dmag/7Wonders/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_80d42.dir/CheckIncludeFile.cxx.o
+/usr/bin/c++     -o CMakeFiles/cmTC_80d42.dir/CheckIncludeFile.cxx.o -c /home/jio/workspace/dmag/7Wonders/CMakeFiles/CMakeTmp/CheckIncludeFile.cxx
+Linking CXX executable cmTC_80d42
+/home/jio/.local/programs/clion/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_80d42.dir/link.txt --verbose=1
+/usr/bin/c++       CMakeFiles/cmTC_80d42.dir/CheckIncludeFile.cxx.o  -o cmTC_80d42 
+make[2]: Leaving directory '/home/jio/workspace/dmag/7Wonders/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/home/jio/workspace/dmag/7Wonders/CMakeFiles/CMakeTmp'
+
+
+Determining if the function pthread_create exists in the pthread passed with the following output:
+Change Dir: /home/jio/workspace/dmag/7Wonders/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_a2e22/fast 
+make[1]: Entering directory '/home/jio/workspace/dmag/7Wonders/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_a2e22.dir/build.make CMakeFiles/cmTC_a2e22.dir/build
+make[2]: Entering directory '/home/jio/workspace/dmag/7Wonders/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_a2e22.dir/CheckFunctionExists.cxx.o
+/usr/bin/c++    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_a2e22.dir/CheckFunctionExists.cxx.o -c /home/jio/workspace/dmag/7Wonders/CMakeFiles/CheckLibraryExists/CheckFunctionExists.cxx
+Linking CXX executable cmTC_a2e22
+/home/jio/.local/programs/clion/bin/cmake/linux/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a2e22.dir/link.txt --verbose=1
+/usr/bin/c++   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_a2e22.dir/CheckFunctionExists.cxx.o  -o cmTC_a2e22 -lpthread 
+make[2]: Leaving directory '/home/jio/workspace/dmag/7Wonders/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/home/jio/workspace/dmag/7Wonders/CMakeFiles/CMakeTmp'
+
+

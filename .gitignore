@@ -1,4 +1,4 @@
-# This file is used to ignore files which are generated
+# This file is used to ignore fi*les which are generated
 # ----------------------------------------------------------------------------
 
 *~
@@ -76,5 +76,6 @@ Thumbs.db
 *.user
 compile_commands.json
 CMakeLists.txt.user
-CMakeFiles/*
 CMakeCache*
+/tests
+/CMakeFiles/
