@@ -3,6 +3,7 @@
 
 #include <deck.h>
 #include <card.h>
+#include <list>
 
 namespace DMAG {
 
@@ -13,10 +14,12 @@ private:
     int score,
         victory_points;
         Deck _deck;
+        void CalculateScore();
 public:
     Player();
-    void CalculateScore();
     int GetScore();
+    void ReceiveCard(Card);
+    void ReceiveCards(std::list<Card>);
 
 };
 }

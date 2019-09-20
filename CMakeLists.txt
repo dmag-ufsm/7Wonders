@@ -22,5 +22,5 @@ set(HEADERS
     include/messager.h)
 
 add_executable(7Wonders main.cpp ${SOURCES} ${HEADERS})
-add_executable(tests src/tests.cpp)
+add_executable(tests src/tests.cpp ${SOURCES} ${HEADERS})
 target_link_libraries(tests ${GTEST_LIBRARIES} pthread)

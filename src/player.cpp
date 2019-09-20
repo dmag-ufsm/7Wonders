@@ -1,4 +1,4 @@
-#include "../include/player.h"
+#include <player.h>
 
 namespace DMAG {
 Player::Player()
@@ -8,17 +8,23 @@ Player::Player()
 }
 
 void Player::CalculateScore(){
-    int _score = 0;
-    Card _c;
-    do{
-        _c = _deck.GetTop();
-        _score += _c.GetValue();
-    }while(!_deck.IsEmpty());
-    this->score = _score;
+    this->score = this->_deck.GetPoints();
 }
 
 int Player::GetScore(){
+    this->CalculateScore();
     return this->score;
+}
+
+void Player::ReceiveCard(Card _c) {
+    this->_deck.Insert(_c);
+}
+
+void Player::ReceiveCards(std::list<Card> _c) {
+    for(std::list<Card>::iterator it = _c.begin(); it != _c.end(); ++it){
+        this->ReceiveCard(*it);
+    }
+
 }
 
 }

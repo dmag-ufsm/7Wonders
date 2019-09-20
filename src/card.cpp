@@ -6,6 +6,7 @@ namespace DMAG {
 Card::Card()
 {
 this->_type = CARD_TYPE::materials;
+this->_value = 10;
 }
 
 Card::Card(int _id, std::string _name, int _value, int _type){
