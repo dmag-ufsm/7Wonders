@@ -1,1 +1,0 @@
-/usr/bin/c++     CMakeFiles/7Wonders.dir/main.cpp.o CMakeFiles/7Wonders.dir/src/card.cpp.o CMakeFiles/7Wonders.dir/src/player.cpp.o CMakeFiles/7Wonders.dir/src/deck.cpp.o CMakeFiles/7Wonders.dir/src/messager.cpp.o  -o 7Wonders 

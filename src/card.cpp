@@ -5,7 +5,7 @@ namespace DMAG {
 
 Card::Card()
 {
-this->_type = CARD_TYPE::research;
+this->_type = 1;
 }
 
 Card::Card(int _id, std::string _name, int _value, int _type){
