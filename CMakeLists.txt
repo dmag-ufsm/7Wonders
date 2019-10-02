@@ -7,8 +7,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 if (NOT BUILD_SHARED_LIBS)
     add_definitions(-DAMQP_STATIC)
 endif()
+
 include_directories(include)
-include_directories(${LIBRABBITMQ_INCLUDE_DIRS})
+link_directories(lib)
 
 set(SOURCES
     src/card.cpp
@@ -23,4 +24,4 @@ set(HEADERS
     include/messager.h)
 
 add_executable(7Wonders main.cpp ${SOURCES} ${HEADERS})
-target_link_libraries(7Wonders ${RMQ_LIBRARY_TARGET})
+target_link_libraries(7Wonders librabbitmq.so)

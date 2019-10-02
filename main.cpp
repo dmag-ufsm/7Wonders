@@ -74,9 +74,9 @@ void game_loop(){
 
 int main()
 {
-    game_init(3);
-    game_loop();
-    game_close();
+   // game_init(3);
+   // game_loop();
+   // game_close();
 
     return 0;
 }
