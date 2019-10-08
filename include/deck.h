@@ -2,14 +2,14 @@
 #define DECK_H
 
 #include <card.h>
-#include <stack>
+#include <list>
 namespace DMAG {
 
 class Deck
 {
 private:
-    std::stack<Card> _deck;
-    std::stack<Card> _discard;
+    std::list<Card> _deck;
+    std::list<Card> _discard;
 public:
     Deck();
     void Shuffle();

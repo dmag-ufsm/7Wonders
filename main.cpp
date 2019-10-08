@@ -24,6 +24,8 @@ void rabbit_start(){
     int port = 5672;
     amqp_bytes_t queuename;
 
+	conn = amqp_new_connection();
+
     {
         amqp_queue_declare_ok_t *r = amqp_queue_declare(conn, 1, amqp_empty_bytes, 0,1,0,1,amqp_empty_table);
         queuename = amqp_bytes_malloc_dup(r->queue);
@@ -31,6 +33,9 @@ void rabbit_start(){
             cerr<<"Failed to initialize connection with Rabbit-MQ"<<endl;
             exit(1);
         }
+		else{
+			cerr << "Did not fail to initialize" << endl;
+		}
     }
     amqp_queue_bind(conn, 1, queuename, amqp_cstring_bytes(exchange),
                     amqp_cstring_bytes(binding), amqp_empty_table);
@@ -78,6 +83,16 @@ int main()
    // game_loop();
    // game_close();
 
+    char mensagem[] = "Isto eh um teste!\n";
+    amqp_bytes_t message_bytes;
+    message_bytes.len = sizeof(mensagem);
+    message_bytes.bytes = mensagem;
+	rabbit_start();
+     amqp_basic_publish(conn, 1, amqp_cstring_bytes("amq.direct"),
+            amqp_cstring_bytes("Game_Control"), 0, 0, NULL,
+            message_bytes);
+
+    rabbit_end();
     return 0;
 }
 
