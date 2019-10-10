@@ -19,7 +19,12 @@ std::string Card::GetName(){
     return this->_name;
 }
 
-int Card::GetValue() {
+int Card::GetValue(){
     return this->_value;
 }
+
+int Card::GetType(){
+    return this->_type;
+}
+
 }

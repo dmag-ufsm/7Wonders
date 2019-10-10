@@ -22,7 +22,7 @@ namespace CARD_ID{
 
 		};
 	}
-	
+
 	namespace MANUFACTURED{
 		enum{
 			loom,
@@ -48,7 +48,7 @@ namespace CARD_ID{
 			senate,
 		};
 	}
-	
+
 	namespace COMMERCIAL{
 		enum{
 			tavern,
@@ -129,6 +129,7 @@ public:
     Card(int, std::string, int, int);
     std::string GetName();
     int GetValue();
+    int GetType();
 };
 
 }
