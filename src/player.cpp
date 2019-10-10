@@ -12,7 +12,10 @@ Player::Player()
 
 void Player::CalculateScore(){
     int _score = this->victory_points + this->conflict_tokens + this->coins;
-    //if (wonder_built) this->score += wonder_points // need to figure out how we'll represent wonders before
+    if (wonder_built) {
+        int wonder_points = 0; // need to figure out how we'll represent wonders to calculate this!
+        _score += wonder_points;
+    }
     //Card _c;
     this->score = _score;
 }
@@ -33,7 +36,7 @@ void Player::Discard(Card c){
 void Player::Battle(Player p){
     int current_age_value = 0; // we'll need to get the actual value for this!
     // win condition
-    if (this->conflict_tokens > p.conflict_tokens) {
+    if (this->conflict_tokens > p.conflict_tokens){
         this->conflict_tokens += current_age_value;
         // Age I   ->  +1 token
         // Age II  ->  +3 tokens
