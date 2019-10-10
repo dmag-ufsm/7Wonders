@@ -14,14 +14,12 @@ link_directories(lib)
 set(SOURCES
     src/card.cpp
     src/player.cpp
-    src/deck.cpp
-    src/messager.cpp)
+	)
 
 set(HEADERS
     include/card.h
     include/player.h
-    include/deck.h
-    include/messager.h)
+	)
 
 add_executable(7Wonders main.cpp ${SOURCES} ${HEADERS})
 target_link_libraries(7Wonders librabbitmq.so)
