@@ -1,5 +1,4 @@
 #include "../include/player.h"
-#include <algorithm>
 
 namespace DMAG {
 Player::Player()
@@ -32,8 +31,8 @@ void Player::Discard(Card c){
 }
 
 void Player::Battle(Player p){
-    // win condition
     int current_age_value = 0; // we'll need to get the actual value for this!
+    // win condition
     if (this->conflict_tokens > p.conflict_tokens) {
         this->conflict_tokens += current_age_value;
         // Age I   ->  +1 token
