@@ -36,15 +36,15 @@ void Player::Discard(Card c){
 
 void Player::Battle(Player p){
     int current_age_value = 0; // we'll need to get the actual value for this!
-    int military_cards = 0; // we'll also need to calculate the military cards
-    int enemy_military_cards = 0;
+    int shields = 0; // we'll also need to calculate the total number of shields from the military cards
+    int enemy_shields = 0;
     // win condition
-    if (military_cards > enemy_military_cards){
+    if (shields > enemy_shields){
         this->victory_tokens += current_age_value;
         // Age I   ->  +1 victory token
         // Age II  ->  +3 victory tokens
         // Age III ->  +5 victory tokens
-    } else if (military_cards < enemy_military_cards){
+    } else if (shields < enemy_shields){
         this->defeat_tokens++;
         p.victory_tokens += current_age_value;
     } // else (equal number of military cards) none are taken
