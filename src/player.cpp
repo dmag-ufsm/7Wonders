@@ -47,7 +47,7 @@ void Player::Battle(Player p){
     } else if (military_cards < enemy_military_cards){
         this->defeat_tokens++;
         p.victory_tokens += current_age_value;
-    } // else (equal number of tokens) none are taken
+    } // else (equal number of military cards) none are taken
 }
 
 }
