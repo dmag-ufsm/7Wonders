@@ -5,13 +5,14 @@ Player::Player()
 {
     this->score = 0;
     this->victory_points = 0;
-    this->conflict_tokens = 0;
+    this->victory_tokens = 0;
+    this->defeat_tokens = 0;
     this->coins = 3; // every player gets 3 coins at the start of each game
     this->wonder_built = false;
 }
 
 void Player::CalculateScore(){
-    int _score = this->victory_points + this->conflict_tokens + this->coins;
+    int _score = (this->victory_points + this->victory_tokens + this->coins) - this->defeat_tokens;
     if (wonder_built) {
         int wonder_points = 0; // need to figure out how we'll represent wonders to calculate this!
         _score += wonder_points;
@@ -35,15 +36,17 @@ void Player::Discard(Card c){
 
 void Player::Battle(Player p){
     int current_age_value = 0; // we'll need to get the actual value for this!
+    int military_cards = 0; // we'll also need to calculate the military cards
+    int enemy_military_cards = 0;
     // win condition
-    if (this->conflict_tokens > p.conflict_tokens){
-        this->conflict_tokens += current_age_value;
-        // Age I   ->  +1 token
-        // Age II  ->  +3 tokens
-        // Age III ->  +5 tokens
-    } else if (this->conflict_tokens < p.conflict_tokens){
-        this->conflict_tokens--;
-        p.conflict_tokens += current_age_value;
+    if (military_cards > enemy_military_cards){
+        this->victory_tokens += current_age_value;
+        // Age I   ->  +1 victory token
+        // Age II  ->  +3 victory tokens
+        // Age III ->  +5 victory tokens
+    } else if (military_cards < enemy_military_cards){
+        this->defeat_tokens++;
+        p.victory_tokens += current_age_value;
     } // else (equal number of tokens) none are taken
 }
 

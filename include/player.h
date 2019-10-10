@@ -13,7 +13,8 @@ private:
     std::vector<Card> cards;
     int score;
     int victory_points;
-    int conflict_tokens;
+    int victory_tokens; // conflict victory
+    int defeat_tokens;  // conflict defeat
     int coins;
     bool wonder_built;
     // board?
