@@ -1,15 +1,15 @@
-id,name,side,provides,stage 1 cost,stage 1 provides,stage 2 cost,stage 2 provides,stage 3 cost,stage 3 provides,stage 4 cost,stage 4 provides
-1,Pyramids of Giza,A,+1 Stone,2x Stone,3x Victory points,3x Wood,5x Victory points,4x Stone,7x Victory points,-,-
-2,Hanging Gardens of Babylon,A,+1 Clay,2x Clay,3x Victory points,3x Wood,1x Compass OR 1x Gear OR 1x Tablet,4x Clay,7x Victory points,-,-
-3,Statue of Zeus in Olympia,A,+1 Wood,2x Wood,3x Victory points,2x Stone,1x per Age build structure free,2x Ore,7x Victory points,-,-
-4,Colossus of Rhodos,A,+1 Ore,2x Wood,3x Victory points,3x Clay,2x Shields,4x Ore,7x Victory points,-,-
-5,Temple of Artemis in Ephesus,A,+1 Press,2x Stone,3x Victory points,2x Wood,9x Coin,2x Press,7x Victory points,-,-
-6,Lighthouse of Alexandria,A,+1 Glass,2x Stone,3x Victory points,2x Ore,1x Clay OR 1x Ore OR 1x Wood OR 1x Stone,2x Glass,7x Victory points,-,-
-7,Mausoleum of Halicarnassus,A,+1 Loom,2x Clay,3x Victory points,3x Ore,pick one cards discarded build free,2x Loom,7x Victory points,-,-
-8,Pyramids of Giza,B,+1 Stone,2x Wood,3x Victory points,3x Stone,5x Victory points,3x Clay,5x Victory points,4x Stone AND 1x Press,7x Victory points
-9,Hanging Gardens of Babylon,B,+1 Clay,1x Loom AND 1x Clay,3x Victory points,1x Glass AND 2x Wood,Playing their seventh age card instead discarding,3x Clay AND 1x Press,1x Compass OR 1x Gear OR 1x Tablet,-,-
-10,Statue of Zeus in Olympia,B,+1 Wood,2x Wood, raw materials  neighboring 1x Coin,2x Stone,5x Victory points,2x Ore AND 1x Loom,Copy guild of one neighboring,-,-
-11,Colossus of Rhodos,B,+1 Ore,3x Stone,1x Shields AND 3x Victory points AND 3x Coin,4x Ore,1x Shields AND 4x Victory points AND 4x Coin,-,-,-,-
-12,Temple of Artemis in Ephesus,B,+1 Press,2x Stone,2x Victory points AND 4x Coin,2x Wood,3x Victory points AND 4x Coin,1x Glass AND 1x Loom AND 1x Press,5x Victory points AND 4x Coin,-,-
-13,Lighthouse of Alexandria,B,+1 Glass,2x Clay,1x Clay OR 1x Ore OR 1x Wood OR 1x Stone,2x Wood,1x Glass OR 1x Loom OR 1x Press,3x Stone,7x Victory points,-,-
-14,Mausoleum of Halicarnassus,B,+1 Loom,2x Ore,2x Victory points AND pick one cards discarded build free,3x Clay,1x Victory points AND pick one cards discarded build free,1x Glass AND 1x Loom AND 1x Press,pick one cards discarded build free,-,-
+id,full name,name,side,provides,stage 1 cost,stage 1 provides,stage 2 cost,stage 2 provides,stage 3 cost,stage 3 provides,stage 4 cost,stage 4 provides
+1,The Pyramids of Giza,Gizah,A,+1 Stone,2x Stone,3x Victory points,3x Wood,5x Victory points,4x Stone,7x Victory points,-,-
+2,The Hanging Gardens of Babylon,Babylon,A,+1 Clay,2x Clay,3x Victory points,3x Wood,Compass OR Gear OR Tablet (the most advantageous),4x Clay,7x Victory points,-,-
+3,The Statue of Zeus in Olympia,Olympia,A,+1 Wood,2x Wood,3x Victory points,2x Stone,"Once per Age, build a structure of their choice for free",2x Ore,7x Victory points,-,-
+4,The Colossus of Rhodes,Rhodos,A,+1 Ore,2x Wood,3x Victory points,3x Clay,2x Shields,4x Ore,7x Victory points,-,-
+5,The Temple of Artemis in Ephesus,Ephesos,A,+1 Press,2x Stone,3x Victory points,2x Wood,9x Coins,2x Press,7x Victory points,-,-
+6,The Lighthouse of Alexandria,Alexandria,A,+1 Glass,2x Stone,3x Victory points,2x Ore,1x Clay OR 1x Ore OR 1x Wood OR 1x Stone,2x Glass,7x Victory points,-,-
+7,The Mausoleum of Halicarnassus,Halikarnassos,A,+1 Loom,2x Clay,3x Victory points,3x Ore,"Look through all of the cards discarded since the beginning of the game, pick one, and build it for free",2x Loom,7x Victory points,-,-
+8,The Pyramids of Giza,Gizah,B,+1 Stone,2x Wood,3x Victory points,3x Stone,5x Victory points,3x Clay,5x Victory points,4x Stone AND 1x Press,7x Victory points
+9,The Hanging Gardens of Babylon,Babylon,B,+1 Clay,1x Loom AND 1x Clay,3x Victory points,1x Glass AND 2x Wood,"Play your seventh Age card instead of discarding it",3x Clay AND 1x Press,1x Compass OR 1x Gear OR 1x Tablet,-,-
+10,The Statue of Zeus in Olympia,Olympia,B,+1 Wood,2x Wood, raw materials  neighboring 1x Coin,2x Stone,5x Victory points,2x Ore AND 1x Loom,Copy a Guild in the neighboring cities (the most advantageous),-,-
+11,The Colossus of Rhodes,Rhodos,B,+1 Ore,3x Stone,1x Shields AND 3x Victory points AND 3x Coin,4x Ore,1x Shields AND 4x Victory points AND 4x Coin,-,-,-,-
+12,The Temple of Artemis in Ephesus,Ephesos,B,+1 Press,2x Stone,2x Victory points AND 4x Coin,2x Wood,3x Victory points AND 4x Coin,1x Glass AND 1x Loom AND 1x Press,5x Victory points AND 4x Coin,-,-
+13,The Lighthouse of Alexandria,Alexandria,B,+1 Glass,2x Clay,1x Clay OR 1x Ore OR 1x Wood OR 1x Stone,2x Wood,1x Glass OR 1x Loom OR 1x Press,3x Stone,7x Victory points,-,-
+14,The Mausoleum of Halicarnassus,Halikarnassos,B,+1 Loom,2x Ore,"2x Victory points AND Look through all of the cards discarded since the beginning of the game, pick one, and build it for free",3x Clay,"1x Victory points AND Look through all of the cards discarded since the beginning of the game, pick one, and build it for free",1x Glass AND 1x Loom AND 1x Press,"Look through all of the cards discarded since the beginning of the game, pick one, and build it for free",-,-
