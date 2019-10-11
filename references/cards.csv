@@ -1,0 +1,79 @@
+id,name,type,cost,provides,future free to,free with,age,amount / players
+1,Lumber Yard,Raw Material,-,+1 Wood,-,-,1,"3,4"
+2,Stone Pit,Raw Material,-,+1 Stone,-,-,1,"3,5"
+3,Clay Pool,Raw Material,-,+1 Clay,-,-,1,"3,5"
+4,Ore Vein,Raw Material,-,+1 Ore,-,-,1,"3,4"
+5,Tree Farm,Raw Material,1x Coin,+1 Wood OR +1 Clay,-,-,1,6
+6,Excavation,Raw Material,1x Coin,+1 Stone OR +1 Clay,-,-,1,4
+7,Clay Pit,Raw Material,1x Coin,+1 Clay OR +1 Ore,-,-,1,3
+8,Timber Yard,Raw Material,1x Coin,+1 Stone OR +1 Wood,-,-,1,3
+9,Forest Cave,Raw Material,1x Coin,+1 Wood OR +1 Ore,-,-,1,5
+10,Mine,Raw Material,1x Coin,+1 Ore OR +1 Stone,-,-,1,6
+11,Sawmill,Raw Material,1x Coin,+2 Wood,-,-,2,"3,4"
+12,Quarry,Raw Material,1x Coin,+2 Stone,-,-,2,"3,4"
+13,Brickyard,Raw Material,1x Coin,+2 Clay,-,-,2,"3,4"
+14,Foundry,Raw Material,1x Coin,+2 Ore,-,-,2,"3,4"
+15,Loom,Manufactured Good,-,+1 Cloth,-,-,1,"3,6"
+16,Glassworks,Manufactured Good,-,+1 Glass,-,-,1,"3,6"
+17,Press,Manufactured Good,-,+1 Papyrus,-,-,1,"3,6"
+18,Loom,Manufactured Good,-,+1 Cloth,-,-,2,"3,5"
+19,Glassworks,Manufactured Good,-,+1 Glass,-,-,2,"3,5"
+20,Press,Manufactured Good,-,+1 Papyrus,-,-,2,"3,5"
+21,Altar,Civilian Structure,-,+2 Victory points,Temple,-,1,"3,5"
+22,Theater,Civilian Structure,-,+2 Victory points,Statue,-,1,"3,6"
+23,Pawnshop,Civilian Structure,-,+3 Victory points,-,-,1,"4,7"
+24,Baths,Civilian Structure,1x Stone,+3 Victory points,Aqueduct,-,1,"3,7"
+25,Temple,Civilian Structure,1x Wood AND 1x Clay AND 1x Glass,+3 Victory points,Pantheon,Altar,2,"3,6"
+26,Courthouse,Civilian Structure,2x Clay AND 1x Cloth,+4 Victory points,- ,Scriptorium,2,"3,5"
+27,Statue,Civilian Structure,2x Ore AND 1x Wood,+4 Victory points,Gardens,Theater,2,"3,7"
+28,Aqueduct,Civilian Structure,3x Stone,+5 Victory points,-,Baths,2,"3,7"
+29,Gardens,Civilian Structure,2x Clay AND 1x Wood,+5 Victory points,-,Statue,3,"3,4"
+30,Town Hall,Civilian Structure,2x Stone AND 1x Ore AND 1x Glass,+6 Victory points,-,-,3,"3,5,6"
+31,Senate,Civilian Structure,2x Wood AND 1x Stone AND 1x Ore,+6 Victory points,- ,Library,3,"3,5"
+32,Pantheon,Civilian Structure,2x Clay AND 1x Ore AND 1x Glass AND 1x Papyrus AND 1x Cloth,+7 Victory points,-,Temple,3,"3,6"
+33,Palace,Civilian Structure,1x Stone AND 1x Ore AND 1x Wood AND 1x Clay AND 1x Glass AND 1x Papyrus AND 1x Cloth,+8 Victory points,-,-,3,"3,7"
+34,Tavern,Commercial Structure,-,+5 Coins,-,-,1,"4,5,7"
+35,East Trading Post,Commercial Structure,-,You only pay 1 coin when you buy a Raw Material from your clockwise neighbor (right),Forum,-,1,"3,7"
+36,West Trading Post,Commercial Structure,-,You only pay 1 coin when you buy a Raw Material from your counter-clockwise neighbor (left),Forum,-,1,"3,7"
+37,Marketplace,Commercial Structure,-,You only pay 1 coin when you buy a Manufactured Good from your neighbors,Caravansery,-,1,"3,6"
+38,Forum,Commercial Structure,2x Clay,+1 Glass OR +1 Cloth OR +1 Papyrus,Haven,East Trading Post OR West Trading Post,2,"3,6,7"
+39,Caravansery,Commercial Structure,2x Wood,+1 Wood OR +1 Stone OR +1 Ore OR +1 Clay,Lighthouse,Marketplace,2,"3,5,6"
+40,Vineyard,Commercial Structure,-,+1 Coin per Raw Material in the neighboring cities AND in your own city,-,-,2,"3,6"
+41,Bazar,Commercial Structure,-,+2 Coin per Manufactured Good in the neighboring cities AND in your own city,-,-,2,"4,7"
+42,Haven,Commercial Structure,1x Wood AND 1x Ore AND 1x Cloth,+1 Victory point AND +1 Coin per Raw Material in your own city,-,Forum,3,"3,4"
+43,Lighthouse,Commercial Structure,1x Stone AND 1x Glass,+1 Victory point AND +1 Coin per Commercial Structure in your own city,-,Caravansery,3,"3,6"
+44,Chamber of Commerce,Commercial Structure,2x Stone AND 1x Papyrus,+2 Victory points AND +2 Coin per Manufactured Good in your own city,-,-,3,"4,6"
+45,Arena,Commercial Structure,2x Stone AND 1x Ore,+1 Victory point AND +3 Coin per Wonder stage constructed in your own city,-,Dispensary,3,"3,5,7"
+46,Stockade,Military Structure,1x Wood,+1 Shield,-,-,1,"3,7"
+47,Barracks,Military Structure,1x Ore,+1 Shield,-,-,1,"3,5"
+48,Guard Tower,Military Structure,1x Clay,+1 Shield,-,-,1,"3,4"
+49,Walls,Military Structure,3x Stone,+2 Shields,Fortifications,-,2,"3,7"
+50,Training Ground,Military Structure,1x Wood AND 2x Ore,+2 Shields,Circus,-,2,"4,6,7"
+51,Stables,Military Structure,1x Ore AND 1x Clay AND 1x Wood,+2 Shields,-,Apothecary,2,"3,5"
+52,Archery Range,Military Structure,2x Wood AND 1x Ore,+2 Shields,-,Workshop,2,"3,6"
+53,Fortifications,Military Structure,1x Stone AND 3x Ore,+3 Shields,-,Walls,3,"3,7"
+54,Circus,Military Structure,3x Stone AND 1x Ore,+3 Shields,-,Training Ground,3,"4,5,6"
+55,Arsenal,Military Structure,1x Ore AND 2x Wood AND +1 Loom,+3 Shields,-,-,3,"3,7"
+56,Siege Workshop,Military Structure,1x Wood AND 3x Clay,+3 Shields,-,Laboratory,3,"3,5"
+57,Apothecary,Scientific Structure,1x Loom,+1 Compass,Stables OR Dispensary,-,1,"3,5"
+58,Workshop,Scientific Structure,1x Glass,+1 Gear,Archery Range OR Laboratory,-,1,"3,7"
+59,Scriptorium,Scientific Structure,1x Press,+1 Tablet,Courthouse OR Library,-,1,"3,4"
+60,Dispensary,Scientific Structure,2x Ore AND 1x Glass,+1 Compass,Arena OR Lodge,Apothecary,2,"3,4"
+61,Laboratory,Scientific Structure,2x Clay AND 1x Press,+1 Gear,Siege Workshop OR Observatory,Workshop,2,"3,5"
+62,Library,Scientific Structure,2x Stone AND 1x Loom,+1 Tablet,Senate OR University,Scriptorium,2,"3,6"
+63,School,Scientific Structure,1x Wood AND 1x Press,+1 Tablet,Academy OR Study,-,2,"3,7"
+64,Lodge,Scientific Structure,2x Clay AND 1x Loom AND 1x Press,+1 Compass,- ,Dispensary,3,"3,6"
+65,Observatory,Scientific Structure,2x Ore AND 1x Glass AND 1x Loom,+1 Gear,-,Laboratory,3,"3,7"
+66,University,Scientific Structure,2x Wood AND 1x Press AND 1x Glass,+1 Tablet,- ,Library,3,"3,4"
+67,Academy,Scientific Structure,3x Stone AND 1x Glass,+1 Compass,-,School,3,"3,7"
+68,Study,Scientific Structure,1x Wood AND 1x Press AND 1x Loom,+1 Gear,- ,School,3,"3,5"
+69,Workers Guild,Guild,1x Wood AND 1x Stone AND 1x Clay AND 2x Ore,+1 Victory point per Raw Material in the neighboring cities,-,-,3,-
+70,Craftsmens Guild,Guild,2x Stone AND 2x Ore,+2 Victory points per Manufactured Good in the neighboring cities,-,-,3,-
+71,Traders Guild,Guild,1x Cloth AND 1x Papyrus AND 1x Glass,+1 Victory point per Commercial Structure in the neighboring cities,-,-,3,-
+72,Philosophers Guild,Guild,3x Clay AND 1x Papyrus AND 1x Cloth,+1 Victory point per Scientific Structure in the neighboring cities,-,-,3,-
+73,Spies Guild,Guild,3x Clay AND 1x Glass,+1 Victory point per Military Structure in the neighboring cities,-,-,3,-
+74,Magistrates Guild,Guild,3x Wood AND 1x Stone AND 1x Cloth,+1 Victory point per Civilian Structure in the neighboring cities,-,-,3,-
+75,Shipowners Guild,Guild,3x Wood AND 1x Papyrus AND 1x Glass,"+1 Victory point per Raw Material, Manufactured Good and Guilds in the neighboring cities",-,-,3,-
+76,Strategists Guild,Guild,2x Ore AND 1x Stone AND 1x Cloth,+1 Victory point per defeat token in the neighboring cities,-,-,3,-
+77,Scientists Guild,Guild,2x Wood AND 2x Ore AND 1x Papyrus,Compass OR Gear OR Tablet (the most advantageous),-,-,3,-
+78,Builders Guild,Guild,2x Stone AND 2x Clay AND 1x Glass,+1 Victory point per Wonder stage constructed in the neighboring cities and in your own city,-,-,3,-
