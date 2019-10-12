@@ -20,6 +20,21 @@ void Player::CalculateScore(){
     //Card _c;
     this->score = _score;
 }
+    
+// this method must be called every time a scientific card is played by the player to update
+// their earned scientific points (also used to see which symbol is most advantageous in
+// cases where the player has won a free symbol through the Babylon board or guild card)
+int Player::CalculateScientificScore(int gear, int tablet, int compass)
+{
+    // the smallest value among the three is the amount of completed sets
+    int completed_sets = 0;
+    if (gear <= tablet && gear <= compass)    completed_sets = gear;
+    if (tablet <= gear && tablet <= compass)  completed_sets = tablet;
+    if (compass <= gear && compass <= tablet) completed_sets = compass;
+
+    int points_per_set_completed = 7;
+    return (gear * gear) + (tablet * tablet) + (compass * compass) + (completed_sets * points_per_set_completed);
+}
 
 int Player::GetScore(){
     return this->score;
