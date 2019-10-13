@@ -27,7 +27,7 @@ public:
     void CalculateScore();
     int GetScore();
     void Discard(Card c);
-    void Battle(Player p);
+    void Battle(Player p, int age);
     int CalculateScientificScore(int gear, int tablet, int compass);
 
 };

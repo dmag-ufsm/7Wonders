@@ -50,8 +50,18 @@ void Player::Discard(Card c){
     this->coins += 3;
 }
 
-void Player::Battle(Player p){
-    int current_age_value = 0; // we'll need to get the actual value for this!
+void Player::Battle(Player p, int age){
+    int current_age_value = 1;
+    switch (age) {
+        case 2:
+            current_age_value = 3;
+            break;
+        case 3:
+            current_age_value = 5;
+            break;
+        default:
+            break;
+    }
     // win condition
     if (this->shields > p.shields) {
         this->victory_tokens += current_age_value;
