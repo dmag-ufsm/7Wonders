@@ -1,10 +1,15 @@
 #include "../include/player.h"
+#include <list>
 
 namespace DMAG {
 Player::Player()
 {
     this->score = 0;
     this->victory_points = 0;
+}
+
+
+void Player::GiveCards(){
 }
 
 void Player::CalculateScore(){
