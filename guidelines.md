@@ -11,20 +11,26 @@ Ex, atributo "fichas de conflito":
 
 
 
-
 # Classe player:
 
 Atributos:
 - Tabuleiro
 - Moedas
-- Cartas
+- Cartas na mão
+- Cartas jogadas
+- Recursos
+- Escudos
 - Fichas de Conflito
+- Estágios da maravilha construídos
+- Pontos de vitória
+- Jogadores vizinhos
 
 Métodos:
-- Construir Estutura
 - Construir maravilha
+- Construir estrutura
+- Construir guilda
 - Comprar recurso
-- Enviar/receber cartas
+- Receber cartas
 - Descartar
 - Combate
 - Calcular pontuação
@@ -32,11 +38,39 @@ Métodos:
 # Classe card:
 
 Atributos:
-- tipo
-- recursos
-- pontos de vitória
-- poder militar
-- especial
+- Tipo
+- Custo
+- Recursos
+- Pontos de vitória
+- Poder militar
+- Especial
+- Era
+- Unidades por qtd. de jogadores
+- Grátis com
+- Grátis para
 
 Métodos:
+- Pode ser comprada?
 
+# Classe game:
+
+Atributos:
+- Jogadores
+- Número de jogadores
+- Era
+- Rodada
+- Timer da rodada
+- Baralho
+
+Métodos:
+- Em jogo
+- Próxima rodada
+- Novo jogo
+- Distribuir cartas
+- Distribuir maravilhas
+
+# Classe logger:
+
+Atributos:
+
+Métodos:

@@ -2,7 +2,7 @@
 #define PLAYER_H
 
 #include <card.h>
-#include <list>
+#include <vector>
 
 namespace DMAG {
 
@@ -10,15 +10,25 @@ namespace DMAG {
 class Player
 {
 private:
-    int score,
-        victory_points;
-	std::list<Card> hand;
+    std::vector<Card> cardsHand;
+    std::vector<Card> cardsPlayed;
+    int score;
+    int victory_points;
+    int victory_tokens; // conflict victory
+    int defeat_tokens;  // conflict defeat
+    int coins;
+    int shields;
+    bool wonder_built;
+    // board?
+    // wonder?
 
 public:
     Player();
     void CalculateScore();
     int GetScore();
-	void GiveCards();
+    void Discard(Card c);
+    void Battle(Player p, int age);
+    int CalculateScientificScore(int gear, int tablet, int compass);
 
 };
 }
