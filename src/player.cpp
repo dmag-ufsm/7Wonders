@@ -23,7 +23,6 @@ void Player::CalculateScore(){
         int wonder_points = 0; // need to figure out how we'll represent wonders to calculate this!
         _score += wonder_points;
     }
-    //Card _c;
     this->score = _score;
 }
 
@@ -51,12 +50,17 @@ void Player::Discard(Card c){
     //        discard the card he's just taken for three coins, it'll be removed (pop)
     //        from the vector.
     // this'll probably need to be reworked
-    this->cardsPlayed.pop_back();
+    this->cards_played.pop_back();
     this->coins += 3;
+    // todo: put discarded card into the discard deck
 }
 
 void Player::Battle(Player p, int age){
     int current_age_value = 1;
+
+    // Age I   ->  +1 victory token
+    // Age II  ->  +3 victory tokens
+    // Age III ->  +5 victory tokens
     switch (age) {
         case 2:
             current_age_value = 3;
@@ -67,12 +71,9 @@ void Player::Battle(Player p, int age){
         default:
             break;
     }
-    // win condition
+
     if (this->shields > p.shields) {
         this->victory_tokens += current_age_value;
-        // Age I   ->  +1 victory token
-        // Age II  ->  +3 victory tokens
-        // Age III ->  +5 victory tokens
     } else if (this->shields < p.shields) {
         this->defeat_tokens++;
         p.victory_tokens += current_age_value;

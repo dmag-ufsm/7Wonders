@@ -10,8 +10,8 @@ namespace DMAG {
 class Player
 {
 private:
-    std::vector<Card> cardsHand;
-    std::vector<Card> cardsPlayed;
+    std::vector<Card> cards_hand;
+    std::vector<Card> cards_played;
     int score;
     int victory_points;
     int victory_tokens; // conflict victory
@@ -24,6 +24,7 @@ private:
 
 public:
     Player();
+    void GiveCards();
     void CalculateScore();
     int GetScore();
     void Discard(Card c);
