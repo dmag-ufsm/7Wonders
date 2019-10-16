@@ -13,6 +13,11 @@ Ex, atributo "fichas de conflito":
 
 # Classe player:
 
+## Contributors:
+### Pedro
+### Rafael
+
+
 Atributos:
 - Tabuleiro - uchar
 - Moedas - uchar
@@ -36,6 +41,8 @@ Métodos:
 - Calcular pontuação - int
 
 # Classe card:
+## Contributors:
+### Emilio
 
 Atributos:
 - Tipo - uchar
@@ -54,6 +61,12 @@ Métodos:
 - Pode ser comprada?
 
 # Classe game:
+
+## Contributor
+### Julia
+### Julio
+### Rafael
+
 
 Atributos:
 - Jogadores - array<DMAG::Player>
