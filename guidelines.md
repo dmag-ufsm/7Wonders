@@ -14,40 +14,41 @@ Ex, atributo "fichas de conflito":
 # Classe player:
 
 Atributos:
-- Tabuleiro
-- Moedas
-- Cartas na mão
-- Cartas jogadas
+- Tabuleiro - uchar
+- Moedas - uchar
+- Cartas na mão - array
+- Cartas jogadas - array
 - Recursos
-- Escudos
-- Fichas de Conflito
-- Estágios da maravilha construídos
-- Pontos de vitória
-- Jogadores vizinhos
+- Escudos - uchar
+- Fichas de Conflito - signed char
+- Estágios da maravilha construídos - uchar
+- Pontos de vitória - uchar
+- Jogadores vizinhos - DMAG::Player
 
 Métodos:
-- Construir maravilha
-- Construir estrutura
-- Construir guilda
-- Comprar recurso
-- Receber cartas
-- Descartar
-- Combate
-- Calcular pontuação
+- Construir maravilha - void
+- Construir estrutura - void
+- Construir guilda - void
+- Comprar recurso - int 
+- Receber cartas - array
+- Descartar - DMAG::Card
+- Combate - int
+- Calcular pontuação - int
 
 # Classe card:
 
 Atributos:
-- Tipo
-- Custo
-- Recursos
-- Pontos de vitória
-- Poder militar
-- Especial
-- Era
-- Unidades por qtd. de jogadores
-- Grátis com
-- Grátis para
+- Tipo - uchar
+- ID - uchar
+- Custo - array
+- Recursos - array
+- Pontos de vitória - uchar
+- Poder militar - uchar
+- Especial - a definir
+- Era - uchar
+- Unidades por qtd. de jogadores - nada
+- Grátis com - DMAG::Card
+- Grátis para - array<DMAG::Card>
 
 Métodos:
 - Pode ser comprada?
@@ -55,19 +56,23 @@ Métodos:
 # Classe game:
 
 Atributos:
-- Jogadores
-- Número de jogadores
-- Era
-- Rodada
-- Timer da rodada
-- Baralho
+- Jogadores - array<DMAG::Player>
+- Número de jogadores - uchar
+- Era - uchar
+- Rodada - uchar
+- Timer da rodada - nada
+- Baralho - array<deque<DMAG::Card>>
+- Pilha de descarte - array<DMAG::Card>
 
 Métodos:
-- Em jogo
-- Próxima rodada
-- Novo jogo
-- Distribuir cartas
-- Distribuir maravilhas
+- Em jogo - void
+- Próxima rodada - void
+- Novo jogo - void
+- Distribuir cartas - void
+- Trocar cartas - void
+- Distribuir maravilhas - void
+- Escrever em arquivo
+- Ler dos arquivos
 
 # Classe logger:
 
