@@ -2,35 +2,42 @@
 #define PLAYER_H
 
 #include <card.h>
-#include <vector>
+#include <list>
 
 namespace DMAG {
-
 
 class Player
 {
 private:
-    std::vector<Card> cards_hand;
-    std::vector<Card> cards_played;
-    int score;
-    int victory_points;
-    int victory_tokens; // conflict victory
-    int defeat_tokens;  // conflict defeat
-    int coins;
-    int shields;
-    bool wonder_built;
-    // board?
-    // wonder?
+    std::list<DMAG::Card> cards_hand;
+    std::list<DMAG::Card> cards_played;
+    unsigned char board; // wonder
+    unsigned char coins;
+    // resources (?)
+    unsigned char shields;
+    signed char conflict_tokens;
+    unsigned char wonder_stage; // 0 to 3
+    unsigned char victory_points;
+
+    // The neighbour players will need to be pointers, otherwise
+    // the compiler won't know how to deal with them
+    DMAG::Player* player_east;
+    DMAG::Player* player_west;
 
 public:
     Player();
-    void GiveCards();
-    void CalculateScore();
-    int GetScore();
-    void Discard(Card c);
-    void Battle(Player p, int age);
+    void BuildWonder();
+    void BuildStructure();
+    void BuildGuild();
+    void ReceiveCards();
+    DMAG::Card Discard();
+    int BuyResource();
+    int Battle(DMAG::Player p, int age);
     int CalculateScientificScore(int gear, int tablet, int compass);
+    int CalculateScore();
 
+    // Will probably need SetWonder, SetNeighbours?
 };
+
 }
 #endif // PLAYER_H
