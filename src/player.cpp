@@ -97,14 +97,14 @@ int Player::CalculateScientificScore(int gear, int tablet, int compass){
 }
 
 int Player::CalculateScore(){
-    int treasury_points = this->coins/3; // 1 VP for every 3 coins
+    int treasury_score = static_cast<int>(this->coins/3); // 1 VP for every 3 coins
     // TODO: all these:
     // int civil_score = CalculteCivilianScore();
     // int commercial_score = CalculeCommercialScore();
     // int guild_score = CalculateGuildScore();
     // int science_score = CalculateScientificScore();
-    // this->victory_points += civil_score + commercial_score + guild_score +
-    //                         science_score + this->conflict_tokens;
+    // this->victory_points += treasury_score + civil_score + commercial_score +
+    //                         guild_score + science_score + this->conflict_tokens;
     if (this->wonder_stage == 3) {
         int wonder_score = 0; // will need to calculate wonder points
         this->victory_points += wonder_score;
