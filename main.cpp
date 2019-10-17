@@ -6,45 +6,53 @@
 using namespace std;
 using namespace DMAG;
 
-// define global variables
-list<Player> player_list;
+
+class Game{
+	private:
+	list<Player> player_list;
+
+	
+	public:
+	Game(){
+	}
+	// Initiate global variables
+
+	void Init(int _players){
+		for(int i = 0; i<_players; i++){
+			player_list.push_back(Player());
+		}
 
 
-// Initiate global variables
+		return;
+	}
 
-void game_init(int _players){
-    for(int i = 0; i<_players; i++){
-        player_list.push_back(Player());
-    }
+	void Close(){
 
+		// deallocate memory
+	}
+	void Loop(){
 
-    return;
-}
+		// create connection with RabbitMQ
 
-void game_close(){
+		//show info
 
-    // deallocate memory
-}
-void game_loop(){
+		//get commands
 
-    // create connection with RabbitMQ
+		//calculate stuff
 
-    //show info
+		//end game?
+	}
+};
 
-    //get commands
-
-    //calculate stuff
-
-    //end game?
-}
 
 int main()
 {
-   // game_init(3);
-   // game_loop();
-   // game_close();
+	Game g;
+	g.Init(3);
+	g.Loop();
+	g.Close();
 
-    return 0;
+	return 0;
 }
 
 

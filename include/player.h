@@ -36,6 +36,8 @@ public:
     int CalculateScientificScore(int gear, int tablet, int compass);
     int CalculateScore();
 
+	void SetNeighbours(DMAG::Player *east, DMAG::Player * west);
+
     // Will probably need SetWonder, SetNeighbours?
 };
 

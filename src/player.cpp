@@ -112,4 +112,8 @@ int Player::CalculateScore(){
     return this->victory_points;
 }
 
+void Player::SetNeighbours(DMAG::Player *east, DMAG::Player *west){
+	this->player_east = east;
+	this->player_west = west;
+}
 }
