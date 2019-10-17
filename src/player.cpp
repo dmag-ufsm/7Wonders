@@ -105,8 +105,8 @@ int Player::CalculateScore(){
     // int science_score = CalculateScientificScore();
     // this->victory_points += treasury_score + civil_score + commercial_score +
     //                         guild_score + science_score + this->conflict_tokens;
-    if (this->wonder_stage == 3) {
-        int wonder_score = 0; // will need to calculate wonder points
+    if (this->wonder_stage > 0) {
+        int wonder_score = 0; // we will need to calculate wonder points based on each stage effect
         this->victory_points += wonder_score;
     }
     return this->victory_points;
