@@ -89,7 +89,32 @@ Métodos:
 
 # Anotações
 
-Ao invés de usar um booleano pra verificar se o jogo ainda está acontecendo, 
+* Ao invés de usar um booleano pra verificar se o jogo ainda está acontecendo, 
 poderiamos trocar por um verificador do turno. Cada jogo tem uma duração definida
 em 7 (ou 6, não tô muito certo agora) turnos por era, totalizando 21 (ou 18, né)
 turnos no total. Então se o número de turnos = 21|18, o jogo termina.
+
+* Outras coisas... (Pedro)
+    * Revisando as regras aqui, estou começando a achar que talvez seja
+      necessário criar uma classe para representar as maravilhas. Vejam bem:
+      para cada estágio da maravilha, temos
+        * recursos necessários para construir o estágio
+        * efeito especial de cada estágio da maravilha (normalmente é VP, mas pode ser outra
+          coisa)
+    
+      Se fôssemos implementar essas variações em Player, por exemplo, teríamos:
+
+      14 (número de tabuleiros) x 3 (estágios) = 42 variações. Claro que isso
+      vai dar um trabalho desgraçado de qualquer forma, mas parece overkill
+      cuidar caso a caso em Player. Seria bom se tivéssemos esses atributos de
+      recursos necessários e efeito especial já definidos.
+
+      Uma solução seria representar cada estágio da maravilha como uma
+      carta, mas não me parece uma boa ideia. 
+
+    * Sobre "baixar" uma carta ("Construir Estrutura") em Player...
+      Ok, o player tem uma lista de cartas na mão, mas como vamos comunicar
+      da Main (Game) *qual* carta da mão do jogador ele vai querer baixar? A
+      função de Construir Estrutura simplesmente receberia como parâmetro a
+      carta que o Player quer baixar?
+      (acho que isso foi vagamente discutido)
