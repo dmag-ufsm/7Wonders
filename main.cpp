@@ -9,39 +9,83 @@ using namespace DMAG;
 
 class Game{
 	private:
-	list<Player> player_list;
+		list<Player> player_list;
+		unsigned char number_of_players;
+		unsigned char era;
+		unsigned char turn;
+		list<Card> deck[3]; //3 eras, so 3 decks
+		list<Card> discard_pile;
 
-	
+
 	public:
-	Game(){
-	}
-	// Initiate global variables
 
-	void Init(int _players){
-		for(int i = 0; i<_players; i++){
-			player_list.push_back(Player());
+		Game(){
+			this->number_of_players = 0;
+			this->era = 0;
+			this->turn = 0;
+		}
+		// Initiate global variables
+
+		bool InGame(){
+
+			if(turn < 21) // Total number of turns in a game
+				return true;
+
+			return false;
+		}
+
+		void NextTurn(){
+		}
+
+		void GiveCards(){
+		}
+
+		void GiveWonders(){
 		}
 
 
-		return;
-	}
+		/*
+		 * This method will write to the file for other
+		 * processes to read, and will return an execution
+		 * code.
+		 */
+		int WriteToFile(){
+			return 0;
+		}
 
-	void Close(){
+		/*
+		 * The return code could be the number of read files,
+		 * or the number of read bytes.
+		 */
+		int ReadFromFile(){
+			return 0;
+		}
 
-		// deallocate memory
-	}
-	void Loop(){
+		void Init(int _players){
+			for(int i = 0; i<_players; i++){
+				player_list.push_back(Player());
+			}
 
-		// create connection with RabbitMQ
 
-		//show info
+			return;
+		}
 
-		//get commands
+		void Close(){
 
-		//calculate stuff
+			// deallocate memory
+		}
+		void Loop(){
 
-		//end game?
-	}
+			// create connection with RabbitMQ
+
+			//show info
+
+			//get commands
+
+			//calculate stuff
+
+			//end game?
+		}
 };
 
 

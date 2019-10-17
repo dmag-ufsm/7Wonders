@@ -78,7 +78,7 @@ Atributos:
 - Pilha de descarte - array<DMAG::Card>
 
 Métodos:
-- Em jogo - void
+- Em jogo - bool // vai ser chamado no while() do loop principal
 - Próxima rodada - void
 - Novo jogo - void
 - Distribuir cartas - void
@@ -87,8 +87,9 @@ Métodos:
 - Escrever em arquivo
 - Ler dos arquivos
 
-# Classe logger:
+# Anotações
 
-Atributos:
-
-Métodos:
+Ao invés de usar um booleano pra verificar se o jogo ainda está acontecendo, 
+poderiamos trocar por um verificador do turno. Cada jogo tem uma duração definida
+em 7 (ou 6, não tô muito certo agora) turnos por era, totalizando 21 (ou 18, né)
+turnos no total. Então se o número de turnos = 21|18, o jogo termina.
