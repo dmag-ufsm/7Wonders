@@ -14,13 +14,11 @@ link_directories(lib)
 set(SOURCES
     src/card.cpp
     src/player.cpp
-    src/game.cpp
 	)
 
 set(HEADERS
     include/card.h
     include/player.h
-    include/game.h
 	)
 
 add_executable(7Wonders main.cpp ${SOURCES} ${HEADERS})
