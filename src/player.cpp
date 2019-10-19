@@ -13,42 +13,41 @@ Player::Player()
     this->victory_points = 0;
 }
 
-void Player::BuildWonder() {
+void Player::BuildWonder(){
     // TODO: check to see if the player can build a stage of the wonder
 
     // this->wonder_stage++;
 }
 
-void Player::BuildStructure() {
+void Player::BuildStructure(){
     // TODO: check to see if you can build the structure and then play the card
 }
 
-void Player::BuildGuild() {
+void Player::BuildGuild(){
     // TODO: check to see if you can build the structure and then play the card
 }
 
-void Player::ReceiveCards() {
+void Player::ReceiveCards(){
     // TODO
 }
 
 DMAG::Card Player::Discard(){
-    // logic: the card taken at a certain round will be pushed back to the list of played cards,
-    //        effectively making it the last one. Therefore, if the player decides do discard
-    //        the card he's just taken for three coins, it'll be removed (pop) from the list.
+    // The card taken at a certain round will be pushed back to the list of played cards,
+    // effectively making it the last one. Therefore, if the player decides to discard
+    // the card he's just taken for three coins, it'll be removed (pop) from the list.
     this->coins += 3;
     Card c = this->cards_played.back();
     this->cards_played.pop_back();
     return c;
 }
 
-int Player::BuyResource() {
+int Player::BuyResource(){
     // TODO: *thinking*
     return 0;
 }
 
 int Player::Battle(Player p, int age){
     int current_age_value = 1;
-
     // Age I   ->  +1 victory token
     // Age II  ->  +3 victory tokens
     // Age III ->  +5 victory tokens
@@ -69,19 +68,45 @@ int Player::Battle(Player p, int age){
     } else if (this->shields < p.shields) {
         this->conflict_tokens--;
         return -1; // -1 -> lost
-    } else
-        return 0; // 0 -> draw
-
-    /*
-    if (this->shields > p.shields) {
-        this->victory_tokens += current_age_value;
-    } else if (this->shields < p.shields) {
-        this->defeat_tokens++;
-        p.victory_tokens += current_age_value;
     }
-    */
+    return 0; // 0 -> draw
 }
 
+int Player::CalculateCivilianScore(){
+    // Each Civilian (blue) structure gives a fixed number of VPs.
+    int civil_score = 0;
+
+    for (DMAG::Card const& card : this->cards_played) {
+        // This will probably need to be modified depending on how Card will be implemented.
+        if (card.GetType() == CARD_TYPE::civilian) {
+            civil_score += card.GetValue();
+        }
+    }
+
+    return civil_score;
+}
+
+int Player::CalculateCommercialScore(){
+    // Age III commercial structures (yellow) grant victory points based on certain
+    // structures a player has built.
+    int comm_score = 0;
+
+    // TODO
+
+    return comm_score;
+}
+
+int Player::CalculateGuildScore(){
+    // The guilds (purple) provide several means of gaining victory points, most of
+    // which are based on the types of structure a player and/or his neighbors have built.
+    int guild_score = 0;
+
+    // TODO
+
+    return guild_score;
+}
+
+// CalculateScientificScore(...) will probably need to be reworked?
 // this method must be called every time a scientific card is played by the player to update
 // their earned scientific points (also used to see which symbol is most advantageous in
 // cases where the player has won a free symbol through the Babylon board or guild card)
