@@ -127,9 +127,9 @@ private:
 public:
     Card();
     Card(int, std::string, int, int);
-    std::string GetName();
-    int GetValue();
-    int GetType();
+    std::string GetName() const;
+    int GetValue() const;
+    int GetType() const;
 };
 
 }

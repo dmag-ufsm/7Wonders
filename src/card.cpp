@@ -15,15 +15,15 @@ Card::Card(int _id, std::string _name, int _value, int _type){
     this->_value = _value;
 }
 
-std::string Card::GetName(){
+std::string Card::GetName() const{
     return this->_name;
 }
 
-int Card::GetValue(){
+int Card::GetValue() const{
     return this->_value;
 }
 
-int Card::GetType(){
+int Card::GetType() const{
     return this->_type;
 }
 
