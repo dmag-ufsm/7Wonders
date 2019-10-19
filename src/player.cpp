@@ -43,6 +43,12 @@ DMAG::Card Player::Discard(){
 
 int Player::BuyResource(){
     // TODO: *thinking*
+    // This function will be a "step" to BuildStructure!
+    // Step 1) Check if the player has commercial structures that give bonuses
+    //         (e.g. buying a resource from neighbour for 1 coin instead of 2);
+    // Step 2) Check if one of the neighbours has the resource we need;
+    // Step 3) Take the shared resource;
+    // Step 4) Continue building the structure.
     return 0;
 }
 
@@ -92,6 +98,7 @@ int Player::CalculateCommercialScore(){
     int comm_score = 0;
 
     // TODO
+    // Commerce provides specials so we'll need to check for them.
 
     return comm_score;
 }
@@ -102,11 +109,13 @@ int Player::CalculateGuildScore(){
     int guild_score = 0;
 
     // TODO
+    // Guilds provide specials so we'll need to check for them.
 
     return guild_score;
 }
 
-// CalculateScientificScore(...) will probably need to be reworked?
+// CalculateScientificScore(...) will probably need to be reworked...
+
 // this method must be called every time a scientific card is played by the player to update
 // their earned scientific points (also used to see which symbol is most advantageous in
 // cases where the player has won a free symbol through the Babylon board or guild card)
