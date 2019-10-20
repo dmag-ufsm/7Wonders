@@ -95,13 +95,14 @@ Métodos:
 Atributos:
 - ID - int
 - Nome - string
-- Recursos produzido - ??? 
+- Recurso produzido - int?
 - Efeitos (especiais) - lista de int?
 - Estágio da maravilha - int
 - ...
 
 Métodos:
 - Pega nome - std::string
+- Pega produção - int?
 - Pega estágio - int
 - Pega efeitos - std::list<int> ?
 - Adiciona estágio - void
