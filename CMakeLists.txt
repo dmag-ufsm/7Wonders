@@ -4,12 +4,12 @@ project(7Wonders LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-if (NOT BUILD_SHARED_LIBS)
-    add_definitions(-DAMQP_STATIC)
-endif()
+# if (NOT BUILD_SHARED_LIBS)
+#     add_definitions(-DAMQP_STATIC)
+# endif()
 
 include_directories(include)
-link_directories(lib)
+# link_directories(lib)
 
 set(SOURCES
     src/card.cpp
@@ -22,4 +22,4 @@ set(HEADERS
 	)
 
 add_executable(7Wonders main.cpp ${SOURCES} ${HEADERS})
-target_link_libraries(7Wonders librabbitmq.so)
+# target_link_libraries(7Wonders librabbitmq.so)

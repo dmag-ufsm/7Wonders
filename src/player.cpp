@@ -49,6 +49,11 @@ int Player::BuyResource(){
     // Step 2) Check if one of the neighbours has the resource we need;
     // Step 3) Take the shared resource;
     // Step 4) Continue building the structure.
+	//
+	// Extra thinking: (Julio)
+	// Check if either neighbour has that resource
+	// If so, mark the resource as "bought", and subtract the 2 coins.
+	// If not, return some arbitrary error value
     return 0;
 }
 
