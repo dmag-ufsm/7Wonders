@@ -9,7 +9,9 @@ Atributos deverão ser escritos em snake_case
 Ex, atributo "fichas de conflito":
 <type> conflict_markers;
 
-
+# Referências
+* [Regras](https://waa.ai/O48v)
+* [Regras rápidas](https://waa.ai/O48z)
 
 # Classe player:
 
@@ -86,6 +88,29 @@ Métodos:
 - Distribuir maravilhas - void
 - Escrever em arquivo
 - Ler dos arquivos
+
+# Classe wonder:
+## Contributor
+### Qualquer
+
+
+Atributos:
+- ID - int
+- Nome - string
+- Recurso produzido - int?
+- Efeitos (especiais) - lista de int?
+- Estágio da maravilha - int
+- ...
+
+Métodos:
+- Pega nome - std::string
+- Pega produção - int?
+- Pega estágio - int
+- Pega efeitos - std::list<int> ?
+- Adiciona estágio - void
+- Recursos necessários para construir o estágio - ?
+- ...
+
 
 # Anotações
 
