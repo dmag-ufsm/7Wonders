@@ -9,7 +9,9 @@ Atributos deverão ser escritos em snake_case
 Ex, atributo "fichas de conflito":
 <type> conflict_markers;
 
-
+# Referências
+* [Regras](https://waa.ai/O48v)
+* [Regras rápidas](https://waa.ai/O48z)
 
 # Classe player:
 
