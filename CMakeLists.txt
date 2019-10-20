@@ -14,11 +14,13 @@ include_directories(include)
 set(SOURCES
     src/card.cpp
     src/player.cpp
+    src/wonder.cpp
 	)
 
 set(HEADERS
     include/card.h
     include/player.h
+    include/wonder.h
 	)
 
 add_executable(7Wonders main.cpp ${SOURCES} ${HEADERS})
