@@ -87,6 +87,28 @@ Métodos:
 - Escrever em arquivo
 - Ler dos arquivos
 
+# Classe wonder:
+## Contributor
+### Qualquer
+
+
+Atributos:
+- ID - int
+- Nome - string
+- Recursos produzido - ??? 
+- Efeitos (especiais) - lista de int?
+- Estágio da maravilha - int
+- ...
+
+Métodos:
+- Pega nome - std::string
+- Pega estágio - int
+- Pega efeitos - std::list<int> ?
+- Adiciona estágio - void
+- Recursos necessários para construir o estágio - ?
+- ...
+
+
 # Anotações
 
 * Ao invés de usar um booleano pra verificar se o jogo ainda está acontecendo, 
