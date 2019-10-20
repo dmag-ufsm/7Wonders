@@ -8,19 +8,19 @@ namespace WONDER_ID{
     enum{
         // 0-6 side A
         gizah_a,
-        rhodos_a,
-        alexandria_a,
-        babylon_a,
-        ephesus_a,
+        babylon_a
         olympia_a,
+        rhodes_a,
+        ephesus_a,
+        alexandria_a,
         halikarnassos_a,
         // 7-13 side B
         gizah_b,
-        rhodos_b,
-        alexandria_b,
-        babylon_b,
-        ephesus_b,
+        babylon_b
         olympia_b,
+        rhodes_b,
+        ephesus_b,
+        alexandria_b,
         halikarnassos_b,
     };
 }
