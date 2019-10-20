@@ -1,30 +1,20 @@
 #include "card.h"
 #include <string>
+#include <utility>
 
 namespace DMAG {
 
-Card::Card()
-{
-this->_type = 1;
-}
-
-Card::Card(int _id, std::string _name, int _value, int _type){
-    this->_id = _id;
-    this->_name = _name;
-    this->_type = _type;
-    this->_value = _value;
+Card::Card(int id, std::string name) {
+    this->id = id;
+    this->name = std::move(name);
 }
 
 std::string Card::GetName() const{
-    return this->_name;
+    return this->name;
 }
 
-int Card::GetValue() const{
-    return this->_value;
-}
-
-int Card::GetType() const{
-    return this->_type;
+int Card::GetId() const{
+    return this->id;
 }
 
 }

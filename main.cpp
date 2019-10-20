@@ -2,6 +2,8 @@
 #include <card.h>
 #include <player.h>
 #include <list>
+#include <deck.h>
+#include <resources.h>
 
 using namespace std;
 using namespace DMAG;
@@ -13,16 +15,19 @@ class Game{
 		unsigned char number_of_players;
 		unsigned char era;
 		unsigned char turn;
-		list<Card> deck[3]; //3 eras, so 3 decks
-		list<Card> discard_pile;
+		Deck deck[3]; //3 eras, so 3 decks
+		Deck discard_pile;
+
 
 
 	public:
 
 		Game(){
-			this->number_of_players = 0;
-			this->era = 0;
+			this->number_of_players = 3;
+			this->era = 1;
 			this->turn = 0;
+			deck[this->era - 1] = Deck(this->era, this->number_of_players);
+			this->discard_pile = Deck();
 		}
 		// Initiate global variables
 

@@ -119,17 +119,13 @@ namespace DMAG {
 class Card
 {
 private:
-    int _id;
-    std::string _name;
-    int _value;
-    int _type;
+    int id;
+    std::string name;
 
 public:
-    Card();
-    Card(int, std::string, int, int);
-    std::string GetName() const;
-    int GetValue() const;
-    int GetType() const;
+    Card(int id, std::string name);
+    [[nodiscard]] std::string GetName() const;
+    [[nodiscard]] int GetId() const;
 };
 
 }

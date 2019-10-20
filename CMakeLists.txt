@@ -13,12 +13,15 @@ include_directories(include)
 
 set(SOURCES
     src/card.cpp
-    src/player.cpp
+	src/deck.cpp
+	src/player.cpp
 	)
 
 set(HEADERS
     include/card.h
-    include/player.h
+	include/deck.h
+	include/player.h
+	include/resources.h
 	)
 
 add_executable(7Wonders main.cpp ${SOURCES} ${HEADERS})
