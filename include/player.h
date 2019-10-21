@@ -2,16 +2,18 @@
 #define PLAYER_H
 
 #include <card.h>
+#include <wonder.h>
 #include <list>
+#include <vector>
 
 namespace DMAG {
 
 class Player
 {
 private:
-    std::list<DMAG::Card> cards_hand;
-    std::list<DMAG::Card> cards_played;
-    unsigned char board; // wonder
+    std::vector<DMAG::Card> cards_hand;
+    std::vector<DMAG::Card> cards_played;
+    DMAG::Wonder board;
     unsigned char coins;
     // resources (?)
     unsigned char shields;
@@ -25,14 +27,16 @@ private:
     DMAG::Player* player_west;
 
 public:
+
     Player();
     void BuildWonder();
     void BuildStructure();
     void BuildGuild();
-    void ReceiveCards();
+    std::vector<Card> GetHandCards();
+    void ReceiveCards(std::vector<Card> _cards_hand);
     DMAG::Card Discard();
     int BuyResource();
-    int Battle(DMAG::Player p, int age);
+    void Battle(int age);
 
     int CalculateCivilianScore();
     int CalculateCommercialScore();
@@ -40,9 +44,12 @@ public:
     int CalculateScientificScore(int gear, int tablet, int compass);
     int CalculateScore();
 
-	void SetNeighbours(DMAG::Player *east, DMAG::Player * west);
+    int GetShields();
+    DMAG::Player* GetEastNeighbor();
+    DMAG::Player* GetWestNeighbor();
 
-    // Will probably need SetWonder?
+    void SetNeighbours(DMAG::Player *east, DMAG::Player *west);
+    void SetWonder(DMAG::Wonder _board);
 };
 
 }
