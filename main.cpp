@@ -67,23 +67,24 @@ class Game{
                 GiveCards();
             }
             else {
+                // needs to be tested
+                
                 Player *player, *p1, *neighbor;
                 p1 = player = player_list.front();
-                vector<Card> tmp_deck;
+                vector<Card> neighbor_deck, player_deck = p1->GetHandCards();
 
                 bool clockwise = (era == 1 || era == 3);
-
                 do {
                     // Get the neighbor of player p who will receive the cards
                     // Keep his deck from being overwritten and lost
                     // The neighbor receives the cards from player p
                     // The neighbor becomes the player p
                     // Continue until you reach the first player again
-
                     neighbor = clockwise ? player->GetEastNeighbor() : player->GetWestNeighbor();
-                    tmp_deck = neighbor->GetHandCards();
-                    neighbor->ReceiveCards(player->GetHandCards());
+                    neighbor_deck = neighbor->GetHandCards();
+                    neighbor->ReceiveCards(player_deck);
                     player = neighbor;
+                    player_deck = neighbor_deck;
                 } while (p1 != player);
             }
         }
