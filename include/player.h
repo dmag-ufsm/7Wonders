@@ -18,7 +18,6 @@ private:
     // resources (?)
     unsigned char shields;
     signed char conflict_tokens;
-    unsigned char wonder_stage; // 0 to 3
     unsigned char victory_points;
 
     // The neighbour players will need to be pointers, otherwise
@@ -30,7 +29,7 @@ public:
 
     Player();
     void BuildWonder();
-    void BuildStructure();
+    void BuildStructure(DMAG::Card c);
     void BuildGuild();
     std::vector<Card> GetHandCards();
     void ReceiveCards(std::vector<Card> _cards_hand);
@@ -41,6 +40,7 @@ public:
     int CalculateCivilianScore();
     int CalculateCommercialScore();
     int CalculateGuildScore();
+    int CalculateWonderScore();
     int CalculateScientificScore(int gear, int tablet, int compass);
     int CalculateScore();
 

@@ -8,7 +8,6 @@ Player::Player()
     this->coins = 3; // every player gets 3 coins at the start of each game
     this->shields = 0;
     this->conflict_tokens = 0;
-    this->wonder_stage = 0;
     this->victory_points = 0;
 
     this->player_east = NULL;
@@ -21,8 +20,8 @@ void Player::BuildWonder(){
     // this->wonder_stage++;
 }
 
-void Player::BuildStructure(){
-    // TODO: check to see if you can build the structure and then play the card
+void Player::BuildStructure(DMAG::Card c){
+    // TODO: check to see if you can build the structure
 }
 
 void Player::BuildGuild(){
@@ -30,11 +29,11 @@ void Player::BuildGuild(){
 }
 
 std::vector<Card> Player::GetHandCards(){
-    return cards_hand;
+    return this->cards_hand;
 }
 
 void Player::ReceiveCards(std::vector<Card> _cards_hand){
-    cards_hand = _cards_hand;
+    this->cards_hand = _cards_hand;
 }
 
 DMAG::Card Player::Discard(){
@@ -63,13 +62,7 @@ int Player::BuyResource(){
     return 0;
 }
 
-
 void Player::Battle(int age){
-    // this function can be changed to battle neighbors
-    // (since we now have access to them) without having
-    // to get player p as argument
-
-
     int current_age_value = 1;
     // Age I   ->  +1 victory token
     // Age II  ->  +3 victory tokens
@@ -134,6 +127,19 @@ int Player::CalculateGuildScore(){
     return guild_score;
 }
 
+int Player::CalculateWonderScore(){
+    int wonder_score = 0;
+
+    if (this->board.GetType() < 7) {
+        // TODO: calculate side A
+    }
+    else {
+        // TODO: calculate side B
+    }
+
+    return wonder_score;
+}
+
 // CalculateScientificScore(...) will probably need to be reworked...
 
 // this method must be called every time a scientific card is played by the player to update
@@ -153,16 +159,18 @@ int Player::CalculateScientificScore(int gear, int tablet, int compass){
 int Player::CalculateScore(){
     int treasury_score = static_cast<int>(this->coins/3); // 1 VP for every 3 coins
     // TODO: all these:
-    // int civil_score = CalculteCivilianScore();
-    // int commercial_score = CalculeCommercialScore();
-    // int guild_score = CalculateGuildScore();
-    // int science_score = CalculateScientificScore();
-    // this->victory_points += treasury_score + civil_score + commercial_score +
-    //                         guild_score + science_score + this->conflict_tokens;
-    if (this->wonder_stage > 0) {
-        int wonder_score = 0; // we will need to calculate wonder points based on each stage effect
+    int civil_score = this->CalculateCivilianScore();
+    int commercial_score = this->CalculateCommercialScore();
+    int guild_score = this->CalculateGuildScore();
+    int science_score = this->CalculateScientificScore(0, 0, 0);
+    this->victory_points += treasury_score + civil_score + commercial_score +
+                             guild_score + science_score + this->conflict_tokens;
+
+    if ( this->board.GetStage() > 0) {
+        int wonder_score = this->CalculateWonderScore();
         this->victory_points += wonder_score;
     }
+
     return this->victory_points;
 }
 
