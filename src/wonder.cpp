@@ -1,6 +1,8 @@
-#include "wonder.h"
+#include <wonder.h>
 
 namespace DMAG {
+
+Wonder::Wonder(){}
 
 Wonder::Wonder(int _id, std::string _name, int _production, std::list<int> _effects)
 {
