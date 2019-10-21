@@ -186,7 +186,7 @@ DMAG::Player* Player::GetWestNeighbor() {
     return this->player_west;
 }
 
-void Player::SetNeighbours(DMAG::Player *east, DMAG::Player *west){
+void Player::SetNeighbors(DMAG::Player* east, DMAG::Player* west){
 	this->player_east = east;
 	this->player_west = west;
 }

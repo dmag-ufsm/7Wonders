@@ -20,8 +20,6 @@ private:
     signed char conflict_tokens;
     unsigned char victory_points;
 
-    // The neighbour players will need to be pointers, otherwise
-    // the compiler won't know how to deal with them
     DMAG::Player* player_east;
     DMAG::Player* player_west;
 
@@ -48,7 +46,7 @@ public:
     DMAG::Player* GetEastNeighbor();
     DMAG::Player* GetWestNeighbor();
 
-    void SetNeighbours(DMAG::Player *east, DMAG::Player *west);
+    void SetNeighbors(DMAG::Player* east, DMAG::Player* west);
     void SetWonder(DMAG::Wonder _board);
 };
 
