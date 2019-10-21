@@ -17,6 +17,10 @@ std::string Wonder::GetName() const{
     return this->name;
 }
 
+int Wonder::GetType() const{
+    return this->id;
+}
+
 int Wonder::GetProduction() const{
     return this->production;
 }

@@ -84,6 +84,7 @@ public:
     // id, name, produção, list of effects?
     Wonder(int, std::string, int, std::list<int>);
     std::string GetName() const;
+    int GetType() const;
     int GetProduction() const;
     int GetStage() const;
     std::list<int> GetEffects() const;
