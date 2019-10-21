@@ -10,7 +10,7 @@ Wonder::Wonder(int _id, std::string _name, int _production, std::list<int> _effe
     this->name = _name;
     this->production = _production;
     this->effects = _effects;
-    this->stage = 1;
+    this->stage = 0;
 }
 
 std::string Wonder::GetName() const{
