@@ -1,16 +1,18 @@
-#include "../include/player.h"
+#include <player.h>
 
 namespace DMAG {
 Player::Player()
 {
-    this->player_east = NULL;
-    this->player_west = NULL;
-    this->board = 0;
+    //this->cards_hand = added next
+    //this->board = added next
     this->coins = 3; // every player gets 3 coins at the start of each game
     this->shields = 0;
     this->conflict_tokens = 0;
     this->wonder_stage = 0;
     this->victory_points = 0;
+
+    this->player_east = NULL;
+    this->player_west = NULL;
 }
 
 void Player::BuildWonder(){
@@ -27,8 +29,12 @@ void Player::BuildGuild(){
     // TODO: check to see if you can build the structure and then play the card
 }
 
-void Player::ReceiveCards(){
-    // TODO
+std::vector<Card> Player::GetHandCards(){
+    return cards_hand;
+}
+
+void Player::ReceiveCards(std::vector<Card> _cards_hand){
+    cards_hand = _cards_hand;
 }
 
 DMAG::Card Player::Discard(){
@@ -57,7 +63,13 @@ int Player::BuyResource(){
     return 0;
 }
 
-int Player::Battle(Player p, int age){
+
+void Player::Battle(int age){
+    // this function can be changed to battle neighbors
+    // (since we now have access to them) without having
+    // to get player p as argument
+
+
     int current_age_value = 1;
     // Age I   ->  +1 victory token
     // Age II  ->  +3 victory tokens
@@ -73,14 +85,17 @@ int Player::Battle(Player p, int age){
             break;
     }
 
-    if (this->shields > p.shields) {
+    // battle with east neighbor
+    if (this->shields > player_east->GetShields())
         this->conflict_tokens += current_age_value;
-        return 1; // 1 -> win
-    } else if (this->shields < p.shields) {
-        this->conflict_tokens--;
-        return -1; // -1 -> lost
-    }
-    return 0; // 0 -> draw
+    else if (this->shields < player_east->GetShields())
+        this->conflict_tokens -= 1;
+
+    // battle with west neighbor
+    if (this->shields > player_west->GetShields())
+        this->conflict_tokens += current_age_value;
+    else if (this->shields < player_west->GetShields())
+        this->conflict_tokens -= 1;
 }
 
 int Player::CalculateCivilianScore(){
@@ -90,7 +105,7 @@ int Player::CalculateCivilianScore(){
     for (DMAG::Card const& card : this->cards_played) {
         // This will probably need to be modified depending on how Card will be implemented.
         if (card.GetType() == CARD_TYPE::civilian) {
-            civil_score += card.GetValue();
+            //civil_score += card.GetValue();
         }
     }
 
@@ -151,8 +166,25 @@ int Player::CalculateScore(){
     return this->victory_points;
 }
 
+int Player::GetShields() {
+    return this->shields;
+}
+
+DMAG::Player* Player::GetEastNeighbor() {
+    return this->player_east;
+}
+
+DMAG::Player* Player::GetWestNeighbor() {
+    return this->player_west;
+}
+
 void Player::SetNeighbours(DMAG::Player *east, DMAG::Player *west){
 	this->player_east = east;
 	this->player_west = west;
 }
+
+void Player::SetWonder(DMAG::Wonder _board){
+    this->board = _board;
+}
+
 }
