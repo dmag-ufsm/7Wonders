@@ -5,6 +5,7 @@ Player::Player()
 {
     //this->cards_hand = added next
     //this->board = added next
+    this->id = 0;
     this->coins = 3; // every player gets 3 coins at the start of each game
     this->shields = 0;
     this->conflict_tokens = 0;
@@ -193,6 +194,10 @@ void Player::SetNeighbors(DMAG::Player* east, DMAG::Player* west){
 
 void Player::SetWonder(DMAG::Wonder _board){
     this->board = _board;
+}
+
+void Player::SetId(int id){
+    this->id = id;
 }
 
 }

@@ -8,6 +8,7 @@
 #include <list>
 #include <vector>
 #include <algorithm>
+#include <string>
 
 using namespace std;
 using namespace DMAG;
@@ -42,7 +43,7 @@ class Game{
             return false;
         }
 
-        void NextTurn(){
+        void NextTurn(list<Player*> player_list){
 
             // TODO: check if the player has the wonder effects that make
             // possible to play another card in the same round and do it
@@ -55,7 +56,8 @@ class Game{
                     player->Battle(era);
 
                 era++;
-
+                cout << "-----------------------------------------------------------------\n";
+                cout << "Nova era: %d\n"<< era << endl;
                 // transfer the remaining card in each player's hand to the discarded card list
                 for (Player* & player : player_list) {
                     vector<Card> cards = player->GetHandCards();
@@ -257,18 +259,21 @@ class Game{
             return 0;
         }
 
-        void NewGame(int _players){
+    list<Player*> NewGame(int _players){
             this->number_of_players = _players;
+            Player *p;
 
             for(int i = 0; i < this->number_of_players; i++){
-                player_list.push_back(new Player());
+                p = new Player();
+                p->SetId(i);
+                player_list.push_back(p);
             }
 
             CreateDecks();
             GiveWonders();
             GiveCards();
 
-            return;
+            return player_list;
         }
 
         void Init(){
@@ -280,7 +285,8 @@ class Game{
             // deallocate memory
         }
         void Loop(){
-
+            //Game g;
+            //g.NextTurn();
             // create connection with RabbitMQ
 
             //show info
@@ -297,8 +303,10 @@ class Game{
 int main()
 {
     Game g;
+    list<Player*> p;
     g.Init();
-    g.NewGame(3);
+    p = g.NewGame(3);
+    //g.NextTurn(p); this function is not completed
     g.Loop();
     g.Close();
 

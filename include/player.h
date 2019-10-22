@@ -11,6 +11,7 @@ namespace DMAG {
 class Player
 {
 private:
+    unsigned int id;
     std::vector<DMAG::Card> cards_hand;
     std::vector<DMAG::Card> cards_played;
     DMAG::Wonder board;
@@ -48,6 +49,7 @@ public:
 
     void SetNeighbors(DMAG::Player* east, DMAG::Player* west);
     void SetWonder(DMAG::Wonder _board);
+    void SetId(int id);
 };
 
 }
