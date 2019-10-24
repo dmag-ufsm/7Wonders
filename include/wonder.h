@@ -1,8 +1,10 @@
 #ifndef WONDER_H
 #define WONDER_H
 
+#include <resources.h>
 #include <string>
-#include <list>
+#include <vector>
+#include <map>
 
 namespace WONDER_ID{
     enum{
@@ -10,7 +12,7 @@ namespace WONDER_ID{
         gizah_a,
         babylon_a,
         olympia_a,
-        rhodes_a,
+        rhodos_a,
         ephesos_a,
         alexandria_a,
         halikarnassos_a,
@@ -18,7 +20,7 @@ namespace WONDER_ID{
         gizah_b,
         babylon_b,
         olympia_b,
-        rhodes_b,
+        rhodos_b,
         ephesos_b,
         alexandria_b,
         halikarnassos_b,
@@ -64,7 +66,7 @@ namespace DMAG {
 
 class Wonder
 {
-private:
+protected:
     int id;
     int production;
     std::string name;
@@ -75,21 +77,131 @@ private:
     // Example: gizeh_b       ->  (vp, vp, vp, vp);
     //          alexandria_a  ->  (vp, add_raw_resource, vp)
     // I truly hope someone can think of something better!
-    std::list<int> effects;
-
+    std::vector<int> effects;
     int stage;
+    std::map<int, unsigned char> resources{
+        { RESOURCE::wood, 0 },
+        { RESOURCE::ore, 0 },
+        { RESOURCE::clay, 0 },
+        { RESOURCE::stone, 0 },
+        { RESOURCE::cloth, 0 },
+        { RESOURCE::glass, 0 },
+        { RESOURCE::papyrus, 0 },
+        { RESOURCE::gear, 0 },
+        { RESOURCE::compass, 0 },
+        { RESOURCE::tablet, 0 }
+    };
+
 
 public:
     Wonder();
-    // id, name, produção, list of effects?
-    Wonder(int, std::string, int, std::list<int>);
     std::string GetName() const;
     int GetType() const;
     int GetProduction() const;
     int GetStage() const;
-    std::list<int> GetEffects() const;
-    void AddStage();
+    std::vector<int> GetEffects() const;
+    virtual void AddStage();
     // StageResources()
+};
+
+// I went with snake_case because it's clearer in this case.
+// e.g. Olympia_a vs OlympiaA
+class Gizah_a : public Wonder
+{
+public:
+    Gizah_a();
+    void AddStage() override;
+};
+
+class Gizah_b : public Wonder
+{
+public:
+    Gizah_b();
+    void AddStage() override;
+};
+
+class Babylon_a : public Wonder
+{
+public:
+    Babylon_a();
+    void AddStage() override;
+};
+
+class Babylon_b : public Wonder
+{
+public:
+    Babylon_b();
+    void AddStage() override;
+};
+
+class Olympia_a : public Wonder
+{
+public:
+    Olympia_a();
+    void AddStage() override;
+};
+
+class Olympia_b : public Wonder
+{
+public:
+    Olympia_b();
+    void AddStage() override;
+};
+
+class Rhodos_a : public Wonder
+{
+public:
+    Rhodos_a();
+    void AddStage() override;
+};
+
+class Rhodos_b : public Wonder
+{
+public:
+    Rhodos_b();
+    void AddStage() override;
+};
+
+class Ephesos_a : public Wonder
+{
+public:
+    Ephesos_a();
+    void AddStage() override;
+};
+
+class Ephesos_b : public Wonder
+{
+public:
+    Ephesos_b();
+    void AddStage() override;
+};
+
+class Alexandria_a : public Wonder
+{
+public:
+    Alexandria_a();
+    void AddStage() override;
+};
+
+class Alexandria_b : public Wonder
+{
+public:
+    Alexandria_b();
+    void AddStage() override;
+};
+
+class Halikarnassos_a : public Wonder
+{
+public:
+    Halikarnassos_a();
+    void AddStage() override;
+};
+
+class Halikarnassos_b : public Wonder
+{
+public:
+    Halikarnassos_b();
+    void AddStage() override;
 };
 
 }

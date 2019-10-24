@@ -2,14 +2,7 @@
 
 namespace DMAG {
 
-Wonder::Wonder(){}
-
-Wonder::Wonder(int _id, std::string _name, int _production, std::list<int> _effects)
-{
-    this->id = _id;
-    this->name = _name;
-    this->production = _production;
-    this->effects = _effects;
+Wonder::Wonder(){
     this->stage = 0;
 }
 
@@ -29,12 +22,76 @@ int Wonder::GetStage() const{
     return this->stage;
 }
 
-std::list<int> Wonder::GetEffects() const{
+std::vector<int> Wonder::GetEffects() const{
     return this->effects;
 }
 
-void Wonder::AddStage(){
-    this->stage++;
+void Wonder::AddStage() {}
+
+// GIZAH A
+
+Gizah_a::Gizah_a() {
+    this->id = WONDER_ID::gizah_a;
+    this->name = "Gizah A";
+    this->production = RESOURCE::stone; // Initial production.
+    this->effects = {EFFECT::vp, EFFECT::vp, EFFECT::vp};
+    this->resources[RESOURCE::stone] = 2; // Required resources to build stage 1;
+                                          // will change on AddStage().
 }
+
+// This will probably take Player as a parameter.
+void Gizah_a::AddStage(){
+
+}
+
+// GIZAH B
+
+
+
+// BABYLON A
+
+
+
+// BABYLON B
+
+
+
+// OLYMPIA A
+
+
+
+// OLYMPIA B
+
+
+
+// RHODOS A
+
+
+
+// RHODOS B
+
+
+
+// EPHESOS A
+
+
+
+// EPHESOS B
+
+
+
+// ALEXANDRIA A
+
+
+
+// ALEXANDRIA B
+
+
+
+// HALIKARNASSOS A
+
+
+
+// HALIKARNASSOS B
 
 }
