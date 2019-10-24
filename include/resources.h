@@ -18,7 +18,9 @@ namespace RESOURCE {
 
         gear,
         compass,
-        tablet
+        tablet,
+
+        coins
     };
 }
 
