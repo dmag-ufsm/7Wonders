@@ -6,7 +6,7 @@ Player::Player()
     //this->cards_hand = added next
     //this->board = added next
     this->id = 0;
-    this->coins = 3; // every player gets 3 coins at the start of each game
+    //this->coins = 3; -> moved to resources map
     this->shields = 0;
     this->conflict_tokens = 0;
     this->victory_points = 0;
@@ -41,7 +41,8 @@ DMAG::Card Player::Discard(){
     // The card taken at a certain round will be pushed back to the list of played cards,
     // effectively making it the last one. Therefore, if the player decides to discard
     // the card he's just taken for three coins, it'll be removed (pop) from the list.
-    this->coins += 3;
+    //this->coins += 3;
+    this->resources[RESOURCE::coins] += 3;
     Card c = this->cards_played.back();
     this->cards_played.pop_back();
     return c;
@@ -158,7 +159,7 @@ int Player::CalculateScientificScore(int gear, int tablet, int compass){
 }
 
 int Player::CalculateScore(){
-    int treasury_score = static_cast<int>(this->coins/3); // 1 VP for every 3 coins
+    int treasury_score = static_cast<int>(this->resources[RESOURCE::coins]/3); // 1 VP for every 3 coins
     // TODO: all these:
     int civil_score = this->CalculateCivilianScore();
     int commercial_score = this->CalculateCommercialScore();

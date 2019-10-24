@@ -16,7 +16,7 @@ private:
     std::vector<DMAG::Card> cards_hand;
     std::vector<DMAG::Card> cards_played;
     DMAG::Wonder board;
-    unsigned char coins;
+    // unsigned char coins; -> moved to resources map
     unsigned char shields;
     signed char conflict_tokens;
     unsigned char victory_points;
@@ -32,7 +32,8 @@ private:
         { RESOURCE::papyrus, 0 },
         { RESOURCE::gear, 0 },
         { RESOURCE::compass, 0 },
-        { RESOURCE::tablet, 0 }
+        { RESOURCE::tablet, 0 },
+        { RESOURCE::coins, 3 }
     };
 
     DMAG::Player* player_east;
