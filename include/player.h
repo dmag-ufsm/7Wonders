@@ -3,8 +3,9 @@
 
 #include <card.h>
 #include <wonder.h>
-#include <list>
+#include <resources.h>
 #include <vector>
+#include <map>
 
 namespace DMAG {
 
@@ -16,10 +17,23 @@ private:
     std::vector<DMAG::Card> cards_played;
     DMAG::Wonder board;
     unsigned char coins;
-    // resources (?)
     unsigned char shields;
     signed char conflict_tokens;
     unsigned char victory_points;
+
+    // Key needs to be int because the underlying type in enums is int
+    std::map<int, unsigned char> resources{
+        { RESOURCE::wood, 0 },
+        { RESOURCE::ore, 0 },
+        { RESOURCE::clay, 0 },
+        { RESOURCE::stone, 0 },
+        { RESOURCE::cloth, 0 },
+        { RESOURCE::glass, 0 },
+        { RESOURCE::papyrus, 0 },
+        { RESOURCE::gear, 0 },
+        { RESOURCE::compass, 0 },
+        { RESOURCE::tablet, 0 }
+    };
 
     DMAG::Player* player_east;
     DMAG::Player* player_west;

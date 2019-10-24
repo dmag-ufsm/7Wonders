@@ -194,6 +194,7 @@ void Player::SetNeighbors(DMAG::Player* east, DMAG::Player* west){
 
 void Player::SetWonder(DMAG::Wonder _board){
     this->board = _board;
+    // TODO: we'll need to add a initial resource on this->resources!
 }
 
 void Player::SetId(int id){
