@@ -79,7 +79,7 @@ protected:
     // I truly hope someone can think of something better!
     std::vector<int> effects;
     int stage;
-    std::map<int, unsigned char> resources{
+    std::map<int, unsigned char> cost{
         { RESOURCE::wood, 0 },
         { RESOURCE::ore, 0 },
         { RESOURCE::clay, 0 },
