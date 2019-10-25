@@ -56,7 +56,7 @@ public:
     int CalculateCivilianScore();
     int CalculateCommercialScore();
     int CalculateGuildScore();
-    int CalculateScientificScore(int gear, int tablet, int compass);
+    int CalculateScientificScore();
     int CalculateScore();
 
     int GetShields();
