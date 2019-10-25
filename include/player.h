@@ -49,16 +49,18 @@ public:
     void ReceiveCards(std::vector<Card> _cards_hand);
     DMAG::Card Discard();
     int BuyResource();
+    void AddResource(int resource, int quant);
+    void AddShield(int quant);
     void Battle(int age);
 
     int CalculateCivilianScore();
     int CalculateCommercialScore();
     int CalculateGuildScore();
-    int CalculateWonderScore();
     int CalculateScientificScore(int gear, int tablet, int compass);
     int CalculateScore();
 
     int GetShields();
+    std::map<int, unsigned char> GetResources();
     DMAG::Player* GetEastNeighbor();
     DMAG::Player* GetWestNeighbor();
 

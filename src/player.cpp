@@ -64,6 +64,14 @@ int Player::BuyResource(){
     return 0;
 }
 
+void Player::AddResource(int resource, int quant){
+    this->resources[resource] += quant;
+}
+
+void Player::AddShield(int quant){
+    this->shields += quant;
+}
+
 void Player::Battle(int age){
     int current_age_value = 1;
     // Age I   ->  +1 victory token
@@ -129,19 +137,6 @@ int Player::CalculateGuildScore(){
     return guild_score;
 }
 
-int Player::CalculateWonderScore(){
-    int wonder_score = 0;
-
-    if (this->board.GetType() < 7) {
-        // TODO: calculate side A
-    }
-    else {
-        // TODO: calculate side B
-    }
-
-    return wonder_score;
-}
-
 // CalculateScientificScore(...) will probably need to be reworked...
 
 // this method must be called every time a scientific card is played by the player to update
@@ -169,7 +164,7 @@ int Player::CalculateScore(){
                              guild_score + science_score + this->conflict_tokens;
 
     if ( this->board.GetStage() > 0) {
-        int wonder_score = this->CalculateWonderScore();
+        int wonder_score = this->board.GetWonderPoints();
         this->victory_points += wonder_score;
     }
 
@@ -178,6 +173,10 @@ int Player::CalculateScore(){
 
 int Player::GetShields() {
     return this->shields;
+}
+
+std::map<int, unsigned char> Player::GetResources(){
+    return this->resources;
 }
 
 DMAG::Player* Player::GetEastNeighbor() {
