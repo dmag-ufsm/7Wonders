@@ -1,13 +1,14 @@
-#include <cstdlib>
+#include <fstream>
 #include <iostream>
 
 class Filer{
 	private:
 		std::string output;
-		std::string turn;
-		FILE *out_file;
-		FILE *turn_file;
-		FILE* player_input[7];
+		int turn;
+		std::ofstream out_file;
+		std::ofstream turn_file;
+		std::ofstream player_input[7];
+		int player_count;
 	public:
 
 		Filer();
