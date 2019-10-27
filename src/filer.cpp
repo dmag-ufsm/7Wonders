@@ -1,34 +1,55 @@
 #include <filer.h>
+#include <fstream>
+
 
 Filer::Filer(){
+	turn = 1;
 }
 
 int Filer::init(int player_count){
-	this->out_file = fopen("game_output.txt", "w");
-	this->turn_file= fopen("game_turn.txt", "w");
+	out_file.open("game_output.txt");
+	turn_file.open("game_turn.txt");
 
 	this->player_count = player_count;
 	for(int i = 0; i<player_count; ++i){
 		char filename[30];
 		sprintf(filename, "player_%d.txt", i+1);
-		this->player_input[i] = fopen(filename, "r");
+		player_input[i].open(filename);
 	}
 	return 0;
 }
 
 
+/*
+ * fclose returns 0 if no error
+ * so setting retval to return value
+ * and returning that for debugging purposes
+ */
 int Filer::close(){
 	for(int i = 0; i<player_count; i++){
-		fclose(player_input[i]);
+		player_input[i].close();
 	}
-	return 0;
+	out_file.close();
+	turn_file.close();
 
+	return 0;
 }
 
 int Filer::write_message(){
-	
-	// do something
 
-	this->output.clear();
+	for(auto & s: output){
+		out_file << s << std::endl;
+	}
+	turn_file << turn << std::endl;
+
+	turn++;
+	output.clear();
+	return 0;
+}
+
+int Filer::build_message(std::string s){
+	if(s.empty())
+		return 1;
+	output += s;
 	return 0;
 }

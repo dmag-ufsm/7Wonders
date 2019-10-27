@@ -269,7 +269,7 @@ class Game{
 
         void Init(){
             CreateWonders();
-			//fp.init(3);
+			fp.init(3);
 			
         }
 
