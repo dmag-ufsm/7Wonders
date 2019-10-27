@@ -104,7 +104,7 @@ public:
     int GetStage() const;
     int GetWonderPoints() const;
     std::vector<int> GetEffects() const;
-    virtual void AddStage(Player* p);
+    virtual bool AddStage(Player* p);
 };
 
 // I went with snake_case because it's clearer in this case.
@@ -113,98 +113,98 @@ class Gizah_a : public Wonder
 {
 public:
     Gizah_a();
-    void AddStage(Player* p) override;
+    bool AddStage(Player* p) override;
 };
 
 class Gizah_b : public Wonder
 {
 public:
     Gizah_b();
-    void AddStage(Player* p) override;
+    bool AddStage(Player* p) override;
 };
 
 class Babylon_a : public Wonder
 {
 public:
     Babylon_a();
-    void AddStage(Player* p) override;
+    bool AddStage(Player* p) override;
 };
 
 class Babylon_b : public Wonder
 {
 public:
     Babylon_b();
-    void AddStage(Player* p) override;
+    bool AddStage(Player* p) override;
 };
 
 class Olympia_a : public Wonder
 {
 public:
     Olympia_a();
-    void AddStage(Player* p) override;
+    bool AddStage(Player* p) override;
 };
 
 class Olympia_b : public Wonder
 {
 public:
     Olympia_b();
-    void AddStage(Player* p) override;
+    bool AddStage(Player* p) override;
 };
 
 class Rhodos_a : public Wonder
 {
 public:
     Rhodos_a();
-    void AddStage(Player* p) override;
+    bool AddStage(Player* p) override;
 };
 
 class Rhodos_b : public Wonder
 {
 public:
     Rhodos_b();
-    void AddStage(Player* p) override;
+    bool AddStage(Player* p) override;
 };
 
 class Ephesos_a : public Wonder
 {
 public:
     Ephesos_a();
-    void AddStage(Player* p) override;
+    bool AddStage(Player* p) override;
 };
 
 class Ephesos_b : public Wonder
 {
 public:
     Ephesos_b();
-    void AddStage(Player* p) override;
+    bool AddStage(Player* p) override;
 };
 
 class Alexandria_a : public Wonder
 {
 public:
     Alexandria_a();
-    void AddStage(Player* p) override;
+    bool AddStage(Player* p) override;
 };
 
 class Alexandria_b : public Wonder
 {
 public:
     Alexandria_b();
-    void AddStage(Player* p) override;
+    bool AddStage(Player* p) override;
 };
 
 class Halikarnassos_a : public Wonder
 {
 public:
     Halikarnassos_a();
-    void AddStage(Player* p) override;
+    bool AddStage(Player* p) override;
 };
 
 class Halikarnassos_b : public Wonder
 {
 public:
     Halikarnassos_b();
-    void AddStage(Player* p) override;
+    bool AddStage(Player* p) override;
 };
 
 }
