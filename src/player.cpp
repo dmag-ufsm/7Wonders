@@ -6,7 +6,7 @@ Player::Player()
     //this->cards_hand = added next
     //this->board = added next
     this->id = 0;
-    this->coins = 3; // every player gets 3 coins at the start of each game
+    //this->coins = 3; -> moved to resources map
     this->shields = 0;
     this->conflict_tokens = 0;
     this->victory_points = 0;
@@ -41,7 +41,8 @@ DMAG::Card Player::Discard(){
     // The card taken at a certain round will be pushed back to the list of played cards,
     // effectively making it the last one. Therefore, if the player decides to discard
     // the card he's just taken for three coins, it'll be removed (pop) from the list.
-    this->coins += 3;
+    //this->coins += 3;
+    this->resources[RESOURCE::coins] += 3;
     Card c = this->cards_played.back();
     this->cards_played.pop_back();
     return c;
@@ -61,6 +62,14 @@ int Player::BuyResource(){
 	// If so, mark the resource as "bought", and subtract the 2 coins.
 	// If not, return some arbitrary error value
     return 0;
+}
+
+void Player::AddResource(int resource, int quant){
+    this->resources[resource] += quant;
+}
+
+void Player::AddShield(int quant){
+    this->shields += quant;
 }
 
 void Player::Battle(int age){
@@ -128,26 +137,15 @@ int Player::CalculateGuildScore(){
     return guild_score;
 }
 
-int Player::CalculateWonderScore(){
-    int wonder_score = 0;
-
-    if (this->board.GetType() < 7) {
-        // TODO: calculate side A
-    }
-    else {
-        // TODO: calculate side B
-    }
-
-    return wonder_score;
-}
-
-// CalculateScientificScore(...) will probably need to be reworked...
-
-// this method must be called every time a scientific card is played by the player to update
+// This method must be called every time a scientific card is played by the player to update
 // their earned scientific points (also used to see which symbol is most advantageous in
-// cases where the player has won a free symbol through the Babylon board or guild card)
-int Player::CalculateScientificScore(int gear, int tablet, int compass){
-    // the smallest value among the three is the amount of completed sets
+// cases where the player has won a free symbol through the Babylon board or guild card).
+int Player::CalculateScientificScore(){
+    int gear = this->resources[RESOURCE::gear];
+    int tablet = this->resources[RESOURCE::tablet];
+    int compass = this->resources[RESOURCE::compass];
+
+    // The smallest value among the three is the amount of completed sets
     int completed_sets = 0;
     if (gear <= tablet && gear <= compass)    completed_sets = gear;
     if (tablet <= gear && tablet <= compass)  completed_sets = tablet;
@@ -158,17 +156,17 @@ int Player::CalculateScientificScore(int gear, int tablet, int compass){
 }
 
 int Player::CalculateScore(){
-    int treasury_score = static_cast<int>(this->coins/3); // 1 VP for every 3 coins
+    int treasury_score = static_cast<int>(this->resources[RESOURCE::coins]/3); // 1 VP for every 3 coins
     // TODO: all these:
     int civil_score = this->CalculateCivilianScore();
     int commercial_score = this->CalculateCommercialScore();
     int guild_score = this->CalculateGuildScore();
-    int science_score = this->CalculateScientificScore(0, 0, 0);
+    int science_score = this->CalculateScientificScore();
     this->victory_points += treasury_score + civil_score + commercial_score +
                              guild_score + science_score + this->conflict_tokens;
 
     if ( this->board.GetStage() > 0) {
-        int wonder_score = this->CalculateWonderScore();
+        int wonder_score = this->board.GetWonderPoints();
         this->victory_points += wonder_score;
     }
 
@@ -177,6 +175,10 @@ int Player::CalculateScore(){
 
 int Player::GetShields() {
     return this->shields;
+}
+
+std::map<int, unsigned char> Player::GetResources(){
+    return this->resources;
 }
 
 DMAG::Player* Player::GetEastNeighbor() {
@@ -194,6 +196,7 @@ void Player::SetNeighbors(DMAG::Player* east, DMAG::Player* west){
 
 void Player::SetWonder(DMAG::Wonder _board){
     this->board = _board;
+    // TODO: we'll need to add a initial resource on this->resources!
 }
 
 void Player::SetId(int id){

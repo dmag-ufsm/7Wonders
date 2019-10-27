@@ -3,7 +3,7 @@
 #include <card.h>
 #include <player.h>
 #include <wonder.h>
-#include <deck.h>
+//#include <deck.h>
 #include <resources.h>
 #include <list>
 #include <vector>
@@ -69,12 +69,12 @@ class Game{
                     for (int i = 0; i < cards.size(); i++)
                         discard_pile.push_back(cards[i]);
                 }
-                
+
                 GiveCards();
             }
             else {
                 // needs to be tested
-                
+
                 Player *player, *p1, *neighbor;
                 p1 = player = player_list.front();
                 vector<Card> neighbor_deck, player_deck = p1->GetHandCards();
@@ -129,6 +129,8 @@ class Game{
         }
 
         void CreateWonders(){
+            /* This will need to be reworked. See wonder.h
+
             wonders.push_back(Wonder(WONDER_ID::gizah_a, "Gizah A", 0, {}));
             wonders.push_back(Wonder(WONDER_ID::babylon_a, "Babylon A", 0, {}));
             wonders.push_back(Wonder(WONDER_ID::olympia_a, "Olympia A", 0, {}));
@@ -143,6 +145,7 @@ class Game{
             wonders.push_back(Wonder(WONDER_ID::ephesos_b, "Ephesos B", 0, {}));
             wonders.push_back(Wonder(WONDER_ID::alexandria_b, "Alexandria B", 0, {}));
             wonders.push_back(Wonder(WONDER_ID::halikarnassos_b, "Halikarnassos B", 0, {}));
+            */
         }
 
         void CreateDecks(){
@@ -258,7 +261,7 @@ class Game{
             }
 
             CreateDecks();
-            GiveWonders();
+            //GiveWonders();
             GiveCards();
 
             return player_list;
