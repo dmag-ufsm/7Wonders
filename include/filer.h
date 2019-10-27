@@ -8,8 +8,9 @@ class Filer{
 		FILE *out_file;
 		FILE *turn_file;
 		FILE* player_input[7];
-	public:
+        int player_count;
 
+	public:
 		Filer();
 		int init(int player_count);
 		int close(void);
