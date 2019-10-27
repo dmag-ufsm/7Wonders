@@ -150,6 +150,7 @@ public:
     int GetType() const;
     int GetEra() const;
     int GetAmount(int) const;
+    bool Equal(Card c);
 };
 
 }

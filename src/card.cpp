@@ -35,4 +35,8 @@ int Card::GetAmount(int players) const{
 	return this->amount[players-3];
 }
 
+bool Card::Equal(Card c){
+    return this->GetId() == c.GetId();
+}
+
 }
