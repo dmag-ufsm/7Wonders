@@ -42,7 +42,7 @@ private:
 public:
 
     Player();
-    void BuildWonder();
+    void BuildWonder(DMAG::Card c);
     void BuildStructure(DMAG::Card c);
     void BuildGuild();
     std::vector<Card> GetHandCards();

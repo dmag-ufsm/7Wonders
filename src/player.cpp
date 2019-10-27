@@ -1,4 +1,5 @@
 #include <player.h>
+#include <algorithm>
 
 namespace DMAG {
 Player::Player()
@@ -15,10 +16,18 @@ Player::Player()
     this->player_west = NULL;
 }
 
-void Player::BuildWonder(){
-    // TODO: check to see if the player can build a stage of the wonder
-
-    // this->wonder_stage++;
+void Player::BuildWonder(DMAG::Card c){
+    // 1) Build Wonder stage if possible.
+    // 2) If the stage was built, remove card 'c' from the hand
+    //    and insert 'c' to the vector of played cards.
+    if (this->board.AddStage(this)) {
+        size_t i = 0;
+        for (i = 0; i < this->cards_hand.size(); i++) {
+            if (this->cards_hand[i].Equal(c)) break;
+        }
+        this->cards_hand.erase(this->cards_hand.begin()+i);
+        this->cards_played.push_back(c);
+    }
 }
 
 void Player::BuildStructure(DMAG::Card c){
@@ -41,7 +50,6 @@ DMAG::Card Player::Discard(){
     // The card taken at a certain round will be pushed back to the list of played cards,
     // effectively making it the last one. Therefore, if the player decides to discard
     // the card he's just taken for three coins, it'll be removed (pop) from the list.
-    //this->coins += 3;
     this->resources[RESOURCE::coins] += 3;
     Card c = this->cards_played.back();
     this->cards_played.pop_back();

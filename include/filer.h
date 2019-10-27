@@ -9,8 +9,8 @@ class Filer{
 		std::ofstream turn_file;
 		std::ofstream player_input[7];
 		int player_count;
-	public:
 
+	public:
 		Filer();
 		int init(int player_count);
 		int close(void);
