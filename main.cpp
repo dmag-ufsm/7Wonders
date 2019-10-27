@@ -9,6 +9,8 @@
 #include <vector>
 #include <algorithm>
 #include <string>
+#include <filer.h>
+
 
 using namespace std;
 using namespace DMAG;
@@ -23,6 +25,7 @@ class Game{
         vector<Card> deck[3]; // need to change to Deck deck[3];
         list<Card> discard_pile; // need to change to Deck discard_pile;
 
+		Filer fp;
 
     public:
 
@@ -32,6 +35,7 @@ class Game{
             this->turn = 0;
             //deck[this->era - 1] = Deck(this->era, this->number_of_players);
             //this->discard_pile = Deck();
+	
         }
         // Initiate global variables
 
@@ -242,22 +246,6 @@ class Game{
             // TODO: add guild cards to decks
         }
 
-        /*
-         * This method will write to the file for other
-         * processes to read, and will return an execution
-         * code.
-         */
-        int WriteToFile(){
-            return 0;
-        }
-
-        /*
-         * The return code could be the number of read files,
-         * or the number of read bytes.
-         */
-        int ReadFromFile(){
-            return 0;
-        }
 
     list<Player*> NewGame(int _players){
             this->number_of_players = _players;
@@ -278,14 +266,16 @@ class Game{
 
         void Init(){
             CreateWonders();
+			//fp.init(3);
+			
         }
 
         void Close(){
+			//fp.close();
 
             // deallocate memory
         }
         void Loop(){
-            //Game g;
             //g.NextTurn();
             // create connection with RabbitMQ
 

@@ -16,6 +16,7 @@ set(SOURCES
 	src/deck.cpp
 	src/player.cpp
     src/wonder.cpp
+	src/filer.cpp
 	)
 
 set(HEADERS
@@ -24,6 +25,7 @@ set(HEADERS
 	include/player.h
 	include/resources.h
     include/wonder.h
+	include/filer.h
 	)
 
 add_executable(7Wonders main.cpp ${SOURCES} ${HEADERS})
