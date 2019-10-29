@@ -7,10 +7,11 @@ Player::Player()
     //this->cards_hand = added next
     //this->board = added next
     this->id = 0;
-    //this->coins = 3; -> moved to resources map
     this->shields = 0;
     this->conflict_tokens = 0;
     this->victory_points = 0;
+    this->play_seventh = false;
+    this->raw_cheap = false;
 
     this->player_east = NULL;
     this->player_west = NULL;
@@ -179,6 +180,76 @@ int Player::CalculateScore(){
     }
 
     return this->victory_points;
+}
+
+// Called at the end of the game, before scoring.
+void Player::ChooseExtraManuf(int resource){
+    if (resource == RESOURCE::cloth || resource == RESOURCE::glass || resource == RESOURCE::papyrus) {
+        if (this->board.GetType() == WONDER_ID::alexandria_b && this->board.GetStage() >= 2) {
+            this->resources[resource]++;
+        }
+    }
+}
+
+// Called at the end of the game, before scoring.
+void Player::ChooseExtraScience(int resource){
+    if (resource == RESOURCE::gear || resource == RESOURCE::compass || resource == RESOURCE::tablet) {
+        int id = this->board.GetType();
+        int stage = this->board.GetStage();
+        if ((id == WONDER_ID::babylon_a && stage >= 2) ||
+             (id == WONDER_ID::babylon_b && stage >= 3)) {
+            this->resources[resource]++;
+        }
+    }
+}
+
+// Called ONCE each turn. Unsure exactly how this works tbh.
+void Player::ChooseExtraRaw(int resource){
+    if (resource == RESOURCE::wood || resource == RESOURCE::ore ||
+        resource == RESOURCE::clay || resource == RESOURCE::stone) {
+        int id = this->board.GetType();
+        int stage = this->board.GetStage();
+        if ((id == WONDER_ID::alexandria_a && stage >= 2) ||
+            (id == WONDER_ID::alexandria_b && stage >= 1)) {
+            this->resources[resource]++;
+        }
+    }
+}
+
+// Automatically called when Babylon B stage 2 is constructed.
+void Player::CanPlaySeventh(){
+    this->play_seventh = true;
+}
+
+// Automatically called when Olympia A stage 1 is constructed.
+void Player::CanBuyRawCheap(){
+    this->raw_cheap = true;
+}
+
+// Will be changed depending on which type discard_pile will be.
+// Called at the end of the turn after the stage was built.
+void Player::BuildDiscardFree(DMAG::Card c, std::list<DMAG::Card> discard_pile){
+    int id = this->board.GetType();
+    int stage = this->board.GetStage();
+    if ((id == WONDER_ID::halikarnassos_a && stage == 2) ||
+        (id == WONDER_ID::halikarnassos_b && stage >= 1)) {
+        // 1) Check if card c is in discard_pile.
+        // 2) Take c from the discard_pile and push it to cards_played (if it's not there!)
+        // 3) Apply card c effects.
+    }
+}
+
+// Called ONCE per age.
+void Player::BuildHandFree(DMAG::Card c){
+    if (this->board.GetType() == WONDER_ID::olympia_a && this->board.GetStage() >= 2) {
+        // 1) Check if card c is in the hand.
+        // 2) Take c from the hand and push it to cards_played (if it's not there!)
+        // 3) Apply card c effects.
+    }
+}
+
+void Player::CopyGuild(DMAG::Card c){
+    // :-)
 }
 
 int Player::GetShields() {
