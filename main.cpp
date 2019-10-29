@@ -10,7 +10,9 @@
 #include <algorithm>
 #include <string>
 #include <filer.h>
+#include <nlohmann/json.hpp>
 
+using json = nlohmann::json;
 
 using namespace std;
 using namespace DMAG;
@@ -303,5 +305,11 @@ int main()
     g.Loop();
     g.Close();
 
+	//Json test thingy
+	json j;
+	j["pi"] = 3.14;
+
+	cout << j.dump() << endl;
+	
     return 0;
 }
