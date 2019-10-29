@@ -218,9 +218,9 @@ bool Babylon_b::AddStage(Player* p){
         if ((p_resources[RESOURCE::glass] >= this->cost[RESOURCE::glass]) &&
             (p_resources[RESOURCE::wood] >= this->cost[RESOURCE::wood])) {
             this->stage++;
-            // TODO: Play seventh card instead of discarding it.
             this->cost[RESOURCE::clay] = 3;
             this->cost[RESOURCE::papyrus] = 1;
+            p->CanPlaySeventh(); // The Player can play the seventh card of an Age.
             stage_built = true;
         } break;
 
@@ -301,8 +301,8 @@ bool Olympia_b::AddStage(Player* p){
     case 0:
         if (p_resources[RESOURCE::wood] >= this->cost[RESOURCE::wood]) {
             this->stage++;
-            // TODO: Raw materials in neighboring cities for 1x Coin.
             this->cost[RESOURCE::stone] = 2;
+            p->CanBuyRawCheap();
             stage_built = true;
         } break;
 
@@ -321,7 +321,6 @@ bool Olympia_b::AddStage(Player* p){
         if ((p_resources[RESOURCE::ore] >= this->cost[RESOURCE::ore]) &&
             (p_resources[RESOURCE::cloth] >= this->cost[RESOURCE::cloth])) {
             this->stage++;
-            // TODO: Copy a Guild in the neighboring cities.
             stage_built = true;
         } break;
     }
@@ -539,7 +538,6 @@ bool Alexandria_a::AddStage(Player* p){
     case 1:
         if (p_resources[RESOURCE::ore] >= this->cost[RESOURCE::ore]) {
             this->stage++;
-            // TODO: Gives 1x Clay OR 1x Ore OR 1x Wood OR 1x Stone.
             this->cost[RESOURCE::glass] = 2;
             stage_built = true;
         } break;
@@ -575,7 +573,6 @@ bool Alexandria_b::AddStage(Player* p){
     case 0:
         if (p_resources[RESOURCE::clay] >= this->cost[RESOURCE::clay]) {
             this->stage++;
-            // TODO: Gives 1x Clay OR 1x Ore OR 1x Wood or 1x Stone.
             this->cost[RESOURCE::wood] = 2;
             stage_built = true;
         } break;
@@ -584,7 +581,6 @@ bool Alexandria_b::AddStage(Player* p){
     case 1:
         if (p_resources[RESOURCE::wood] >= this->cost[RESOURCE::wood]) {
             this->stage++;
-            // TODO: Gives 1x Glass OR 1x Cloth OR 1x Papyrus.
             this->cost[RESOURCE::stone] = 3;
             stage_built = true;
         } break;
@@ -629,7 +625,6 @@ bool Halikarnassos_a::AddStage(Player* p){
     case 1:
         if (p_resources[RESOURCE::ore] >= this->cost[RESOURCE::ore]) {
             this->stage++;
-            // TODO: Look through all the discarded cards and take one.
             this->cost[RESOURCE::cloth] = 2;
             stage_built = true;
         } break;
@@ -666,7 +661,6 @@ bool Halikarnassos_b::AddStage(Player* p){
         if (p_resources[RESOURCE::ore] >= this->cost[RESOURCE::ore]) {
             this->stage++;
             this->wonder_points += 2;
-            // TODO: Look through discarded cards and take one.
             this->cost[RESOURCE::clay] = 3;
             stage_built = true;
         } break;
@@ -676,7 +670,6 @@ bool Halikarnassos_b::AddStage(Player* p){
         if (p_resources[RESOURCE::clay] >= this->cost[RESOURCE::clay]) {
             this->stage++;
             this->wonder_points += 1;
-            // TODO: Look through all the discarded cards and take one.
             this->cost[RESOURCE::glass] = 1;
             this->cost[RESOURCE::cloth] = 1;
             this->cost[RESOURCE::papyrus] = 1;
@@ -689,7 +682,6 @@ bool Halikarnassos_b::AddStage(Player* p){
             (p_resources[RESOURCE::cloth] >= this->cost[RESOURCE::cloth]) &&
             (p_resources[RESOURCE::papyrus] >= this->cost[RESOURCE::papyrus])) {
             this->stage++;
-            // TODO: Look through all the discarded cards and take one.
             stage_built = true;
         } break;
     }
