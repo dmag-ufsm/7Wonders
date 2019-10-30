@@ -1,6 +1,8 @@
 #include <filer.h>
 #include <fstream>
+#include <nlohmann/json.hpp>
 
+using json = nlohmann::json;
 
 Filer::Filer(){
 	turn = 1;

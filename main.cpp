@@ -10,9 +10,9 @@
 #include <algorithm>
 #include <string>
 #include <filer.h>
-#include <nlohmann/json.hpp>
-
-using json = nlohmann::json;
+//#include <nlohmann/json.hpp>
+//
+//using json = nlohmann::json;
 
 using namespace std;
 using namespace DMAG;
@@ -282,7 +282,6 @@ class Game{
         }
         void Loop(){
             //g.NextTurn();
-            // create connection with RabbitMQ
 
             //show info
 
@@ -304,12 +303,6 @@ int main()
     //g.NextTurn(p); this function is not completed
     g.Loop();
     g.Close();
-
-	//Json test thingy
-	json j;
-	j["pi"] = 3.14;
-
-	cout << j.dump() << endl;
 	
     return 0;
 }
