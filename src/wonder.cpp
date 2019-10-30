@@ -194,7 +194,7 @@ Babylon_b::Babylon_b(){
     this->production = RESOURCE::clay;
     this->effects = {EFFECT::vp, EFFECT::play_seventh_card, EFFECT::add_science};
     this->cost[RESOURCE::clay] = 1;
-    this->cost[RESOURCE::cloth] = 1;
+    this->cost[RESOURCE::loom] = 1;
 }
 
 bool Babylon_b::AddStage(Player* p){
@@ -205,7 +205,7 @@ bool Babylon_b::AddStage(Player* p){
     // Building stage 1
     case 0:
         if ((p_resources[RESOURCE::clay] >= this->cost[RESOURCE::clay]) &&
-            (p_resources[RESOURCE::cloth] >= this->cost[RESOURCE::cloth])) {
+            (p_resources[RESOURCE::loom] >= this->cost[RESOURCE::loom])) {
             this->stage++;
             this->wonder_points += 3;
             this->cost[RESOURCE::glass] = 1;
@@ -312,14 +312,14 @@ bool Olympia_b::AddStage(Player* p){
             this->stage++;
             this->wonder_points += 5;
             this->cost[RESOURCE::ore] = 2;
-            this->cost[RESOURCE::cloth] = 1;
+            this->cost[RESOURCE::loom] = 1;
             stage_built = true;
         } break;
 
     // Building stage 3
     case 2:
         if ((p_resources[RESOURCE::ore] >= this->cost[RESOURCE::ore]) &&
-            (p_resources[RESOURCE::cloth] >= this->cost[RESOURCE::cloth])) {
+            (p_resources[RESOURCE::loom] >= this->cost[RESOURCE::loom])) {
             this->stage++;
             stage_built = true;
         } break;
@@ -490,7 +490,7 @@ bool Ephesos_b::AddStage(Player* p){
             this->wonder_points += 3;
             p->AddResource(RESOURCE::coins, 4);
             this->cost[RESOURCE::glass] = 1;
-            this->cost[RESOURCE::cloth] = 1;
+            this->cost[RESOURCE::loom] = 1;
             this->cost[RESOURCE::papyrus] = 1;
             stage_built = true;
         } break;
@@ -498,7 +498,7 @@ bool Ephesos_b::AddStage(Player* p){
     // Building stage 3
     case 2:
         if ((p_resources[RESOURCE::glass] >= this->cost[RESOURCE::glass]) &&
-            (p_resources[RESOURCE::cloth] >= this->cost[RESOURCE::cloth]) &&
+            (p_resources[RESOURCE::loom] >= this->cost[RESOURCE::loom]) &&
             (p_resources[RESOURCE::papyrus] >= this->cost[RESOURCE::papyrus])) {
             this->stage++;
             this->wonder_points += 5;
@@ -602,7 +602,7 @@ bool Alexandria_b::AddStage(Player* p){
 Halikarnassos_a::Halikarnassos_a(){
     this->id = WONDER_ID::halikarnassos_a;
     this->name = "Halikarnassos A";
-    this->production = RESOURCE::cloth;
+    this->production = RESOURCE::loom;
     this->effects = {EFFECT::vp, EFFECT::discard_build_for_free, EFFECT::vp};
     this->cost[RESOURCE::clay] = 2;
 }
@@ -625,13 +625,13 @@ bool Halikarnassos_a::AddStage(Player* p){
     case 1:
         if (p_resources[RESOURCE::ore] >= this->cost[RESOURCE::ore]) {
             this->stage++;
-            this->cost[RESOURCE::cloth] = 2;
+            this->cost[RESOURCE::loom] = 2;
             stage_built = true;
         } break;
 
     // Building stage 3
     case 2:
-        if (p_resources[RESOURCE::cloth] >= this->cost[RESOURCE::cloth]) {
+        if (p_resources[RESOURCE::loom] >= this->cost[RESOURCE::loom]) {
             this->stage++;
             this->wonder_points += 7;
             stage_built = true;
@@ -646,7 +646,7 @@ bool Halikarnassos_a::AddStage(Player* p){
 Halikarnassos_b::Halikarnassos_b(){
     this->id = WONDER_ID::halikarnassos_b;
     this->name = "Halikarnassos B";
-    this->production = RESOURCE::cloth;
+    this->production = RESOURCE::loom;
     this->effects = {EFFECT::add_vp_discard, EFFECT::add_vp_discard, EFFECT::discard_build_for_free};
     this->cost[RESOURCE::ore] = 2;
 }
@@ -671,7 +671,7 @@ bool Halikarnassos_b::AddStage(Player* p){
             this->stage++;
             this->wonder_points += 1;
             this->cost[RESOURCE::glass] = 1;
-            this->cost[RESOURCE::cloth] = 1;
+            this->cost[RESOURCE::loom] = 1;
             this->cost[RESOURCE::papyrus] = 1;
             stage_built = true;
         } break;
@@ -679,7 +679,7 @@ bool Halikarnassos_b::AddStage(Player* p){
     // Building stage 3
     case 2:
         if ((p_resources[RESOURCE::glass] >= this->cost[RESOURCE::glass]) &&
-            (p_resources[RESOURCE::cloth] >= this->cost[RESOURCE::cloth]) &&
+            (p_resources[RESOURCE::loom] >= this->cost[RESOURCE::loom]) &&
             (p_resources[RESOURCE::papyrus] >= this->cost[RESOURCE::papyrus])) {
             this->stage++;
             stage_built = true;

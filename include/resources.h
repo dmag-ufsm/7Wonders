@@ -12,7 +12,7 @@ namespace RESOURCE {
         clay,
         stone,
 
-        cloth,
+        loom,
         glass,
         papyrus,
 

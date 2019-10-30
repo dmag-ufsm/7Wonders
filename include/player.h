@@ -30,7 +30,7 @@ private:
         { RESOURCE::ore, 0 },
         { RESOURCE::clay, 0 },
         { RESOURCE::stone, 0 },
-        { RESOURCE::cloth, 0 },
+        { RESOURCE::loom, 0 },
         { RESOURCE::glass, 0 },
         { RESOURCE::papyrus, 0 },
         { RESOURCE::gear, 0 },

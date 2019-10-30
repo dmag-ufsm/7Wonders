@@ -184,7 +184,7 @@ int Player::CalculateScore(){
 
 // Called at the end of the game, before scoring.
 void Player::ChooseExtraManuf(int resource){
-    if (resource == RESOURCE::cloth || resource == RESOURCE::glass || resource == RESOURCE::papyrus) {
+    if (resource == RESOURCE::loom || resource == RESOURCE::glass || resource == RESOURCE::papyrus) {
         if (this->board.GetType() == WONDER_ID::alexandria_b && this->board.GetStage() >= 2) {
             this->resources[resource]++;
         }
