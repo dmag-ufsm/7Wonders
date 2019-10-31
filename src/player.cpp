@@ -4,14 +4,16 @@
 namespace DMAG {
 Player::Player()
 {
-    //this->cards_hand = added next
-    //this->board = added next
     this->id = 0;
     this->shields = 0;
     this->conflict_tokens = 0;
     this->victory_points = 0;
+
     this->play_seventh = false;
-    this->raw_cheap = false;
+    this->wonder_raw_cheap = false;
+    this->raw_cheap_east = false;
+    this->raw_cheap_west = false;
+    this->manuf_cheap = false;
 
     this->player_east = NULL;
     this->player_west = NULL;
@@ -57,24 +59,40 @@ DMAG::Card Player::Discard(){
     return c;
 }
 
-int Player::BuyResource(){
-    // TODO: *thinking*
-    // This function will be a "step" to BuildStructure!
-    // Step 1) Check if the player has commercial structures that give bonuses
-    //         (e.g. buying a resource from neighbour for 1 coin instead of 2);
-    // Step 2) Check if one of the neighbours has the resource we need;
-    // Step 3) Take the shared resource;
-    // Step 4) Continue building the structure.
-	//
-	// Extra thinking: (Julio)
-	// Check if either neighbour has that resource
-	// If so, mark the resource as "bought", and subtract the 2 coins.
-	// If not, return some arbitrary error value
-    return 0;
+// This function is a "step" in BuildStructure.
+bool Player::BuyResource(int resource, int quant){
+    bool is_raw = resource <= 3 ? true : false; // raw materials have code <= 3 in resources.h
+    int cost = !is_raw && this->manuf_cheap ? 1 : 2;
+
+    Player* east = this->GetEastNeighbor();
+    Player* west = this->GetWestNeighbor();
+
+    if (east->HasEnoughResource(resource, quant)) {
+        if (is_raw && (this->raw_cheap_east || this->wonder_raw_cheap)) cost = 1;
+        if (cost >= this->resources[RESOURCE::coins]) {
+            this->resources[RESOURCE::coins] -= cost;
+            east->AddResource(RESOURCE::coins, cost);
+            return true;
+        }
+    }
+    if (west->HasEnoughResource(resource, quant)) {
+        if (is_raw && (this->raw_cheap_west || this->wonder_raw_cheap)) cost = 1;
+        if (cost >= this->resources[RESOURCE::coins]) {
+            this->resources[RESOURCE::coins] -= cost;
+            west->AddResource(RESOURCE::coins, cost);
+            return true;
+        }
+    }
+
+    return false; // couldn't buy
 }
 
 void Player::AddResource(int resource, int quant){
     this->resources[resource] += quant;
+}
+
+bool Player::HasEnoughResource(int resource, int quant){
+    return (this->resources[resource] >= quant);
 }
 
 void Player::AddShield(int quant){
@@ -223,7 +241,7 @@ void Player::CanPlaySeventh(){
 
 // Automatically called when Olympia A stage 1 is constructed.
 void Player::CanBuyRawCheap(){
-    this->raw_cheap = true;
+    this->wonder_raw_cheap = true;
 }
 
 // Will be changed depending on which type discard_pile will be.
