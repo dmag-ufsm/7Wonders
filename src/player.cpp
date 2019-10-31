@@ -62,13 +62,13 @@ DMAG::Card Player::Discard(){
 // This function is a "step" in BuildStructure.
 bool Player::BuyResource(int resource, int quant){
     bool is_raw = resource <= 3 ? true : false; // raw materials have code <= 3 in resources.h
-    int cost = !is_raw && this->manuf_cheap ? 1 : 2;
+    int cost = !is_raw && this->manuf_cheap ? 1*quant : 2*quant;
 
     Player* east = this->GetEastNeighbor();
     Player* west = this->GetWestNeighbor();
 
     if (east->HasEnoughResource(resource, quant)) {
-        if (is_raw && (this->raw_cheap_east || this->wonder_raw_cheap)) cost = 1;
+        if (is_raw && (this->raw_cheap_east || this->wonder_raw_cheap)) cost = 1*quant;
         if (cost >= this->resources[RESOURCE::coins]) {
             this->resources[RESOURCE::coins] -= cost;
             east->AddResource(RESOURCE::coins, cost);
@@ -76,7 +76,7 @@ bool Player::BuyResource(int resource, int quant){
         }
     }
     if (west->HasEnoughResource(resource, quant)) {
-        if (is_raw && (this->raw_cheap_west || this->wonder_raw_cheap)) cost = 1;
+        if (is_raw && (this->raw_cheap_west || this->wonder_raw_cheap)) cost = 1*quant;
         if (cost >= this->resources[RESOURCE::coins]) {
             this->resources[RESOURCE::coins] -= cost;
             west->AddResource(RESOURCE::coins, cost);
