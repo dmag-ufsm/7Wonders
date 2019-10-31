@@ -37,7 +37,7 @@ class Game{
             this->turn = 0;
             //deck[this->era - 1] = Deck(this->era, this->number_of_players);
             //this->discard_pile = Deck();
-	
+
         }
         // Initiate global variables
 
@@ -156,6 +156,7 @@ class Game{
             // TODO: complete the remaining arguments for card: cost, provides, free to and free with
 
             // Raw Material
+            /*
             cards.push_back(Card(CARD_ID::MATERIALS::lumber_yard, "Lumber Yard", CARD_TYPE::materials, 1, {1, 2, 2, 2, 2}));
             cards.push_back(Card(CARD_ID::MATERIALS::stone_pit, "Stone Pit", CARD_TYPE::materials, 1, {1, 1, 2, 2, 2}));
             cards.push_back(Card(CARD_ID::MATERIALS::clay_pool, "Clay Pool", CARD_TYPE::materials, 1, {1, 1, 2, 2, 2}));
@@ -247,6 +248,7 @@ class Game{
                     deck[card.GetEra()-1].push_back(card);
                 }
             }
+            */
 
             // TODO: add guild cards to decks
         }
@@ -272,7 +274,7 @@ class Game{
         void Init(){
             CreateWonders();
 			fp.init(3);
-			
+
         }
 
         void Close(){
@@ -303,6 +305,6 @@ int main()
     //g.NextTurn(p); this function is not completed
     g.Loop();
     g.Close();
-	
+
     return 0;
 }
