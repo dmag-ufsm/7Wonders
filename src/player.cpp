@@ -161,22 +161,29 @@ int Player::CalculateCommercialScore(){
 
     for (DMAG::Card const& card : this->cards_played) {
         int id = card.GetId();
+        switch(id) {
+            case (CARD_ID::haven):
+                // +1 VP per Raw Material CARD in your own city.
+                comm_score += this->QuantOfType(CARD_TYPE::materials);
+                break;
 
-        if (id == CARD_ID::haven) {
-            // +1 VP per Raw Material CARD in your own city.
-            comm_score += this->QuantOfType(CARD_TYPE::materials);
+            case (CARD_ID::lighthouse):
+                // +1 VP per Commercial Structure CARD in your own city.
+                comm_score += this->QuantOfType(CARD_TYPE::commercial);
+                break;
 
-        } else if (id == CARD_ID::lighthouse) {
-            // +1 VP per Commercial Structure CARD in your own city.
-            comm_score += this->QuantOfType(CARD_TYPE::commercial);
+            case (CARD_ID::chamber_of_commerce):
+                // +2 VP per Manufactured Good CARD in your own city.
+                comm_score += (this->QuantOfType(CARD_TYPE::manufactured) * 2);
+                break;
 
-        } else if (id == CARD_ID::chamber_of_commerce) {
-            // +2 VP per Manufactured Good CARD in your own city.
-            comm_score += this->QuantOfType(CARD_TYPE::manufactured)*2;
+            case (CARD_ID::arena):
+                // +1 VP Coin per Wonder stage constructed in your own city.
+                comm_score += this->board.GetStage();
+                break;
 
-        } else if (id == CARD_ID::arena) {
-            // +1 VP Coin per Wonder stage constructed in your own city.
-            comm_score += this->board.GetStage();
+            default:
+                break;
         }
     }
 
