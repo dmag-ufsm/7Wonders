@@ -50,6 +50,8 @@ public:
     void SetNeighbors(DMAG::Player* east, DMAG::Player* west);
     void SetWonder(DMAG::Wonder _board);
     void SetId(int id);
+
+    int GetId();
 };
 
 }

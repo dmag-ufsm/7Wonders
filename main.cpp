@@ -9,13 +9,14 @@
 #include <vector>
 #include <algorithm>
 #include <string>
+#include <iomanip>
 
 using namespace std;
 using namespace DMAG;
 
 class Game{
     private:
-        list<Player*> player_list;
+        vector<Player*> player_list;
         unsigned char number_of_players;
         unsigned char era;
         unsigned char turn;
@@ -43,7 +44,7 @@ class Game{
             return false;
         }
 
-        void NextTurn(list<Player*> player_list){
+        void NextTurn(vector<Player*> player_list, int actual_player_id){
 
             // TODO: check if the player has the wonder effects that make
             // possible to play another card in the same round and do it
@@ -70,7 +71,7 @@ class Game{
             }
             else {
                 // needs to be tested
-                
+
                 Player *player, *p1, *neighbor;
                 p1 = player = player_list.front();
                 vector<Card> neighbor_deck, player_deck = p1->GetHandCards();
@@ -259,7 +260,7 @@ class Game{
             return 0;
         }
 
-    list<Player*> NewGame(int _players){
+    vector<Player*> NewGame(int _players){
             this->number_of_players = _players;
             Player *p;
 
@@ -303,10 +304,15 @@ class Game{
 int main()
 {
     Game g;
-    list<Player*> p;
+    vector<Player*> p;
     g.Init();
     p = g.NewGame(3);
-    //g.NextTurn(p); this function is not completed
+    if(p.size() == 3){ // set the neighbors in the case of a 3 player game
+        p[0]->SetNeighbors(p[2], p[1]);
+        p[1]->SetNeighbors(p[2], p[0]);
+        p[2]->SetNeighbors(p[1], p[0]);
+    }
+//    g.NextTurn(p, 0); //this function is not completed
     g.Loop();
     g.Close();
 

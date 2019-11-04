@@ -200,4 +200,8 @@ void Player::SetId(int id){
     this->id = id;
 }
 
+int Player::GetId(){
+    return this->id;
+}
+
 }
