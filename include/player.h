@@ -55,6 +55,7 @@ public:
     std::vector<DMAG::Card> GetHandCards();
     void ReceiveCards(std::vector<DMAG::Card> _cards_hand);
     DMAG::Card Discard();
+    int QuantOfType(int card_type);
 
     // Resource-related:
     bool BuyResource(int resource, int quant);

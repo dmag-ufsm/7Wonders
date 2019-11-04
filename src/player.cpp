@@ -59,6 +59,17 @@ DMAG::Card Player::Discard(){
     return c;
 }
 
+// Returns the quantity of played cards of a given type (commercial, military, materials, etc.)
+int Player::QuantOfType(int card_type){
+    int quant = 0;
+    for (DMAG::Card const& card : this->cards_played) {
+        if (card.GetType() == card_type) {
+            quant++;
+        }
+    }
+    return quant;
+}
+
 // This function is a "step" in BuildStructure.
 bool Player::BuyResource(int resource, int quant){
     bool is_raw = resource <= 3 ? true : false; // raw materials have code <= 3 in resources.h
@@ -128,6 +139,7 @@ void Player::Battle(int age){
         this->conflict_tokens -= 1;
 }
 
+// Calculates the number of VPs the player gets from civilian structures.
 int Player::CalculateCivilianScore(){
     // Each Civilian (blue) structure gives a fixed number of VPs.
     int civil_score = 0;
@@ -142,17 +154,36 @@ int Player::CalculateCivilianScore(){
     return civil_score;
 }
 
+// Calculates the number of VPs the player gets from certain commercial structures.
+// (the other special effects will be calculated when the structure is built!)
 int Player::CalculateCommercialScore(){
-    // Age III commercial structures (yellow) grant victory points based on certain
-    // structures a player has built.
     int comm_score = 0;
 
-    // TODO
-    // Commerce provides specials so we'll need to check for them.
+    for (DMAG::Card const& card : this->cards_played) {
+        int id = card.GetId();
+
+        if (id == CARD_ID::haven) {
+            // +1 VP per Raw Material CARD in your own city.
+            comm_score += this->QuantOfType(CARD_TYPE::materials);
+
+        } else if (id == CARD_ID::lighthouse) {
+            // +1 VP per Commercial Structure CARD in your own city.
+            comm_score += this->QuantOfType(CARD_TYPE::commercial);
+
+        } else if (id == CARD_ID::chamber_of_commerce) {
+            // +2 VP per Manufactured Good CARD in your own city.
+            comm_score += this->QuantOfType(CARD_TYPE::manufactured)*2;
+
+        } else if (id == CARD_ID::arena) {
+            // +1 VP Coin per Wonder stage constructed in your own city.
+            comm_score += this->board.GetStage();
+        }
+    }
 
     return comm_score;
 }
 
+// Calculates the number of VPs the player gets from guild structures.
 int Player::CalculateGuildScore(){
     // The guilds (purple) provide several means of gaining victory points, most of
     // which are based on the types of structure a player and/or his neighbors have built.
