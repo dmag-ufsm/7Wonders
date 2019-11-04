@@ -20,7 +20,9 @@ namespace RESOURCE {
         compass,
         tablet,
 
-        coins
+        coins,
+
+		multiple = 99,
     };
 }
 
