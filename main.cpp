@@ -3,13 +3,17 @@
 #include <card.h>
 #include <player.h>
 #include <wonder.h>
-#include <deck.h>
+//#include <deck.h>
 #include <resources.h>
 #include <list>
 #include <vector>
 #include <algorithm>
 #include <string>
 #include <iomanip>
+#include <filer.h>
+//#include <nlohmann/json.hpp>
+//
+//using json = nlohmann::json;
 
 using namespace std;
 using namespace DMAG;
@@ -24,6 +28,7 @@ class Game{
         vector<Card> deck[3]; // need to change to Deck deck[3];
         list<Card> discard_pile; // need to change to Deck discard_pile;
 
+		Filer fp;
 
     public:
 
@@ -33,6 +38,7 @@ class Game{
             this->turn = 0;
             //deck[this->era - 1] = Deck(this->era, this->number_of_players);
             //this->discard_pile = Deck();
+
         }
         // Initiate global variables
 
@@ -66,7 +72,7 @@ class Game{
                     for (int i = 0; i < cards.size(); i++)
                         discard_pile.push_back(cards[i]);
                 }
-                
+
                 GiveCards();
             }
             else {
@@ -126,6 +132,8 @@ class Game{
         }
 
         void CreateWonders(){
+            /* This will need to be reworked. See wonder.h
+
             wonders.push_back(Wonder(WONDER_ID::gizah_a, "Gizah A", 0, {}));
             wonders.push_back(Wonder(WONDER_ID::babylon_a, "Babylon A", 0, {}));
             wonders.push_back(Wonder(WONDER_ID::olympia_a, "Olympia A", 0, {}));
@@ -140,6 +148,7 @@ class Game{
             wonders.push_back(Wonder(WONDER_ID::ephesos_b, "Ephesos B", 0, {}));
             wonders.push_back(Wonder(WONDER_ID::alexandria_b, "Alexandria B", 0, {}));
             wonders.push_back(Wonder(WONDER_ID::halikarnassos_b, "Halikarnassos B", 0, {}));
+            */
         }
 
         void CreateDecks(){
@@ -148,6 +157,7 @@ class Game{
             // TODO: complete the remaining arguments for card: cost, provides, free to and free with
 
             // Raw Material
+            /*
             cards.push_back(Card(CARD_ID::MATERIALS::lumber_yard, "Lumber Yard", CARD_TYPE::materials, 1, {1, 2, 2, 2, 2}));
             cards.push_back(Card(CARD_ID::MATERIALS::stone_pit, "Stone Pit", CARD_TYPE::materials, 1, {1, 1, 2, 2, 2}));
             cards.push_back(Card(CARD_ID::MATERIALS::clay_pool, "Clay Pool", CARD_TYPE::materials, 1, {1, 1, 2, 2, 2}));
@@ -239,26 +249,11 @@ class Game{
                     deck[card.GetEra()-1].push_back(card);
                 }
             }
+            */
 
             // TODO: add guild cards to decks
         }
 
-        /*
-         * This method will write to the file for other
-         * processes to read, and will return an execution
-         * code.
-         */
-        int WriteToFile(){
-            return 0;
-        }
-
-        /*
-         * The return code could be the number of read files,
-         * or the number of read bytes.
-         */
-        int ReadFromFile(){
-            return 0;
-        }
 
     vector<Player*> NewGame(int _players){
             this->number_of_players = _players;
@@ -271,7 +266,7 @@ class Game{
             }
 
             CreateDecks();
-            GiveWonders();
+            //GiveWonders();
             GiveCards();
 
             return player_list;
@@ -279,16 +274,17 @@ class Game{
 
         void Init(){
             CreateWonders();
+			fp.init(3);
+
         }
 
         void Close(){
+			//fp.close();
 
             // deallocate memory
         }
         void Loop(){
-            //Game g;
             //g.NextTurn();
-            // create connection with RabbitMQ
 
             //show info
 

@@ -5,8 +5,8 @@
 #include <vector>
 
 namespace CARD_ID{
-    namespace MATERIALS{
-        enum{
+        enum ID{
+			// Materials
             lumber_yard,
             stone_pit,
             clay_pool,
@@ -22,19 +22,12 @@ namespace CARD_ID{
             brickyard,
             foundry,
 
-        };
-    }
-
-    namespace MANUFACTURED{
-        enum{
+			//Manufactured
             loom,
             glassworks,
             press,
-        };
-    }
 
-    namespace CIVILIAN{
-        enum{
+			//Civilian
             altar,
             theater,
             pawnshop,
@@ -48,11 +41,8 @@ namespace CARD_ID{
             senate,
             pantheon,
             palace,
-        };
-    }
 
-    namespace COMMERCIAL{
-        enum{
+			//Comercial
             tavern,
             east_trading_post,
             west_trading_post,
@@ -65,11 +55,8 @@ namespace CARD_ID{
             lighthouse,
             chamber_of_commerce,
             arena,
-        };
-    }
 
-    namespace MILITARY{
-        enum{
+			//Military
             stockade,
             barracks,
             guard_tower,
@@ -81,11 +68,8 @@ namespace CARD_ID{
             circus,
             arsenal,
             siege_workshop,
-        };
-    }
 
-    namespace SCIENTIFIC{
-        enum{
+			//Scientific
             apothecary,
             workshop,
             scriptorium,
@@ -98,11 +82,8 @@ namespace CARD_ID{
             university,
             academy,
             study,
-        };
-    }
 
-    namespace GUILD{
-        enum{
+			//Guild
             workers,
             craftsmens,
             traders,
@@ -114,10 +95,21 @@ namespace CARD_ID{
             scientists,
             builders,
         };
-    }
 
 }
 
+namespace CARD_RESOURCE { 
+	enum resource{
+		wood,
+		clay,
+		stone,
+		ore,
+		glass,
+		parchment,
+		fabric,
+		multiple=99,		
+	};
+}
 
 namespace CARD_TYPE {
 enum type{
@@ -136,9 +128,9 @@ namespace DMAG {
 class Card
 {
 private:
-    int id;
+	int id;
     std::string name;
-    int type;
+	int type;
     int era;
     int amount[5];
 
@@ -150,6 +142,7 @@ public:
     int GetType() const;
     int GetEra() const;
     int GetAmount(int) const;
+    bool Equal(Card c);
 };
 
 }
