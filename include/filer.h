@@ -7,7 +7,7 @@ class Filer{
 		int turn;
 		std::ofstream out_file;
 		std::ofstream turn_file;
-		std::ofstream player_input[7];
+		std::ifstream player_input[7];
 		int player_count;
 
 	public:
@@ -16,5 +16,5 @@ class Filer{
 		int close(void);
 		int build_message(std::string s);
 		int write_message();
-
+		int read_messages(int player_number, std::string &s);
 };
