@@ -16,5 +16,5 @@ class Filer{
 		int close(void);
 		int build_message(std::string s);
 		int write_message();
-		int read_messages(int player_number, std::string &s);
+		std::string read_messages(int player_number);
 };

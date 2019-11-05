@@ -55,3 +55,15 @@ int Filer::build_message(std::string s){
 	output += s;
 	return 0;
 }
+
+std::string Filer::read_messages(int player_number){
+
+	if(player_number >= player_count)
+		return "";
+
+	std::string aux, s;
+	while(getline(player_input[player_number], aux)){
+		s += aux;
+	}
+	return s;
+}
