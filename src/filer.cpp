@@ -1,3 +1,4 @@
+#include <iostream>
 #include <filer.h>
 #include <fstream>
 #include <nlohmann/json.hpp>
@@ -8,16 +9,8 @@ Filer::Filer(){
 	turn = 1;
 }
 
-int Filer::init(int player_count){
-	out_file.open("game_output.txt");
-	turn_file.open("game_turn.txt");
-
+int Filer::Init(int player_count){
 	this->player_count = player_count;
-	for(int i = 0; i<player_count; ++i){
-		char filename[30];
-		sprintf(filename, "player_%d.txt", i+1);
-		player_input[i].open(filename);
-	}
 	return 0;
 }
 
@@ -27,43 +20,50 @@ int Filer::init(int player_count){
  * so setting retval to return value
  * and returning that for debugging purposes
  */
-int Filer::close(){
-	for(int i = 0; i<player_count; i++){
-		player_input[i].close();
-	}
-	out_file.close();
-	turn_file.close();
 
-	return 0;
-}
+int Filer::WriteMessage(json message){
 
-int Filer::write_message(){
-
-	for(auto & s: output){
-		out_file << s << std::endl;
-	}
+	out_file.open("game_output.json");
+	out_file  << message << std::endl;
+	turn_file.open("game_turn.txt");
 	turn_file << turn << std::endl;
 
+	turn_file.close();
+	out_file.close();
 	turn++;
 	output.clear();
 	return 0;
 }
 
-int Filer::build_message(std::string s){
-	if(s.empty())
-		return 1;
-	output += s;
-	return 0;
+json Filer::ReadMessages(int player_number){
+
+	json ret;
+	if(player_number >= player_count)
+		return json({});
+	char filename[30];
+	sprintf(filename, "player_%d.json", player_number+1);
+	player_input.open(filename);
+	player_input >> ret;
+		
+	player_input.close(); //Puts the cursor back at the start
+	return ret;
 }
 
-std::string Filer::read_messages(int player_number){
-
-	if(player_number >= player_count)
-		return "";
-
-	std::string aux, s;
-	while(getline(player_input[player_number], aux)){
-		s += aux;
+bool Filer::ArePlayersReady(){
+	players_ready.open("ready.txt");
+	std::string ready;
+	for(int i = 0; i< player_count; i++){
+		getline(players_ready, ready);
+		if(ready != "ready"){
+			std::cout<< ready << " is not ready" <<std::endl;
+			players_ready.close();
+			return false;
+		}
 	}
-	return s;
+
+	players_ready.close();
+	std::ofstream clear_ready("ready.txt");
+	clear_ready << std::endl;
+	clear_ready.close();
+	return true;
 }

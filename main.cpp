@@ -11,9 +11,10 @@
 #include <string>
 #include <iomanip>
 #include <filer.h>
-//#include <nlohmann/json.hpp>
-//
-//using json = nlohmann::json;
+#include <algorithm>
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
 
 using namespace std;
 using namespace DMAG;
@@ -151,7 +152,7 @@ class Game{
 			   */
 		}
 
-		void CreateDecks(){
+		void CreateDecks(int era){
 			list<Card> cards;
 
 			// TODO: complete the remaining arguments for card: cost, provides, free to and free with
@@ -255,7 +256,7 @@ class Game{
 		}
 
 
-		vector<Player*> NewGame(int _players){
+		int NewGame(int _players){
 			this->number_of_players = _players;
 			Player *p;
 
@@ -265,25 +266,41 @@ class Game{
 				player_list.push_back(p);
 			}
 
-			CreateDecks();
-			//GiveWonders();
-			GiveCards();
+			for(int i = 0; i < this->number_of_players; i++){
+				if(i == 0){
+					player_list[i]->SetNeighbors(player_list[this->number_of_players -1], player_list[i+1]);
+				}else if(i == this->number_of_players -1){
+					player_list[i]->SetNeighbors(player_list[i-1], player_list[0]);
+				}else{
+					player_list[i]->SetNeighbors(player_list[i-1], player_list[i+1]);
+				}
+			}
 
-			return player_list;
+			//CreateDecks();
+			//GiveWonders();
+			//GiveCards();
+
+			return 0;
 		}
 
 		void Init(){
 			CreateWonders();
-//			fp.init(3);
+			fp.Init(3);
 
 		}
 
 		void Close(){
-			//fp.close();
 
 			// deallocate memory
 		}
 		void Loop(){
+
+			json command;
+			while(!fp.ArePlayersReady());
+			for(int i = 0; i < number_of_players; i++){
+				command = fp.ReadMessages(i);
+				cout << command << endl;
+			}
 			//g.NextTurn();
 
 			//show info
@@ -294,20 +311,16 @@ class Game{
 
 			//end game?
 		}
+
 };
 
 
 int main()
 {
 	Game g;
-	vector<Player*> p;
 	g.Init();
-	p = g.NewGame(3);
-	if(p.size() == 3){ // set the neighbors in the case of a 3 player game
-		p[0]->SetNeighbors(p[2], p[1]);
-		p[1]->SetNeighbors(p[2], p[0]);
-		p[2]->SetNeighbors(p[1], p[0]);
-	}
+	g.NewGame(3);
+	
 	//    g.NextTurn(p, 0); //this function is not completed
 	g.Loop();
 	g.Close();
