@@ -62,8 +62,7 @@ bool Filer::ArePlayersReady(){
 	}
 
 	players_ready.close();
-	std::ofstream clear_ready("ready.txt");
-	clear_ready << std::endl;
+	std::ofstream clear_ready("ready.txt", std::ofstream::out | std::ofstream::trunc);
 	clear_ready.close();
 	return true;
 }
