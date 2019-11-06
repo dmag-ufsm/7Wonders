@@ -51,7 +51,7 @@ class Game{
 			return false;
 		}
 
-		void NextTurn(vector<Player*> player_list, int actual_player_id){
+		void NextTurn(int actual_player_id){
 
 			// TODO: check if the player has the wonder effects that make
 			// possible to play another card in the same round and do it
@@ -295,21 +295,27 @@ class Game{
 		}
 		void Loop(){
 
-			json command;
-			while(!fp.ArePlayersReady());
-			for(int i = 0; i < number_of_players; i++){
-				command = fp.ReadMessages(i);
-				cout << command << endl;
+			json json_object;
+			while(InGame()){
+				while(!fp.ArePlayersReady());
+				for(int i = 0; i < number_of_players; i++){
+					json_object = fp.ReadMessages(i);
+					cout << json_object << endl;
+					// handle command inside json_object
+					if(json_object["command"] == "build_structure"){
+						player_list[i]->BuildStructure(Card()); // find card before calling this
+					}
+				}
+				//g.NextTurn();
+
+				//show info
+
+				//get commands
+
+				//calculate stuff
+
+				//end game?
 			}
-			//g.NextTurn();
-
-			//show info
-
-			//get commands
-
-			//calculate stuff
-
-			//end game?
 		}
 
 };
@@ -320,7 +326,7 @@ int main()
 	Game g;
 	g.Init();
 	g.NewGame(3);
-	
+
 	//    g.NextTurn(p, 0); //this function is not completed
 	g.Loop();
 	g.Close();
