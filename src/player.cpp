@@ -331,7 +331,8 @@ void Player::SetNeighbors(DMAG::Player* east, DMAG::Player* west){
 
 void Player::SetWonder(DMAG::Wonder _board){
     this->board = _board;
-    // TODO: we'll need to add a initial resource on this->resources!
+    // Wonders provide specific initial resources
+    this->resources[this->board.GetProduction()] += 1;
 }
 
 void Player::SetId(int id){
