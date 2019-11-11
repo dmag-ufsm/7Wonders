@@ -33,7 +33,7 @@ void Player::BuildWonder(DMAG::Card c){
     }
 }
 
-void Player::BuildStructure(DMAG::Card c){
+void Player::BuildStructure(int card_id){
     // TODO: check to see if you can build the structure
 }
 

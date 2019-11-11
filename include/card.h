@@ -98,18 +98,6 @@ namespace CARD_ID{
 
 }
 
-namespace CARD_RESOURCE { 
-	enum resource{
-		wood,
-		clay,
-		stone,
-		ore,
-		glass,
-		parchment,
-		fabric,
-		multiple=99,		
-	};
-}
 
 namespace CARD_TYPE {
 enum type{
@@ -133,6 +121,8 @@ private:
 	int type;
     int era;
     int amount[5];
+	int resource_type;
+	std::vector<int> resource_list;
 
 public:
     Card();

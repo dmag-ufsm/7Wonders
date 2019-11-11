@@ -50,7 +50,7 @@ public:
 
     // Card-related:
     void BuildWonder(DMAG::Card c);
-    void BuildStructure(DMAG::Card c);
+    void BuildStructure(int card_id);
     void BuildGuild();
     std::vector<DMAG::Card> GetHandCards();
     void ReceiveCards(std::vector<DMAG::Card> _cards_hand);

@@ -3,7 +3,6 @@
 #include <card.h>
 #include <player.h>
 #include <wonder.h>
-//#include <deck.h>
 #include <resources.h>
 #include <list>
 #include <vector>
@@ -133,23 +132,21 @@ class Game{
 		}
 
 		void CreateWonders(){
-			/* This will need to be reworked. See wonder.h
 
-			   wonders.push_back(Wonder(WONDER_ID::gizah_a, "Gizah A", 0, {}));
-			   wonders.push_back(Wonder(WONDER_ID::babylon_a, "Babylon A", 0, {}));
-			   wonders.push_back(Wonder(WONDER_ID::olympia_a, "Olympia A", 0, {}));
-			   wonders.push_back(Wonder(WONDER_ID::rhodes_a, "Rhodes A", 0, {}));
-			   wonders.push_back(Wonder(WONDER_ID::ephesos_a, "Ephesos A", 0, {}));
-			   wonders.push_back(Wonder(WONDER_ID::alexandria_a, "Alexandria A", 0, {}));
-			   wonders.push_back(Wonder(WONDER_ID::halikarnassos_a, "Halikarnassos A", 0, {}));
-			   wonders.push_back(Wonder(WONDER_ID::gizah_b, "Gizah B", 0, {}));
-			   wonders.push_back(Wonder(WONDER_ID::babylon_b, "Babylon B", 0, {}));
-			   wonders.push_back(Wonder(WONDER_ID::olympia_b, "Olympia B", 0, {}));
-			   wonders.push_back(Wonder(WONDER_ID::rhodes_b, "Rhodes B", 0, {}));
-			   wonders.push_back(Wonder(WONDER_ID::ephesos_b, "Ephesos B", 0, {}));
-			   wonders.push_back(Wonder(WONDER_ID::alexandria_b, "Alexandria B", 0, {}));
-			   wonders.push_back(Wonder(WONDER_ID::halikarnassos_b, "Halikarnassos B", 0, {}));
-			   */
+			   wonders.push_back(Gizah_a());
+			   wonders.push_back(Babylon_a());
+			   wonders.push_back(Olympia_a());
+			   wonders.push_back(Rhodos_a());
+			   wonders.push_back(Ephesos_a());
+			   wonders.push_back(Alexandria_a());
+			   wonders.push_back(Halikarnassos_a());
+			   wonders.push_back(Gizah_b());
+			   wonders.push_back(Babylon_b());
+			   wonders.push_back(Olympia_b());
+			   wonders.push_back(Rhodos_b());
+			   wonders.push_back(Ephesos_b());
+			   wonders.push_back(Alexandria_b());
+			   wonders.push_back(Halikarnassos_b());
 		}
 
 		void CreateDecks(int era){
@@ -302,8 +299,8 @@ class Game{
 					json_object = fp.ReadMessages(i);
 					cout << json_object << endl;
 					// handle command inside json_object
-					if(json_object["command"] == "build_structure"){
-						player_list[i]->BuildStructure(Card()); // find card before calling this
+					if(json_object["command"]["subcommand"] == "build_structure"){
+						player_list[i]->BuildStructure(0); // find card before calling this
 					}
 				}
 				//g.NextTurn();
