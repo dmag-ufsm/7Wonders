@@ -17,7 +17,6 @@ private:
     DMAG::Wonder board;
     std::vector<DMAG::Card> cards_hand;
     std::vector<DMAG::Card> cards_played;
-    unsigned char shields;
     signed char conflict_tokens;
     unsigned char victory_points;
 
@@ -39,7 +38,8 @@ private:
         { RESOURCE::gear, 0 },
         { RESOURCE::compass, 0 },
         { RESOURCE::tablet, 0 },
-        { RESOURCE::coins, 3 }
+        { RESOURCE::coins, 3 },
+        { RESOURCE::shields, 0 }
     };
 
     DMAG::Player* player_east;
@@ -84,6 +84,7 @@ public:
     void CopyGuild(DMAG::Card c); // At the end of the game.
 
     // Getters:
+    int GetId();
     int GetShields();
     std::map<int, unsigned char> GetResources();
     DMAG::Player* GetEastNeighbor();
@@ -93,8 +94,6 @@ public:
     void SetNeighbors(DMAG::Player* east, DMAG::Player* west);
     void SetWonder(DMAG::Wonder _board);
     void SetId(int id);
-
-    int GetId();
 };
 
 }

@@ -5,7 +5,6 @@ namespace DMAG {
 Player::Player()
 {
     this->id = 0;
-    this->shields = 0;
     this->conflict_tokens = 0;
     this->victory_points = 0;
 
@@ -107,7 +106,7 @@ bool Player::HasEnoughResource(int resource, int quant){
 }
 
 void Player::AddShield(int quant){
-    this->shields += quant;
+    this->resources[RESOURCE::shields] += quant;
 }
 
 void Player::Battle(int age){
@@ -126,16 +125,18 @@ void Player::Battle(int age){
             break;
     }
 
+    int this_shields = this->resources[RESOURCE::shields];
+
     // battle with east neighbor
-    if (this->shields > player_east->GetShields())
+    if (this_shields > player_east->GetShields())
         this->conflict_tokens += current_age_value;
-    else if (this->shields < player_east->GetShields())
+    else if (this_shields < player_east->GetShields())
         this->conflict_tokens -= 1;
 
     // battle with west neighbor
-    if (this->shields > player_west->GetShields())
+    if (this_shields > player_west->GetShields())
         this->conflict_tokens += current_age_value;
-    else if (this->shields < player_west->GetShields())
+    else if (this_shields < player_west->GetShields())
         this->conflict_tokens -= 1;
 }
 
@@ -309,7 +310,7 @@ void Player::CopyGuild(DMAG::Card c){
 }
 
 int Player::GetShields() {
-    return this->shields;
+    return this->resources[RESOURCE::shields];
 }
 
 std::map<int, unsigned char> Player::GetResources(){

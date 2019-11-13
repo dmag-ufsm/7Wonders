@@ -21,6 +21,7 @@ namespace RESOURCE {
         tablet,
 
         coins,
+        shields,
 
 		multiple = 99,
     };
