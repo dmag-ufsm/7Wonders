@@ -105,10 +105,6 @@ bool Player::HasEnoughResource(int resource, int quant){
     return (this->resources[resource] >= quant);
 }
 
-void Player::AddShield(int quant){
-    this->resources[RESOURCE::shields] += quant;
-}
-
 void Player::Battle(int age){
     int current_age_value = 1;
     // Age I   ->  +1 victory token

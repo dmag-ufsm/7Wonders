@@ -356,7 +356,7 @@ bool Rhodos_a::AddStage(Player* p){
     case 1:
         if (p_resources[RESOURCE::clay] >= this->cost[RESOURCE::clay]) {
             this->stage++;
-            p->AddShield(2);
+            p->AddResource(RESOURCE::shields, 2);
             this->cost[RESOURCE::ore] = 4;
             stage_built = true;
         } break;
@@ -393,7 +393,7 @@ bool Rhodos_b::AddStage(Player* p){
         if (p_resources[RESOURCE::stone] >= this->cost[RESOURCE::stone]) {
             this->stage++;
             this->wonder_points += 3;
-            p->AddShield(1);
+            p->AddResource(RESOURCE::shields, 1);
             p->AddResource(RESOURCE::coins, 3);
             this->cost[RESOURCE::ore] = 4;
             stage_built = true;
@@ -404,7 +404,7 @@ bool Rhodos_b::AddStage(Player* p){
         if (p_resources[RESOURCE::ore] >= this->cost[RESOURCE::ore]) {
             this->stage++;
             this->wonder_points += 4;
-            p->AddShield(1);
+            p->AddResource(RESOURCE::shields, 1);
             p->AddResource(RESOURCE::coins, 4);
             stage_built = true;
         } break;

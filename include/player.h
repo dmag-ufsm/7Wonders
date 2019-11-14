@@ -63,7 +63,6 @@ public:
     bool HasEnoughResource(int resource, int quant);
 
     // Battle-related:
-    void AddShield(int quant);
     void Battle(int age);
 
     // Scoring-related:
