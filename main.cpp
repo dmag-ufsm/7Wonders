@@ -13,6 +13,8 @@
 #include <algorithm>
 #include <nlohmann/json.hpp>
 
+#define NUM_PLAYERS 3
+
 using json = nlohmann::json;
 
 using namespace std;
@@ -32,8 +34,19 @@ class Game{
 
 	public:
 
+		Card GetCardByName(std::string name){
+			for(int i = 0; i < 3; ++i){
+				for(auto c: deck[i]){
+					if(c.GetName().compare(name) == 0){
+						return c;
+					}
+				}
+			}
+			return Card(0, "not found", 0, 0, std::vector<int>());
+		}
+
 		Game(){
-			this->number_of_players = 3;
+			this->number_of_players = NUM_PLAYERS;
 			this->era = 1;
 			this->turn = 0;
 			//deck[this->era - 1] = Deck(this->era, this->number_of_players);
@@ -133,20 +146,20 @@ class Game{
 
 		void CreateWonders(){
 
-			   wonders.push_back(Gizah_a());
-			   wonders.push_back(Babylon_a());
-			   wonders.push_back(Olympia_a());
-			   wonders.push_back(Rhodos_a());
-			   wonders.push_back(Ephesos_a());
-			   wonders.push_back(Alexandria_a());
-			   wonders.push_back(Halikarnassos_a());
-			   wonders.push_back(Gizah_b());
-			   wonders.push_back(Babylon_b());
-			   wonders.push_back(Olympia_b());
-			   wonders.push_back(Rhodos_b());
-			   wonders.push_back(Ephesos_b());
-			   wonders.push_back(Alexandria_b());
-			   wonders.push_back(Halikarnassos_b());
+			wonders.push_back(Gizah_a());
+			wonders.push_back(Babylon_a());
+			wonders.push_back(Olympia_a());
+			wonders.push_back(Rhodos_a());
+			wonders.push_back(Ephesos_a());
+			wonders.push_back(Alexandria_a());
+			wonders.push_back(Halikarnassos_a());
+			wonders.push_back(Gizah_b());
+			wonders.push_back(Babylon_b());
+			wonders.push_back(Olympia_b());
+			wonders.push_back(Rhodos_b());
+			wonders.push_back(Ephesos_b());
+			wonders.push_back(Alexandria_b());
+			wonders.push_back(Halikarnassos_b());
 		}
 
 		void CreateDecks(int era){
@@ -282,7 +295,7 @@ class Game{
 
 		void Init(){
 			CreateWonders();
-			fp.Init(3);
+			fp.Init(NUM_PLAYERS);
 
 		}
 
@@ -293,15 +306,23 @@ class Game{
 		void Loop(){
 
 			json json_object;
+			std::string command, argument;
 			while(InGame()){
 				while(!fp.ArePlayersReady());
 				for(int i = 0; i < number_of_players; i++){
 					json_object = fp.ReadMessages(i);
-					cout << json_object << endl;
 					// handle command inside json_object
-					if(json_object["command"]["subcommand"] == "build_structure"){
-						player_list[i]->BuildStructure(0); // find card before calling this
-					}
+					command = json_object["command"]["subcommand"];
+					argument = json_object["command"]["argument"];
+					if(command == "build_structure"){
+						Card selected = GetCardByName(argument);
+						player_list[i]->BuildStructure(selected); // find card before calling this
+					}else if(command == "build_guild"){
+						//do something
+					}else if(command == "build_wonder"){
+						Card sacrifice = GetCardByName(argument);
+						player_list[i]->BuildWonder(sacrifice);
+
 				}
 				//g.NextTurn();
 
@@ -322,7 +343,7 @@ int main()
 {
 	Game g;
 	g.Init();
-	g.NewGame(3);
+	g.NewGame(NUM_PLAYERS);
 
 	//    g.NextTurn(p, 0); //this function is not completed
 	g.Loop();
