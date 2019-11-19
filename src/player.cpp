@@ -49,14 +49,9 @@ void Player::ReceiveCards(std::vector<Card> _cards_hand){
     this->cards_hand = _cards_hand;
 }
 
-DMAG::Card Player::Discard(){
-    // The card taken at a certain round will be pushed back to the list of played cards,
-    // effectively making it the last one. Therefore, if the player decides to discard
-    // the card he's just taken for three coins, it'll be removed (pop) from the list.
+void Player::Discard(){
+	// This just adds some coins to the player total.
     this->resources[RESOURCE::coins] += 3;
-    Card c = this->cards_played.back();
-    this->cards_played.pop_back();
-    return c;
 }
 
 // Returns the quantity of played cards of a given type (commercial, military, materials, etc.)
