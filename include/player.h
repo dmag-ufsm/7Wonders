@@ -54,7 +54,7 @@ public:
     void BuildGuild();
     std::vector<DMAG::Card> GetHandCards();
     void ReceiveCards(std::vector<DMAG::Card> _cards_hand);
-    DMAG::Card Discard();
+    void Discard();
     int QuantOfType(int card_type);
 
     // Resource-related:

@@ -303,6 +303,17 @@ class Game{
 
 			// deallocate memory
 		}
+
+		void ShowInfo(){
+			/*
+			 * Will print to the stdout all the information formatted
+			 * as JSON object.
+			 * This will only be called if the variable NDEBUG is not
+			 * set. CMAKE sets that when compiling as RELEASE
+			 */
+
+		}
+
 		void Loop(){
 
 			json json_object;
@@ -322,32 +333,41 @@ class Game{
 					}else if(command == "build_wonder"){
 						Card sacrifice = GetCardByName(argument);
 						player_list[i]->BuildWonder(sacrifice);
+					}else if(command == "discard"){
+						Card discard = GetCardByName(argument);
+						player_list[i]->Discard(); //Gives player 3 coins.
+						discard_pile.push_back(discard);
+					}
+					
+					// Moves the game to the next turn.
+					NextTurn(0); // Have to fix this, and the method.
 
+					// TODO: show info
+#ifndef NDEBUG
+					ShowInfo();
+#endif
+
+
+					//get commands
+
+					//calculate stuff
+
+					//end game?
 				}
-				//g.NextTurn();
-
-				//show info
-
-				//get commands
-
-				//calculate stuff
-
-				//end game?
 			}
+
+		};
+
+
+		int main()
+		{
+			Game g;
+			g.Init();
+			g.NewGame(NUM_PLAYERS);
+
+			//    g.NextTurn(p, 0); //this function is not completed
+			g.Loop();
+			g.Close();
+
+			return 0;
 		}
-
-};
-
-
-int main()
-{
-	Game g;
-	g.Init();
-	g.NewGame(NUM_PLAYERS);
-
-	//    g.NextTurn(p, 0); //this function is not completed
-	g.Loop();
-	g.Close();
-
-	return 0;
-}
