@@ -163,8 +163,10 @@ class Game{
 		}
 
 		void CreateDecks(int era){
-			list<Card> cards;
 
+			// Will have to populate each of the 3 era decks individually.
+			// SAD.
+			//deck[1].push_back();
 			// TODO: complete the remaining arguments for card: cost, provides, free to and free with
 
 			// Raw Material
@@ -338,7 +340,7 @@ class Game{
 						player_list[i]->Discard(); //Gives player 3 coins.
 						discard_pile.push_back(discard);
 					}
-					
+
 					// Moves the game to the next turn.
 					NextTurn(0); // Have to fix this, and the method.
 
@@ -356,7 +358,8 @@ class Game{
 				}
 			}
 
-		};
+		}
+};
 
 
 		int main()
@@ -371,3 +374,4 @@ class Game{
 
 			return 0;
 		}
+
