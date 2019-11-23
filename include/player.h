@@ -17,7 +17,7 @@ private:
     DMAG::Wonder board;
     std::vector<DMAG::Card> cards_hand;
     std::vector<DMAG::Card> cards_played;
-    signed char conflict_tokens;
+    signed char victory_tokens, defeat_tokens;
     unsigned char victory_points;
 
     bool play_seventh;         // Can the player play the seventh card or not? (Wonder effect)
@@ -25,6 +25,9 @@ private:
     bool raw_cheap_east;       // Can the player buy raw resources from eastern neighbor for 1 coin? (East Trading Post)
     bool raw_cheap_west;       // Can the player buy raw resources from western neighbor for 1 coin? (West Trading Post)
     bool manuf_cheap;          // Can the player buy manufactured resources from neighbors for 1 coin? (Marketplace)
+    int raw_extra;             // The player has an additional raw material. (Caravansery and Alexandria A)
+    int manuf_extra;           // The player has an additional manufactured good. (Forum and Alexandria B)
+    int sci_extra;             // The player has an additional scientific piece. (Scientific Guild and Babylon A and B)
 
     // Key needs to be int because the underlying type in enums is int
     std::map<int, unsigned char> resources{
@@ -51,11 +54,10 @@ public:
     // Card-related:
     void BuildWonder(DMAG::Card c);
     void BuildStructure(DMAG::Card c);
-    void BuildGuild();
     std::vector<DMAG::Card> GetHandCards();
     void ReceiveCards(std::vector<DMAG::Card> _cards_hand);
     void Discard();
-    int QuantOfType(int card_type);
+    int AmountOfType(int card_type);
 
     // Resource-related:
     bool BuyResource(int resource, int quant);
@@ -85,6 +87,8 @@ public:
     // Getters:
     int GetId();
     int GetShields();
+    DMAG::Wonder GetBoard();
+    int GetDefeatTokens();
     std::map<int, unsigned char> GetResources();
     DMAG::Player* GetEastNeighbor();
     DMAG::Player* GetWestNeighbor();
