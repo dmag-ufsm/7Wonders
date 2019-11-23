@@ -28,7 +28,7 @@ class Game{
         unsigned char turn;
         vector<Wonder> wonders;
         vector<Card> deck[3]; // need to change to Deck deck[3];
-        list<Card> discard_pile; // need to change to Deck discard_pile;
+        vector<Card> discard_pile; // need to change to Deck discard_pile;
 
         Filer fp;
 
@@ -329,7 +329,7 @@ class Game{
                     argument = json_object["command"]["argument"];
                     if(command == "build_structure"){
                         Card selected = GetCardByName(argument);
-                        player_list[i]->BuildStructure(selected); // find card before calling this
+                        player_list[i]->BuildStructure(selected, player_list[i]->GetHandCards(), false); // find card before calling this
                     }else if(command == "build_guild"){
                         //do something
                     }else if(command == "build_wonder"){
