@@ -3,10 +3,12 @@
 
 #include <string>
 #include <vector>
+#include <map>
+#include <resources.h>
 
 namespace CARD_ID{
         enum ID{
-			// Materials
+            // Materials
             lumber_yard,
             stone_pit,
             clay_pool,
@@ -22,12 +24,12 @@ namespace CARD_ID{
             brickyard,
             foundry,
 
-			//Manufactured
+            //Manufactured
             loom,
             glassworks,
             press,
 
-			//Civilian
+            //Civilian
             altar,
             theater,
             pawnshop,
@@ -42,7 +44,7 @@ namespace CARD_ID{
             pantheon,
             palace,
 
-			//Comercial
+            //Comercial
             tavern,
             east_trading_post,
             west_trading_post,
@@ -56,7 +58,7 @@ namespace CARD_ID{
             chamber_of_commerce,
             arena,
 
-			//Military
+            //Military
             stockade,
             barracks,
             guard_tower,
@@ -69,7 +71,7 @@ namespace CARD_ID{
             arsenal,
             siege_workshop,
 
-			//Scientific
+            //Scientific
             apothecary,
             workshop,
             scriptorium,
@@ -83,7 +85,7 @@ namespace CARD_ID{
             academy,
             study,
 
-			//Guild
+            //Guild
             workers,
             craftsmens,
             traders,
@@ -116,23 +118,33 @@ namespace DMAG {
 class Card
 {
 private:
-	int id;
+    int id;
     std::string name;
-	int type;
+    int type;
     int era;
-    int amount[5];
-	int resource_type;
-	std::vector<int> resource_list;
+    int amountPerPlayers[5];
+    std::map<int, unsigned char> cost{
+        { RESOURCE::wood, 0 },
+        { RESOURCE::ore, 0 },
+        { RESOURCE::clay, 0 },
+        { RESOURCE::stone, 0 },
+        { RESOURCE::loom, 0 },
+        { RESOURCE::glass, 0 },
+        { RESOURCE::papyrus, 0 },
+        { RESOURCE::coins, 0 }
+    };
 
 public:
     Card();
-    Card(int id, std::string name, int type, int era, std::vector<int> amount);
+    Card(int id, std::string name, int type, int era, std::vector<int> cost, std::vector<int> amountPerPlayers);
     [[nodiscard]] std::string GetName() const;
     [[nodiscard]] int GetId() const;
     int GetType() const;
     int GetEra() const;
     int GetAmount(int) const;
     bool Equal(Card c);
+    bool CanBePlayed(std::map<int, unsigned char> resources);
+    std::map<int, unsigned char> MissingCards(std::map<int, unsigned char> resources);
 };
 
 }
