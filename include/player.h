@@ -53,7 +53,7 @@ public:
 
     // Card-related:
     void BuildWonder(DMAG::Card c);
-    void BuildStructure(DMAG::Card c);
+    void BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _free_card);
     std::vector<DMAG::Card> GetHandCards();
     void ReceiveCards(std::vector<DMAG::Card> _cards_hand);
     void Discard();
@@ -80,7 +80,7 @@ public:
     void ChooseExtraRaw(int resource);     // Once per turn.
     void CanPlaySeventh();
     void CanBuyRawCheap();
-    void BuildDiscardFree(DMAG::Card c, std::list<DMAG::Card> discard_pile); // At the end of the turn after the stage was built.
+    void BuildDiscardFree(DMAG::Card c, std::vector<DMAG::Card> discard_pile); // At the end of the turn after the stage was built.
     void BuildHandFree(DMAG::Card c); // Once per Age.
     void CopyGuild(DMAG::Card c); // At the end of the game.
 

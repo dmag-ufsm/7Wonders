@@ -36,19 +36,25 @@ void Player::BuildWonder(DMAG::Card c){
     }
 }
 
-void Player::BuildStructure(DMAG::Card c){
+void Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _free_card){
     // returns if the card has already been played (cannot play the same card twice)
     //if (std::find(cards_played.begin(), cards_played.end(), c) != cards_played.end())
     //    return;
 
-    // if there are not enough resources
-    if (!c.CanBePlayed(this->resources)) {
-        // TODO: check if the card can be played for free, otherwise check buy from neighbors
-        // this->BuyResource()...
+    bool free_card = _free_card;
 
-        return;
+    if (!free_card) {
+        // if there are not enough resources
+        if (!c.CanBePlayed(this->resources)) {
+            // TODO: check if the card can be played for free, otherwise check buy from neighbors.
+            // free_card will be manipulated here if it was initially false ("normal" build).
+            // this->BuyResource()...
+
+            return;
+        }
     }
 
+    int cost = 0;
     int card = c.GetId();
     switch (c.GetType()) {
         case CARD_TYPE::materials:
@@ -62,34 +68,34 @@ void Player::BuildStructure(DMAG::Card c){
                 this->resources[RESOURCE::ore] += 1;
             } else if (card == CARD_ID::tree_farm) {
                 // wood or clay (check how this will be implemented)
-                this->resources[RESOURCE::coins] -= 1; // cost
+                cost = 1;
             } else if (card == CARD_ID::excavation) {
                 // stone or clay (check how this will be implemented)
-                this->resources[RESOURCE::coins] -= 1; // cost
+                cost = 1;
             } else if (card == CARD_ID::clay_pit) {
                 // clay or ore (check how this will be implemented)
-                this->resources[RESOURCE::coins] -= 1; // cost
+                cost = 1;
             } else if (card == CARD_ID::timber_yard) {
                 // stone or wood (check how this will be implemented)
-                this->resources[RESOURCE::coins] -= 1; // cost
+                cost = 1;
             } else if (card == CARD_ID::forest_cave) {
                 // wood or ore (check how this will be implemented)
-                this->resources[RESOURCE::coins] -= 1; // cost
+                cost = 1;
             } else if (card == CARD_ID::mine) {
                 // ore or stone (check how this will be implemented)
-                this->resources[RESOURCE::coins] -= 1; // cost
+                cost = 1;
             } else if (card == CARD_ID::sawmill) {
                 this->resources[RESOURCE::wood] += 2;
-                this->resources[RESOURCE::coins] -= 1; // cost
+                cost = 1;
             } else if (card == CARD_ID::quarry) {
                 this->resources[RESOURCE::stone] += 2;
-                this->resources[RESOURCE::coins] -= 1; //cost
+                cost = 1;
             } else if (card == CARD_ID::brickyard) {
                 this->resources[RESOURCE::clay] += 2;
-                this->resources[RESOURCE::coins] -= 1; // cost
+                cost = 1;
             } else if (card == CARD_ID::foundry) {
                 this->resources[RESOURCE::ore] += 2;
-                this->resources[RESOURCE::coins] -= 1; // cost
+                cost = 1;
             }
             break;
 
@@ -152,7 +158,7 @@ void Player::BuildStructure(DMAG::Card c){
             } else if (card == CARD_ID::walls   || card == CARD_ID::training_ground ||
                        card == CARD_ID::stables || card == CARD_ID::archery_range) {
                 this->resources[RESOURCE::shields] += 2;
-            
+
             } else if (card == CARD_ID::fortifications || card == CARD_ID::circus ||
                        card == CARD_ID::arsenal        || card == CARD_ID::siege_workshop) {
                 this->resources[RESOURCE::shields] += 3;
@@ -169,15 +175,17 @@ void Player::BuildStructure(DMAG::Card c){
     }
 
     size_t i = 0;
-    for (i = 0; i < this->cards_hand.size(); i++) {
-        if (this->cards_hand[i].Equal(c)) break;
+    for (i = 0; i < cards.size(); i++) {
+        if (cards[i].Equal(c)) break;
     }
-    if (i == this->cards_hand.size()) {
-        // ERROR: Card played was not found in the player's hand
+    if (i == cards.size()) {
+        // ERROR: Card played was not found in the vector
     } else {
-        this->cards_hand.erase(this->cards_hand.begin()+i);
-        this->cards_played.push_back(c);
+        cards.erase(cards.begin()+i);
+        cards_played.push_back(c);
     }
+
+    if (!free_card) this->resources[RESOURCE::coins] -= cost;
 }
 
 std::vector<Card> Player::GetHandCards(){
@@ -528,28 +536,24 @@ void Player::CanBuyRawCheap(){
 
 // Will be changed depending on which type discard_pile will be.
 // Called at the end of the turn after the stage was built.
-void Player::BuildDiscardFree(DMAG::Card c, std::list<DMAG::Card> discard_pile){
+void Player::BuildDiscardFree(DMAG::Card c, std::vector<DMAG::Card> discard_pile){
     int id = this->board.GetType();
     int stage = this->board.GetStage();
     if ((id == WONDER_ID::halikarnassos_a && stage == 2) ||
         (id == WONDER_ID::halikarnassos_b && stage >= 1)) {
-        // 1) Check if card c is in discard_pile.
-        // 2) Take c from the discard_pile and push it to cards_played (if it's not there!)
-        // 3) Apply card c effects.
+            this->BuildStructure(c, discard_pile, true);
     }
 }
 
 // Called ONCE per age.
 void Player::BuildHandFree(DMAG::Card c){
     if (this->board.GetType() == WONDER_ID::olympia_a && this->board.GetStage() >= 2) {
-        // 1) Check if card c is in the hand.
-        // 2) Take c from the hand and push it to cards_played (if it's not there!)
-        // 3) Apply card c effects.
+        this->BuildStructure(c, this->cards_hand, true);
     }
 }
 
 void Player::CopyGuild(DMAG::Card c){
-    // :-)
+    // TODO
 }
 
 int Player::GetShields() {
