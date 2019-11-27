@@ -12,6 +12,36 @@ Ex, atributo "fichas de conflito":
 # Referências
 * [Regras](https://waa.ai/O48v)
 * [Regras rápidas](https://waa.ai/O48z)
+* [Informações sobre cartas e maravilhas (tabuladas)](https://github.com/dmag-ufsm/Game/tree/master/references)
+
+# TODO
+## Player
+* CopyGuild -- efeito de Wonder, é ok de implementar (acho), só falta sentar e
+  escrever mesmo.
+* Alguns detalhes em BuildStructure
+    * Checar quando a carta pode ser construída de graça (e.g. "combos")
+        * Depende de Card para fazer isso (ver abaixo).
+* Talvez seja necessário mudar a assinatura de alguns métodos void para
+  retornarem algum valor de sucesso/erro, para se comunicarem melhor com a
+  main.
+* Algo mais além disso?
+## Card
+* Cartas que fazem "combo" para a construção ficar grátis
+    * Vetor?
+        * Player poderá varrer o vetor de "combos" e verificar se ele possui as
+          cartas requeridas; se tiver, constrói a estrutura de graça.
+* Outras coisas?
+## Filer
+* ?
+## Main
+* Terminar de incluir os comandos de possíveis jogadas
+    * Decidir como controlar os comandos, afinal, algumas jogadas são especiais
+      e aplicadas em momentos específicos do jogo.
+      * Para tirar o "burden" de fazer isso em player, a verificação de jogadas
+        válidas em um turno X poderia ser feita aqui mesmo (também faz mais
+        sentido).
+* ?
+## Outros
 
 # Classe player:
 
@@ -111,15 +141,3 @@ Métodos:
 - Adiciona estágio - void
 - Recursos necessários para construir o estágio - ?
 - ...
-
-Com o intuito de diminuir os número de checagens (ainda que brevemente),
-tentaremos separar as maravilhas em subclasses filhas da classe mãe Wonder.
-Essas maravilhas terão, quando necessário, métodos "override" -- mesma
-assinatura, mas comportamento diferente -- da classe mãe.
-
-# Anotações
-
-* Ao invés de usar um booleano pra verificar se o jogo ainda está acontecendo, 
-poderiamos trocar por um verificador do turno. Cada jogo tem uma duração definida
-em 7 (ou 6, não tô muito certo agora) turnos por era, totalizando 21 (ou 18, né)
-turnos no total. Então se o número de turnos = 21|18, o jogo termina.
