@@ -1,4 +1,4 @@
-	# Diretrizes
+# Diretrizes
 
 Todos os atributos e métodos serão escritos em inglês.
 As funções deverão começar com uma ação, escrita em CamelCase
