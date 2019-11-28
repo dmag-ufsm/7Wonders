@@ -22,6 +22,11 @@ Player::Player()
     this->player_west = NULL;
 }
 
+
+//////////////////
+// CARD-RELATED //
+//////////////////
+
 void Player::BuildWonder(DMAG::Card c){
     // 1) Build Wonder stage if possible.
     // 2) If the stage was built, remove card 'c' from the hand
@@ -212,6 +217,11 @@ int Player::AmountOfType(int card_type){
     return quant;
 }
 
+
+//////////////////////
+// RESOURCE-RELATED //
+//////////////////////
+
 // This function is a "step" in BuildStructure.
 bool Player::BuyResource(int resource, int quant){
     bool is_raw = resource <= 3 ? true : false; // raw materials have code <= 3 in resources.h
@@ -248,6 +258,11 @@ bool Player::HasEnoughResource(int resource, int quant){
     return (this->resources[resource] >= quant);
 }
 
+
+////////////////////
+// BATTLE-RELATED //
+////////////////////
+
 void Player::Battle(int age){
     int current_age_value = 1;
     // Age I   ->  +1 victory token
@@ -278,6 +293,11 @@ void Player::Battle(int age){
     else if (this_shields < player_west->GetShields())
         this->defeat_tokens += 1;
 }
+
+
+/////////////////////
+// SCORING-RELATED //
+/////////////////////
 
 // Calculates the number of VPs the player gets from civilian structures.
 int Player::CalculateCivilianScore(){
@@ -490,6 +510,11 @@ int Player::CalculateScore(){
     return this->victory_points;
 }
 
+
+////////////////////////////
+// WONDER-RELATED EFFECTS //
+////////////////////////////
+
 // Called at the end of the game, before scoring.
 void Player::ChooseExtraManuf(int resource){
     if (resource == RESOURCE::loom || resource == RESOURCE::glass || resource == RESOURCE::papyrus) {
@@ -539,6 +564,7 @@ void Player::CanBuyRawCheap(){
 void Player::BuildDiscardFree(DMAG::Card c, std::vector<DMAG::Card> discard_pile){
     int id = this->board.GetType();
     int stage = this->board.GetStage();
+
     if ((id == WONDER_ID::halikarnassos_a && stage == 2) ||
         (id == WONDER_ID::halikarnassos_b && stage >= 1)) {
             this->BuildStructure(c, discard_pile, true);
@@ -552,9 +578,29 @@ void Player::BuildHandFree(DMAG::Card c){
     }
 }
 
-void Player::CopyGuild(DMAG::Card c){
-    // TODO
+// Called at the END of the game, before scoring.
+// Where:
+//       Card c      ->  Guild to be copied
+//       int side 0  ->  GetEastNeighbor
+//       int side 1  ->  GetWestNeighbor
+void Player::CopyGuild(DMAG::Card c, int side){
+    Player* neighbor = side ? this->GetWestNeighbor() : this->GetEastNeighbor();
+    int id = this->board.GetType();
+    int stage = this->board.GetStage();
+
+    if (c.GetType() == CARD_TYPE::guild && (id == WONDER_ID::olympia_b && stage >= 3)) {
+        for (DMAG::Card const& card : neighbor->cards_played) {
+            if (c.Equal(card)) {
+                this->cards_played.push_back(c);
+                return;
+            }
+        }
+    }
 }
+
+///////////////////////
+// GETTERS & SETTERS //
+///////////////////////
 
 int Player::GetShields() {
     return this->resources[RESOURCE::shields];

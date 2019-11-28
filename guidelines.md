@@ -16,8 +16,6 @@ Ex, atributo "fichas de conflito":
 
 # TODO
 ## Player
-* CopyGuild -- efeito de Wonder, é ok de implementar (acho), só falta sentar e
-  escrever mesmo.
 * Alguns detalhes em BuildStructure
     * Checar quando a carta pode ser construída de graça (e.g. "combos")
         * Depende de Card para fazer isso (ver abaixo).
