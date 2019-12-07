@@ -22,7 +22,6 @@ Player::Player()
     this->player_west = NULL;
 }
 
-
 //////////////////
 // CARD-RELATED //
 //////////////////
@@ -256,6 +255,17 @@ void Player::AddResource(int resource, int quant){
 
 bool Player::HasEnoughResource(int resource, int quant){
     return (this->resources[resource] >= quant);
+}
+
+bool Player::CanPlayFree(DMAG::Card c) {
+    for (DMAG::Card const&  card : this->cards_played) {
+        if (card.GetFreeWith() == card.GetId())
+            return true;
+    }
+    return false;
+
+    // TODO: fix the only case of the Forum card that makes it
+    // possible to be free from two others (may need to use vector)
 }
 
 
