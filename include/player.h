@@ -63,6 +63,7 @@ public:
     bool BuyResource(int resource, int quant);
     void AddResource(int resource, int quant);
     bool HasEnoughResource(int resource, int quant);
+    bool CanPlayFree(DMAG::Card c);
 
     // Battle-related:
     void Battle(int age);
