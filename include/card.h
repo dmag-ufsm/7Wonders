@@ -8,6 +8,8 @@
 
 namespace CARD_ID{
         enum ID{
+            none,
+
             // Materials
             lumber_yard,
             stone_pit,
@@ -122,6 +124,7 @@ private:
     std::string name;
     int type;
     int era;
+    int freeWithId;
     int amountPerPlayers[5];
     std::map<int, unsigned char> cost{
         { RESOURCE::wood, 0 },
@@ -136,11 +139,12 @@ private:
 
 public:
     Card();
-    Card(int id, std::string name, int type, int era, std::vector<int> cost, std::vector<int> amountPerPlayers);
-    [[nodiscard]] std::string GetName() const;
-    [[nodiscard]] int GetId() const;
+    Card(int id, std::string name, int type, int era, int freeWithId, std::vector<int> cost, std::vector<int> amountPerPlayers);
+    /*[[nodiscard]] */std::string GetName() const;
+    /*[[nodiscard]] */int GetId() const;
     int GetType() const;
     int GetEra() const;
+    int GetFreeWith() const;
     int GetAmount(int) const;
     bool Equal(Card c);
     bool CanBePlayed(std::map<int, unsigned char> resources);
