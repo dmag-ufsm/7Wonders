@@ -6,17 +6,18 @@ namespace DMAG {
 
 Card::Card(){}
 
-Card::Card(int id, std::string name, int type, int era, std::vector<int> cost, std::vector<int> amountPerPlayers){
+Card::Card(int id, std::string name, int type, int era, int freeWithId, std::vector<int> cost, std::vector<int> amountPerPlayers){
     this->id = id;
     this->name = std::move(name);
     this->type = type;
     this->era = era;
+    this->freeWithId = freeWithId;
 
     // must have a better way to deal with the cost and quantity of units by number of players
     // (but this one is working)
 
     for (int i = 0; i < 5; i++)
-    	this->amountPerPlayers[i] = amountPerPlayers[i];
+        this->amountPerPlayers[i] = amountPerPlayers[i];
     
     this->cost[RESOURCE::wood] = cost[0];
     this->cost[RESOURCE::ore] = cost[1];
@@ -42,11 +43,15 @@ int Card::GetType() const{
 }
 
 int Card::GetEra() const{
-	return this->era;
+    return this->era;
+}
+
+int Card::GetFreeWith() const{
+    return this->freeWithId;
 }
 
 int Card::GetAmount(int players) const{
-	return this->amountPerPlayers[players-3];
+    return this->amountPerPlayers[players-3];
 }
 
 bool Card::Equal(Card c){
