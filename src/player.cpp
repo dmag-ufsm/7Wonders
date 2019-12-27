@@ -26,7 +26,7 @@ Player::Player()
 // CARD-RELATED //
 //////////////////
 
-void Player::BuildWonder(DMAG::Card c){
+bool Player::BuildWonder(DMAG::Card c){
     // 1) Build Wonder stage if possible.
     // 2) If the stage was built, remove card 'c' from the hand
     //    and insert 'c' to the vector of played cards.
@@ -37,13 +37,15 @@ void Player::BuildWonder(DMAG::Card c){
         }
         this->cards_hand.erase(this->cards_hand.begin()+i);
         this->cards_played.push_back(c);
+        return true;
     }
+    return false;
 }
 
-void Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _free_card){
-    // returns if the card has already been played (cannot play the same card twice)
+bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _free_card){
+    // returns false if the card has already been played (cannot play the same card twice)
     //if (std::find(cards_played.begin(), cards_played.end(), c) != cards_played.end())
-    //    return;
+    //    return false;
 
     bool free_card = _free_card;
 
@@ -54,7 +56,7 @@ void Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _f
             // free_card will be manipulated here if it was initially false ("normal" build).
             // this->BuyResource()...
 
-            return;
+            //return true;
         }
     }
 
@@ -184,12 +186,14 @@ void Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _f
     }
     if (i == cards.size()) {
         // ERROR: Card played was not found in the vector
+        return false;
     } else {
         cards.erase(cards.begin()+i);
         cards_played.push_back(c);
     }
 
     if (!free_card) this->resources[RESOURCE::coins] -= cost;
+    return true;
 }
 
 std::vector<Card> Player::GetHandCards(){
@@ -221,7 +225,8 @@ int Player::AmountOfType(int card_type){
 // RESOURCE-RELATED //
 //////////////////////
 
-// This function is a "step" in BuildStructure.
+// Buys x quantity of a certain resource from any neighbor.
+// - this function is a "step" in BuildStructure.
 bool Player::BuyResource(int resource, int quant){
     bool is_raw = resource <= 3 ? true : false; // raw materials have code <= 3 in resources.h
     int cost = !is_raw && this->manuf_cheap ? 1*quant : 2*quant;
@@ -249,14 +254,17 @@ bool Player::BuyResource(int resource, int quant){
     return false; // couldn't buy
 }
 
+// Adds x quantity of a certain resource.
 void Player::AddResource(int resource, int quant){
     this->resources[resource] += quant;
 }
 
+// Returns true if the player has x quantity of a certain resource.
 bool Player::HasEnoughResource(int resource, int quant){
     return (this->resources[resource] >= quant);
 }
 
+// Returns true if the player can play a card for free.
 bool Player::CanPlayFree(DMAG::Card c) {
     for (DMAG::Card const&  card : this->cards_played) {
         if (card.GetFreeWith() == card.GetId())
@@ -273,6 +281,7 @@ bool Player::CanPlayFree(DMAG::Card c) {
 // BATTLE-RELATED //
 ////////////////////
 
+// The player battles each neighbor at the end of every Age.
 void Player::Battle(int age){
     int current_age_value = 1;
     // Age I   ->  +1 victory token
@@ -460,6 +469,7 @@ int Player::CalculateGuildScore(){
     return guild_score;
 }
 
+// Calculates the number of VPs the player gets from scientific development.
 int Player::CalculateScientificScore(){
     int gear = 0, tablet = 0, compass = 0;
     for (DMAG::Card const& card : this->cards_played) {
@@ -502,6 +512,7 @@ int Player::CalculateScientificScore(){
     return (gear * gear) + (tablet * tablet) + (compass * compass) + (completed_sets * points_per_set_completed);
 }
 
+// Calculates the player's TOTAL score using the methods defined above.
 int Player::CalculateScore(){
     int treasury_score = static_cast<int>(this->resources[RESOURCE::coins]/3); // 1 VP for every 3 coins
     // TODO: all these:
@@ -525,29 +536,37 @@ int Player::CalculateScore(){
 // WONDER-RELATED EFFECTS //
 ////////////////////////////
 
-// Called at the end of the game, before scoring.
-void Player::ChooseExtraManuf(int resource){
+// The player chooses one of the 3 manufactured resources to get for free at the end of the game.
+// - called at the end of the game, before scoring.
+bool Player::ChooseExtraManuf(int resource){
     if (resource == RESOURCE::loom || resource == RESOURCE::glass || resource == RESOURCE::papyrus) {
         if (this->board.GetType() == WONDER_ID::alexandria_b && this->board.GetStage() >= 2) {
             this->resources[resource]++;
+            return true;
         }
     }
+    return false;
 }
 
-// Called at the end of the game, before scoring.
-void Player::ChooseExtraScience(int resource){
+// The player chooses one of the 3 scientific symbols to get for free at the end of the game.
+// - called at the end of the game, before scoring.
+bool Player::ChooseExtraScience(int resource){
     if (resource == RESOURCE::gear || resource == RESOURCE::compass || resource == RESOURCE::tablet) {
         int id = this->board.GetType();
         int stage = this->board.GetStage();
         if ((id == WONDER_ID::babylon_a && stage >= 2) ||
              (id == WONDER_ID::babylon_b && stage >= 3)) {
             this->resources[resource]++;
+            return true;
         }
     }
+    return false;
 }
 
-// Called ONCE each turn. Unsure exactly how this works tbh.
-void Player::ChooseExtraRaw(int resource){
+
+// The player chooses one of the 4 raw resources to receive for free at each turn (untradable).
+// - called ONCE each turn; unsure exactly how this works tbh.
+bool Player::ChooseExtraRaw(int resource){
     if (resource == RESOURCE::wood || resource == RESOURCE::ore ||
         resource == RESOURCE::clay || resource == RESOURCE::stone) {
         int id = this->board.GetType();
@@ -555,45 +574,54 @@ void Player::ChooseExtraRaw(int resource){
         if ((id == WONDER_ID::alexandria_a && stage >= 2) ||
             (id == WONDER_ID::alexandria_b && stage >= 1)) {
             this->resources[resource]++;
+            return true;
         }
     }
+    return false;
 }
 
-// Automatically called when Babylon B stage 2 is constructed.
+// The player can choose to play the seventh card of an Age instead of discarding it.
+// - automatically called when Babylon B stage 2 is constructed.
 void Player::CanPlaySeventh(){
     this->play_seventh = true;
 }
 
-// Automatically called when Olympia A stage 1 is constructed.
+// The player can buy resources for 1 coin instead of 2 from neighbors.
+// - automatically called when Olympia A stage 1 is constructed.
 void Player::CanBuyRawCheap(){
     this->wonder_raw_cheap = true;
 }
 
-// Will be changed depending on which type discard_pile will be.
-// Called at the end of the turn after the stage was built.
-void Player::BuildDiscardFree(DMAG::Card c, std::vector<DMAG::Card> discard_pile){
+// Builds a card from the discard pile for free.
+// - will be changed depending on which type discard_pile will be.
+// - called at the end of the turn after the stage was built.
+bool Player::BuildDiscardFree(DMAG::Card c, std::vector<DMAG::Card> discard_pile){
     int id = this->board.GetType();
     int stage = this->board.GetStage();
 
     if ((id == WONDER_ID::halikarnassos_a && stage == 2) ||
         (id == WONDER_ID::halikarnassos_b && stage >= 1)) {
-            this->BuildStructure(c, discard_pile, true);
+            return this->BuildStructure(c, discard_pile, true);
     }
+    return false;
 }
 
-// Called ONCE per age.
-void Player::BuildHandFree(DMAG::Card c){
+// Builds a card from the hand for free.
+// - called ONCE per age.
+bool Player::BuildHandFree(DMAG::Card c){
     if (this->board.GetType() == WONDER_ID::olympia_a && this->board.GetStage() >= 2) {
-        this->BuildStructure(c, this->cards_hand, true);
+        return this->BuildStructure(c, this->cards_hand, true);
     }
+    return false;
 }
 
-// Called at the END of the game, before scoring.
-// Where:
-//       Card c      ->  Guild to be copied
-//       int side 0  ->  GetEastNeighbor
-//       int side 1  ->  GetWestNeighbor
-void Player::CopyGuild(DMAG::Card c, int side){
+// Copies a neighbor's Guild.
+// - called at the END of the game, before scoring.
+// - where:
+//        Card c      ->  Guild to be copied
+//        int side 0  ->  GetEastNeighbor
+//        int side 1  ->  GetWestNeighbor
+bool Player::CopyGuild(DMAG::Card c, int side){
     Player* neighbor = side ? this->GetWestNeighbor() : this->GetEastNeighbor();
     int id = this->board.GetType();
     int stage = this->board.GetStage();
@@ -602,10 +630,11 @@ void Player::CopyGuild(DMAG::Card c, int side){
         for (DMAG::Card const& card : neighbor->cards_played) {
             if (c.Equal(card)) {
                 this->cards_played.push_back(c);
-                return;
+                return true;;
             }
         }
     }
+    return false;
 }
 
 ///////////////////////

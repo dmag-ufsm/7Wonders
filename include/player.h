@@ -52,8 +52,8 @@ public:
     Player();
 
     // Card-related:
-    void BuildWonder(DMAG::Card c);
-    void BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _free_card);
+    bool BuildWonder(DMAG::Card c);
+    bool BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _free_card);
     std::vector<DMAG::Card> GetHandCards();
     void ReceiveCards(std::vector<DMAG::Card> _cards_hand);
     void Discard();
@@ -76,14 +76,14 @@ public:
     int CalculateScore();
 
     // Wonder-related effects:
-    void ChooseExtraManuf(int resource);   // At the end of the game.
-    void ChooseExtraScience(int resource); // At the end of the game.
-    void ChooseExtraRaw(int resource);     // Once per turn.
+    bool ChooseExtraManuf(int resource);   // At the end of the game.
+    bool ChooseExtraScience(int resource); // At the end of the game.
+    bool ChooseExtraRaw(int resource);     // Once per turn.
     void CanPlaySeventh();
     void CanBuyRawCheap();
-    void BuildDiscardFree(DMAG::Card c, std::vector<DMAG::Card> discard_pile); // At the end of the turn after the stage was built.
-    void BuildHandFree(DMAG::Card c); // Once per Age.
-    void CopyGuild(DMAG::Card c, int side); // At the end of the game.
+    bool BuildDiscardFree(DMAG::Card c, std::vector<DMAG::Card> discard_pile); // At the end of the turn after the stage was built.
+    bool BuildHandFree(DMAG::Card c); // Once per Age.
+    bool CopyGuild(DMAG::Card c, int side); // At the end of the game.
 
     // Getters:
     int GetId();
