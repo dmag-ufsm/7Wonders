@@ -35,9 +35,11 @@ std::vector<int> Wonder::GetEffects() const{
 
 bool Wonder::AddStage(Player* p) { return false; }
 
-// TODO:
-// Still need to figure out how we'll apply each wonder's special effects.
-// Will we doi it through here or directly through player?
+/*
+ * Every Wonder has its own constructor and AddStage() method.
+ * Therefore, the Player class won't have to deal with (most) wonder-specific
+ * stuff; he will simply call the method and be done with it!
+ */
 
 // GIZAH A
 
