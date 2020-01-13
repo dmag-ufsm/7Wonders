@@ -42,21 +42,35 @@ bool Player::BuildWonder(DMAG::Card c){
     return false;
 }
 
+// knee-deep in the dead
 bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _free_card){
-    // returns false if the card has already been played (cannot play the same card twice)
-    //if (std::find(cards_played.begin(), cards_played.end(), c) != cards_played.end())
-    //    return false;
+    // Returns false if the card has already been played (cannot play the same card twice).
+    for (DMAG::Card const& card : this->cards_played)
+        if (c.Equal(card)) return false;
 
     bool free_card = _free_card;
 
     if (!free_card) {
-        // if there are not enough resources
+        // If there are not enough resources.
         if (!c.CanBePlayed(this->resources)) {
-            // TODO: check if the card can be played for free, otherwise check buy from neighbors.
-            // free_card will be manipulated here if it was initially false ("normal" build).
-            // this->BuyResource()...
-
-            //return true;
+            // Check if the card can be played for free, otherwise buy from neighbors.
+            if (this->CheckFreeCard(c)) free_card = true;
+            else {
+                std::map<int, unsigned char> resources_bckp = this->resources;
+                std::map<int, unsigned char> resources_needed = c.MissingCards(this->resources);
+                for (std::map<int, unsigned char>::iterator it = resources_needed.begin();
+                     it!=resources_needed.end(); ++it) {
+                    int quant_needed = resources_needed[it->first];
+                    if (quant_needed > 0) {
+                        bool could_buy = this->BuyResource(it->first, quant_needed);
+                        // If it was not possible to buy from neighbor, revert changes and return.
+                        if (!could_buy) {
+                            this->resources = resources_bckp;
+                            return false;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -196,6 +210,26 @@ bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _f
     return true;
 }
 
+// Checks if the player has a card that permits him to play card 'c' for free.
+bool Player::CheckFreeCard(DMAG::Card c){
+    int free_id = c.GetFreeWith();
+
+    if (free_id != CARD_ID::none) {
+        // Treating exception:
+        // Forum can be constructed for free if the player has either the East Trading Post
+        // or the West Trading Post (raw_cheap_east or raw_cheap_west).
+        if (free_id == -1 && (this->raw_cheap_east || this->raw_cheap_west))
+            return true;
+
+        // General case:
+        for (DMAG::Card const& card : this->cards_played) {
+            if (card.GetId() == free_id) return true;
+        }
+    }
+
+    return false;
+}
+
 std::vector<Card> Player::GetHandCards(){
     return this->cards_hand;
 }
@@ -262,18 +296,6 @@ void Player::AddResource(int resource, int quant){
 // Returns true if the player has x quantity of a certain resource.
 bool Player::HasEnoughResource(int resource, int quant){
     return (this->resources[resource] >= quant);
-}
-
-// Returns true if the player can play a card for free.
-bool Player::CanPlayFree(DMAG::Card c) {
-    for (DMAG::Card const&  card : this->cards_played) {
-        if (card.GetFreeWith() == card.GetId())
-            return true;
-    }
-    return false;
-
-    // TODO: fix the only case of the Forum card that makes it
-    // possible to be free from two others (may need to use vector)
 }
 
 

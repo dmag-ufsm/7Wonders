@@ -54,6 +54,7 @@ public:
     // Card-related:
     bool BuildWonder(DMAG::Card c);
     bool BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _free_card);
+    bool CheckFreeCard(DMAG::Card c);
     std::vector<DMAG::Card> GetHandCards();
     void ReceiveCards(std::vector<DMAG::Card> _cards_hand);
     void Discard();
@@ -63,7 +64,6 @@ public:
     bool BuyResource(int resource, int quant);
     void AddResource(int resource, int quant);
     bool HasEnoughResource(int resource, int quant);
-    bool CanPlayFree(DMAG::Card c);
 
     // Battle-related:
     void Battle(int age);
