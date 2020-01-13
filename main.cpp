@@ -206,7 +206,10 @@ class Game{
             cards.push_back(Card(CARD_ID::east_trading_post, "East Trading Post", CARD_TYPE::commercial, 1, CARD_ID::none, {0, 0, 0, 0, 0, 0, 0, 0}, {1, 1, 1, 1, 2}));
             cards.push_back(Card(CARD_ID::west_trading_post, "West Trading Post", CARD_TYPE::commercial, 1, CARD_ID::none, {0, 0, 0, 0, 0, 0, 0, 0}, {1, 1, 1, 1, 2}));
             cards.push_back(Card(CARD_ID::marketplace, "Marketplace", CARD_TYPE::commercial, 1, CARD_ID::none, {0, 0, 0, 0, 0, 0, 0, 0}, {1, 1, 1, 2, 2}));
-            cards.push_back(Card(CARD_ID::forum, "Forum", CARD_TYPE::commercial, 2, CARD_ID::east_trading_post, {0, 0, 2, 0, 0, 0, 0, 0}, {1, 1, 1, 2, 3}));
+            // obs.: Forum can be constructed for free if the player has either the East Trading Post or the West Trading Post.
+            // Therefore, freeWithId will be -1 and will be treated on player.cpp, therefore avoiding the need for vectors.
+            // It's not the prettiest, but it's a simple and efficient solution, as Forum is the only card that carries this exception.
+            cards.push_back(Card(CARD_ID::forum, "Forum", CARD_TYPE::commercial, 2, -1, {0, 0, 2, 0, 0, 0, 0, 0}, {1, 1, 1, 2, 3}));
             cards.push_back(Card(CARD_ID::caravansery, "Caravansery", CARD_TYPE::commercial, 2, CARD_ID::marketplace, {2, 0, 0, 0, 0, 0, 0, 0}, {1, 1, 2, 3, 3}));
             cards.push_back(Card(CARD_ID::vineyard, "Vineyard", CARD_TYPE::commercial, 2, CARD_ID::none, {0, 0, 0, 0, 0, 0, 0, 0}, {1, 1, 1, 2, 2}));
             cards.push_back(Card(CARD_ID::bazar, "Bazar", CARD_TYPE::commercial, 2, CARD_ID::none, {0, 0, 0, 0, 0, 0, 0, 0}, {0, 1, 1, 1, 2}));
@@ -329,7 +332,15 @@ class Game{
                     argument = json_object["command"]["argument"];
                     if(command == "build_structure"){
                         Card selected = GetCardByName(argument);
-                        player_list[i]->BuildStructure(selected, player_list[i]->GetHandCards(), player_list[i]->CanPlayFree(selected)); // find card before calling this
+                        player_list[i]->BuildStructure(selected, player_list[i]->GetHandCards(), false); // find card before calling this
+                    // TODO:
+                    // Most of these end up calling BuildStructure, but they are wonder-specific.
+                    // - ChooseExtraManuf(int resource)   // end of game
+                    // - ChooseExtraScience(int resource) // end of game
+                    // - ChooseExtraRaw(int resource)     // once per turn (?)
+                    // - BuildDiscardFree(Card c)         // end of the turn after the stage was built (?)
+                    // - BuildHandFree (Card c)           // once per Age
+                    // - CopyGuild(Card c, int side);     // end of game
                     }else if(command == "build_guild"){
                         //do something
                     }else if(command == "build_wonder"){
