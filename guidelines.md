@@ -15,22 +15,6 @@ Ex, atributo "fichas de conflito":
 * [Informações sobre cartas e maravilhas (tabuladas)](https://github.com/dmag-ufsm/Game/tree/master/references)
 
 # TODO
-## Player
-* Alguns detalhes em BuildStructure
-    * Checar quando a carta pode ser construída de graça (e.g. "combos")
-        * Depende de Card para fazer isso (ver abaixo).
-* Talvez seja necessário mudar a assinatura de alguns métodos void para
-  retornarem algum valor de sucesso/erro, para se comunicarem melhor com a
-  main.
-* Algo mais além disso?
-## Card
-* Cartas que fazem "combo" para a construção ficar grátis
-    * Vetor?
-        * Player poderá varrer o vetor de "combos" e verificar se ele possui as
-          cartas requeridas; se tiver, constrói a estrutura de graça.
-* Outras coisas?
-## Filer
-* ?
 ## Main
 * Terminar de incluir os comandos de possíveis jogadas
     * Decidir como controlar os comandos, afinal, algumas jogadas são especiais
@@ -39,7 +23,7 @@ Ex, atributo "fichas de conflito":
         válidas em um turno X poderia ser feita aqui mesmo (também faz mais
         sentido).
 * ?
-## Outros
+## Debugging!
 
 # Classe player:
 
