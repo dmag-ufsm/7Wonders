@@ -18,7 +18,7 @@ Card::Card(int id, std::string name, int type, int era, int freeWithId, std::vec
 
     for (int i = 0; i < 5; i++)
         this->amountPerPlayers[i] = amountPerPlayers[i];
-    
+
     this->cost[RESOURCE::wood] = cost[0];
     this->cost[RESOURCE::ore] = cost[1];
     this->cost[RESOURCE::clay] = cost[2];
@@ -58,6 +58,7 @@ bool Card::Equal(Card c){
     return this->GetId() == c.GetId();
 }
 
+// Checks if we have enough resources to play the card.
 bool Card::CanBePlayed(std::map<int, unsigned char> resources){
     return (this->cost[RESOURCE::wood] <= resources[RESOURCE::wood] &&
             this->cost[RESOURCE::ore] <= resources[RESOURCE::ore] &&
@@ -69,6 +70,7 @@ bool Card::CanBePlayed(std::map<int, unsigned char> resources){
             this->cost[RESOURCE::coins] <= resources[RESOURCE::coins]);
 }
 
+// Returns a map with the quantities needed of each resource to play the card.
 std::map<int, unsigned char> Card::MissingCards(std::map<int, unsigned char> resources) {
     std::map<int, unsigned char> missing{
         { RESOURCE::wood, 0 },
