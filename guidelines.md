@@ -1,12 +1,12 @@
 # Diretrizes
 
 Todos os atributos e métodos serão escritos em inglês.
-As funções deverão começar com uma ação, escrita em CamelCase
+As funções deverão começar com uma ação, escrita em CamelCase;
 ex, função "comprar recurso":
 <type> PurchaseResource(args);
 
-Atributos deverão ser escritos em snake_case
-Ex, atributo "fichas de conflito":
+Atributos deverão ser escritos em snake_case;
+ex, atributo "fichas de conflito":
 <type> conflict_markers;
 
 # Referências
@@ -22,7 +22,17 @@ Ex, atributo "fichas de conflito":
       * Para tirar o "burden" de fazer isso em player, a verificação de jogadas
         válidas em um turno X poderia ser feita aqui mesmo (também faz mais
         sentido).
-* ?
+
+## Player
+* Pensei que tinha terminado de implementá-la, mas vendo aqui vi que ainda
+  faltam algumas coisas em ```BuildStructure(...)```..
+    * Dependendo do que o jogador construir, ele pode escolhir dentre dois
+      recursos qual gastar (aparentemente é isso, pelos comentários do Rafael).
+      Talvez dê pra resolver incluindo *mais um* argumento na função; um valor
+      opcional que represente o recurso escolhido.
+* Na linha 525 tem um TODO perdido: 
+    * ```// TODO: choose the most advantageous scientific piece (this->sci_extra)```.
+
 ## Debugging!
 
 # Classe player:
