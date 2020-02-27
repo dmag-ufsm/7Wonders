@@ -27,7 +27,7 @@ ex, atributo "fichas de conflito":
 * Pensei que tinha terminado de implementá-la, mas vendo aqui vi que ainda
   faltam algumas coisas em ```BuildStructure(...)```..
     * Dependendo do que o jogador construir, ele pode escolhir dentre dois
-      recursos qual gastar (aparentemente é isso, pelos comentários do Rafael).
+      recursos qual incrementar.
       Talvez dê pra resolver incluindo *mais um* argumento na função; um valor
       opcional que represente o recurso escolhido.
 * Na linha 525 tem um TODO perdido: 
