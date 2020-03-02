@@ -292,7 +292,7 @@ class Game{
                 }
             }
 
-            //CreateDecks();
+            CreateDecks();
             //GiveWonders();
             //GiveCards();
 
