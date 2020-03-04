@@ -29,6 +29,15 @@ private:
     int manuf_extra;           // The player has an additional manufactured good. (Forum and Alexandria B)
     int sci_extra;             // The player has an additional scientific piece. (Scientific Guild and Babylon A and B)
 
+    bool used_tree_farm;
+    bool used_forest_cave;
+    bool used_timber_yard;
+    bool used_excavation;
+    bool used_mine;
+    bool used_clay_pit;
+    bool used_forum;
+    bool used_caravansery;
+
     // Key needs to be int because the underlying type in enums is int
     std::map<int, unsigned char> resources{
         { RESOURCE::wood, 0 },
@@ -59,8 +68,11 @@ public:
     void ReceiveCards(std::vector<DMAG::Card> _cards_hand);
     void Discard();
     int AmountOfType(int card_type);
+    bool AvailableCard(int card_id);
+    void ResetUsed();
 
     // Resource-related:
+    bool ProduceResource(int resource, int quant);
     bool BuyResource(int resource, int quant);
     void AddResource(int resource, int quant);
     bool HasEnoughResource(int resource, int quant);

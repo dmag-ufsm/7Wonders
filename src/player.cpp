@@ -15,6 +15,15 @@ Player::Player()
     this->raw_cheap_west = false;
     this->manuf_cheap = false;
 
+    this->used_tree_farm = false;
+    this->used_forest_cave = false;
+    this->used_timber_yard = false;
+    this->used_excavation = false;
+    this->used_mine = false;
+    this->used_clay_pit = false;
+    this->used_forum = false;
+    this->used_caravansery = false;
+
     this->raw_extra = 0;
     this->manuf_extra = 0;
 
@@ -53,7 +62,7 @@ bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _f
     if (!free_card) {
         // If there are not enough resources.
         if (!c.CanBePlayed(this->resources)) {
-            // Check if the card can be played for free, otherwise buy from neighbors.
+            // Check if the card can be played for free, otherwise try to produce the resources needed.
             if (this->CheckFreeCard(c)) free_card = true;
             else {
                 std::map<int, unsigned char> resources_bckp = this->resources;
@@ -62,9 +71,9 @@ bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _f
                      it!=resources_needed.end(); ++it) {
                     int quant_needed = resources_needed[it->first];
                     if (quant_needed > 0) {
-                        bool could_buy = this->BuyResource(it->first, quant_needed);
+                        bool could_produce = this->ProduceResource(it->first, quant_needed);
                         // If it was not possible to buy from neighbor, revert changes and return.
-                        if (!could_buy) {
+                        if (!could_produce) {
                             this->resources = resources_bckp;
                             return false;
                         }
@@ -87,22 +96,22 @@ bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _f
             } else if (card == CARD_ID::ore_vein) {
                 this->resources[RESOURCE::ore] += 1;
             } else if (card == CARD_ID::tree_farm) {
-                // wood or clay (check how this will be implemented)
+                // wood or clay (won't be applied here, see ProduceResource)
                 cost = 1;
             } else if (card == CARD_ID::excavation) {
-                // stone or clay (check how this will be implemented)
+                // stone or clay (won't be applied here, see ProduceResource)
                 cost = 1;
             } else if (card == CARD_ID::clay_pit) {
-                // clay or ore (check how this will be implemented)
+                // clay or ore (won't be applied here, see ProduceResource)
                 cost = 1;
             } else if (card == CARD_ID::timber_yard) {
-                // stone or wood (check how this will be implemented)
+                // stone or wood (won't be applied here, see ProduceResource)
                 cost = 1;
             } else if (card == CARD_ID::forest_cave) {
-                // wood or ore (check how this will be implemented)
+                // wood or ore (won't be applied here, see ProduceResource)
                 cost = 1;
             } else if (card == CARD_ID::mine) {
-                // ore or stone (check how this will be implemented)
+                // ore or stone (won't be applied here, see ProduceResource)
                 cost = 1;
             } else if (card == CARD_ID::sawmill) {
                 this->resources[RESOURCE::wood] += 2;
@@ -207,6 +216,7 @@ bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _f
     }
 
     if (!free_card) this->resources[RESOURCE::coins] -= cost;
+    this->ResetUsed();
     return true;
 }
 
@@ -254,10 +264,143 @@ int Player::AmountOfType(int card_type){
     return quant;
 }
 
+bool Player::AvailableCard(int card_id){
+   for (DMAG::Card const& card : this->cards_played) {
+       int this_card = card.GetId();
+       if (this_card == card_id) {
+           if (this_card == CARD_ID::tree_farm && !this->used_tree_farm) {
+               this->used_tree_farm = true;
+               return true;
+           }
+           if (this_card == CARD_ID::forest_cave && !this->used_forest_cave) {
+               this->used_forest_cave = true;
+               return true;
+           }
+           if (this_card == CARD_ID::timber_yard && !this->used_timber_yard) {
+               this->used_timber_yard = true;
+               return true;
+           }
+           if (this_card == CARD_ID::excavation && !this->used_excavation) {
+               this->used_excavation = true;
+               return true;
+           }
+           if (this_card == CARD_ID::mine && !this->used_mine) {
+               this->used_mine = true;
+               return true;
+           }
+           if (this_card == CARD_ID::clay_pit && !this->used_clay_pit) {
+               this->used_clay_pit = true;
+               return true;
+           }
+           if (this_card == CARD_ID::forum && !this->used_forum) {
+               this->used_forum = true;
+               return true;
+           }
+           if (this_card == CARD_ID::caravansery && !this->used_caravansery) {
+               this->used_caravansery = true;
+               return true;
+           }
+       }
+   }
+   return false;
+}
+
+void Player::ResetUsed() {
+    this->used_tree_farm = false;
+    this->used_forest_cave = false;
+    this->used_timber_yard = false;
+    this->used_excavation = false;
+    this->used_mine = false;
+    this->used_clay_pit = false;
+    this->used_forum = false;
+    this->used_caravansery = false;
+}
+
 
 //////////////////////
 // RESOURCE-RELATED //
 //////////////////////
+
+// Check if the player can produce a resource (in cases where a certain structure gives
+// one resource OR the other; that is, "on demand" resources).
+// If he can't produce by himself, try buying it from neighbors.
+// - this function is a "step" in BuildStructure.
+bool Player::ProduceResource(int resource, int quant){
+    int resource_bckp = this->resources[resource];
+
+    // From: https://github.com/dmag-ufsm/Game/blob/master/references/cards.csv
+    // Wood                 -> tree_farm  || forest_cave || timber_yard || caravansery
+    // Clay                 -> tree_farm  || excavation  || clay_pit    || caravansery
+    // Stone                -> excavation || timber_yard || mine        || caravansery
+    // Ore                  -> clay_pit   || forest_cave || mine        || caravansery
+    // Glass, Loom, Papyrus -> forum
+
+    // Very ugly, but hopefully it'll get the job done.
+    if (resource == RESOURCE::wood) {
+        if (this->AvailableCard(CARD_ID::tree_farm)) {
+            resource_bckp++;
+            if (resource_bckp >= quant) return true;
+        } if (this->AvailableCard(CARD_ID::forest_cave)) {
+            resource_bckp++;
+            if (resource_bckp >= quant) return true;
+        } if (this->AvailableCard(CARD_ID::timber_yard)) {
+            resource_bckp++;
+            if (resource_bckp >= quant) return true;
+        } if (this->AvailableCard(CARD_ID::caravansery)) {
+            resource_bckp++;
+            if (resource_bckp >= quant) return true;
+        }
+    } else if (resource == RESOURCE::clay) {
+        if (this->AvailableCard(CARD_ID::tree_farm)) {
+            resource_bckp++;
+            if (resource_bckp >= quant) return true;
+        } if (this->AvailableCard(CARD_ID::excavation)) {
+            resource_bckp++;
+            if (resource_bckp >= quant) return true;
+        } if (this->AvailableCard(CARD_ID::clay_pit)) {
+            resource_bckp++;
+            if (resource_bckp >= quant) return true;
+        } if (this->AvailableCard(CARD_ID::caravansery)) {
+            resource_bckp++;
+            if (resource_bckp >= quant) return true;
+        }
+    } else if (resource == RESOURCE::stone) {
+        if (this->AvailableCard(CARD_ID::excavation)) {
+            resource_bckp++;
+            if (resource_bckp >= quant) return true;
+        } if (this->AvailableCard(CARD_ID::timber_yard)) {
+            resource_bckp++;
+            if (resource_bckp >= quant) return true;
+        } if (this->AvailableCard(CARD_ID::mine)) {
+            resource_bckp++;
+            if (resource_bckp >= quant) return true;
+        } if (this->AvailableCard(CARD_ID::caravansery)) {
+            resource_bckp++;
+            if (resource_bckp >= quant) return true;
+        }
+    } else if (resource == RESOURCE::ore) {
+        if (this->AvailableCard(CARD_ID::clay_pit)) {
+            resource_bckp++;
+            if (resource_bckp >= quant) return true;
+        } if (this->AvailableCard(CARD_ID::forest_cave)) {
+            resource_bckp++;
+            if (resource_bckp >= quant) return true;
+        } if (this->AvailableCard(CARD_ID::mine)) {
+            resource_bckp++;
+            if (resource_bckp >= quant) return true;
+        } if (this->AvailableCard(CARD_ID::caravansery)) {
+            resource_bckp++;
+            if (resource_bckp >= quant) return true;
+        }
+    } else if (resource == RESOURCE::glass || resource == RESOURCE::loom || resource == RESOURCE::papyrus) {
+        if (this->AvailableCard(CARD_ID::forum)) {
+            resource_bckp++;
+            if (resource_bckp >= quant) return true;
+        }
+    }
+
+    return this->BuyResource(resource_bckp, quant);
+}
 
 // Buys x quantity of a certain resource from any neighbor.
 // - this function is a "step" in BuildStructure.

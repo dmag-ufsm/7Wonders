@@ -24,14 +24,20 @@ ex, atributo "fichas de conflito":
         sentido).
 
 ## Player
-* Pensei que tinha terminado de implementá-la, mas vendo aqui vi que ainda
-  faltam algumas coisas em ```BuildStructure(...)```..
-    * Dependendo do que o jogador construir, ele pode escolhir dentre dois
+* ~~Pensei que tinha terminado de implementá-la, mas vendo aqui vi que ainda
+  faltam algumas coisas em ```BuildStructure(...)```..~~
+    * ~~Dependendo do que o jogador construir, ele pode escolhir dentre dois
       recursos qual incrementar.
       Talvez dê pra resolver incluindo *mais um* argumento na função; um valor
-      opcional que represente o recurso escolhido.
+      opcional que represente o recurso escolhido.~~
+    * O problema acima foi (provavelmente) resolvido com a função
+      ```ProduceResource(...)```, que produz o recurso necessário sob demanda,
+      sem intervenção do jogador. Isso é feito verificando as cartas que produzem 
+      "um recurso OU outro"; as cartas cujo recurso já foi escolhido são
+      marcadas como "used" e não são utilizadas mais uma vez no mesmo turno.
 * Na linha 525 tem um TODO perdido: 
     * ```// TODO: choose the most advantageous scientific piece (this->sci_extra)```.
+    * Ver com o Rafael (ou ignorar por enquanto :P).
 
 ## Debugging!
 
