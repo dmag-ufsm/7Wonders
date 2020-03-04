@@ -75,6 +75,7 @@ bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _f
                         // If it was not possible to buy from neighbor, revert changes and return.
                         if (!could_produce) {
                             this->resources = resources_bckp;
+                            this->ResetUsed();
                             return false;
                         }
                     }
