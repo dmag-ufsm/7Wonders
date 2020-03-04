@@ -46,12 +46,13 @@ bool Player::BuildWonder(DMAG::Card c){
         }
         this->cards_hand.erase(this->cards_hand.begin()+i);
         this->cards_played.push_back(c);
+        this->ResetUsed();
         return true;
     }
     return false;
 }
 
-// knee-deep in the dead
+// Play a card.
 bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _free_card){
     // Returns false if the card has already been played (cannot play the same card twice).
     for (DMAG::Card const& card : this->cards_played)
@@ -72,7 +73,7 @@ bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _f
                     int quant_needed = resources_needed[it->first];
                     if (quant_needed > 0) {
                         bool could_produce = this->ProduceResource(it->first, quant_needed);
-                        // If it was not possible to buy from neighbor, revert changes and return.
+                        // If it was not possible to produce/buy, revert changes and return.
                         if (!could_produce) {
                             this->resources = resources_bckp;
                             this->ResetUsed();
@@ -327,6 +328,10 @@ void Player::ResetUsed() {
 // If he can't produce by himself, try buying it from neighbors.
 // - this function is a "step" in BuildStructure.
 bool Player::ProduceResource(int resource, int quant){
+    // This check below will be done in wonder.cpp, to verify if the player can build a
+    // wonder stage directly of it'll need to "produce" a resource.
+    if (this->resources[resource] >= quant) return true;
+
     int resource_bckp = this->resources[resource];
 
     // From: https://github.com/dmag-ufsm/Game/blob/master/references/cards.csv
