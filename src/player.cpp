@@ -49,6 +49,7 @@ bool Player::BuildWonder(DMAG::Card c){
         this->ResetUsed();
         return true;
     }
+    this->ResetUsed();
     return false;
 }
 
