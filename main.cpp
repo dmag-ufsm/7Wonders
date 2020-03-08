@@ -24,7 +24,7 @@ class Game{
     private:
         vector<Player*> player_list;
         unsigned char number_of_players;
-        unsigned char era;
+        short era;
         unsigned char turn;
         vector<Wonder> wonders;
         vector<Card> deck[3]; // need to change to Deck deck[3];
@@ -77,7 +77,7 @@ class Game{
 
                 era++;
                 cout << "-----------------------------------------------------------------\n";
-                cout << "Nova era: %d\n"<< era << endl;
+                cout << "Nova era: "<< era << endl;
                 // transfer the remaining card in each player's hand to the discarded card list
                 for (Player* & player : player_list) {
                     vector<Card> cards = player->GetHandCards();
