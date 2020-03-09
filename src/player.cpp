@@ -37,15 +37,14 @@ Player::Player()
 
 bool Player::BuildWonder(DMAG::Card c){
     // 1) Build Wonder stage if possible.
-    // 2) If the stage was built, remove card 'c' from the hand
-    //    and insert 'c' to the vector of played cards.
+    // 2) If the stage was built, remove card 'c' from the hand.
     if (this->board.AddStage(this)) {
         size_t i = 0;
         for (i = 0; i < this->cards_hand.size(); i++) {
             if (this->cards_hand[i].Equal(c)) break;
         }
         this->cards_hand.erase(this->cards_hand.begin()+i);
-        this->cards_played.push_back(c);
+        // this->cards_played.push_back(c); Actually, this is not needed.
         return true;
     }
     return false;
