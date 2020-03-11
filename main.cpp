@@ -77,7 +77,10 @@ class Game{
 
                 era++;
                 cout << "-----------------------------------------------------------------\n";
-                cout << "Nova era: "<< era << endl;
+                if(era < 4)
+                    cout << "Nova era: "<< era << endl;
+                else
+                    cout << "End of game" << endl;
                 // transfer the remaining card in each player's hand to the discarded card list
                 for (Player* & player : player_list) {
                     vector<Card> cards = player->GetHandCards();
@@ -369,6 +372,7 @@ class Game{
                 }
             }
 
+            // output results after game
         }
 };
 
