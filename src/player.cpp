@@ -15,14 +15,14 @@ Player::Player()
     this->raw_cheap_west = false;
     this->manuf_cheap = false;
 
-    this->used_tree_farm = false;
-    this->used_forest_cave = false;
-    this->used_timber_yard = false;
-    this->used_excavation = false;
-    this->used_mine = false;
-    this->used_clay_pit = false;
-    this->used_forum = false;
-    this->used_caravansery = false;
+    this->used_tree_farm = -1;
+    this->used_forest_cave = -1;
+    this->used_timber_yard = -1;
+    this->used_excavation = -1;
+    this->used_mine = -1;
+    this->used_clay_pit = -1;
+    this->used_forum = -1;
+    this->used_caravansery = -1;
 
     this->raw_extra = 0;
     this->manuf_extra = 0;
@@ -37,19 +37,16 @@ Player::Player()
 
 bool Player::BuildWonder(DMAG::Card c){
     // 1) Build Wonder stage if possible.
-    // 2) If the stage was built, remove card 'c' from the hand
-    //    and insert 'c' to the vector of played cards.
+    // 2) If the stage was built, remove card 'c' from the hand.
     if (this->board.AddStage(this)) {
         size_t i = 0;
         for (i = 0; i < this->cards_hand.size(); i++) {
             if (this->cards_hand[i].Equal(c)) break;
         }
         this->cards_hand.erase(this->cards_hand.begin()+i);
-        this->cards_played.push_back(c);
-        this->ResetUsed();
+        // this->cards_played.push_back(c); Actually, this is not needed.
         return true;
     }
-    this->ResetUsed();
     return false;
 }
 
@@ -219,7 +216,6 @@ bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _f
     }
 
     if (!free_card) this->resources[RESOURCE::coins] -= cost;
-    this->ResetUsed();
     return true;
 }
 
@@ -267,40 +263,40 @@ int Player::AmountOfType(int card_type){
     return quant;
 }
 
-bool Player::AvailableCard(int card_id){
+bool Player::AvailableCard(int card_id, int resource){
    for (DMAG::Card const& card : this->cards_played) {
        int this_card = card.GetId();
        if (this_card == card_id) {
-           if (this_card == CARD_ID::tree_farm && !this->used_tree_farm) {
-               this->used_tree_farm = true;
+           if (this_card == CARD_ID::tree_farm && this->used_tree_farm == -1) {
+               this->used_tree_farm = resource;
                return true;
            }
-           if (this_card == CARD_ID::forest_cave && !this->used_forest_cave) {
-               this->used_forest_cave = true;
+           if (this_card == CARD_ID::forest_cave && this->used_forest_cave == -1) {
+               this->used_forest_cave = resource;
                return true;
            }
-           if (this_card == CARD_ID::timber_yard && !this->used_timber_yard) {
-               this->used_timber_yard = true;
+           if (this_card == CARD_ID::timber_yard && this->used_timber_yard == -1) {
+               this->used_timber_yard = resource;
                return true;
            }
-           if (this_card == CARD_ID::excavation && !this->used_excavation) {
-               this->used_excavation = true;
+           if (this_card == CARD_ID::excavation && this->used_excavation == -1) {
+               this->used_excavation = resource;
                return true;
            }
-           if (this_card == CARD_ID::mine && !this->used_mine) {
-               this->used_mine = true;
+           if (this_card == CARD_ID::mine && this->used_mine == -1) {
+               this->used_mine = resource;
                return true;
            }
-           if (this_card == CARD_ID::clay_pit && !this->used_clay_pit) {
-               this->used_clay_pit = true;
+           if (this_card == CARD_ID::clay_pit && this->used_clay_pit == -1) {
+               this->used_clay_pit = resource;
                return true;
            }
-           if (this_card == CARD_ID::forum && !this->used_forum) {
-               this->used_forum = true;
+           if (this_card == CARD_ID::forum && this->used_forum == -1) {
+               this->used_forum = resource;
                return true;
            }
            if (this_card == CARD_ID::caravansery && !this->used_caravansery) {
-               this->used_caravansery = true;
+               this->used_caravansery = resource;
                return true;
            }
        }
@@ -308,15 +304,18 @@ bool Player::AvailableCard(int card_id){
    return false;
 }
 
+// Prepare for the next turn.
+// - called at the end of a turn.
 void Player::ResetUsed() {
-    this->used_tree_farm = false;
-    this->used_forest_cave = false;
-    this->used_timber_yard = false;
-    this->used_excavation = false;
-    this->used_mine = false;
-    this->used_clay_pit = false;
-    this->used_forum = false;
-    this->used_caravansery = false;
+    this->DecrementUsed();
+    this->used_tree_farm    = -1;
+    this->used_forest_cave  = -1;
+    this->used_timber_yard  = -1;
+    this->used_excavation   = -1;
+    this->used_mine         = -1;
+    this->used_clay_pit     = -1;
+    this->used_forum        = -1;
+    this->used_caravansery  = -1;
 }
 
 
@@ -329,12 +328,23 @@ void Player::ResetUsed() {
 // If he can't produce by himself, try buying it from neighbors.
 // - this function is a "step" in BuildStructure.
 bool Player::ProduceResource(int resource, int quant){
-    // This check below will be done in wonder.cpp, to verify if the player can build a
-    // wonder stage directly of it'll need to "produce" a resource.
-    if (this->resources[resource] >= quant) return true;
+    // Extra check to verify if the player can build directly without needing to produce.
+    if (this->resources[resource] >= quant)
+        return true;
 
-    int resource_bckp = this->resources[resource];
+    // Produce "on demand" resources.
+    // Ugly, but hopefully it'll get the job done.
+    int needed = this->IncrementOnDemand(resource, quant);
+    if (needed <= 0) return true;
 
+    // if the player couldn't produce the resource by himself, try buying it from a neighbor.
+    return this->BuyResource(resource, needed);
+}
+
+// Some cards can produce one resource OR the other each turn. This function takes care of this by
+// incrementing the needed resource if a structure that fits the criteria is available (not used already).
+// Returns the needed resources - quantity produced.
+int Player::IncrementOnDemand(int resource, int needed){
     // From: https://github.com/dmag-ufsm/Game/blob/master/references/cards.csv
     // Wood                 -> tree_farm  || forest_cave || timber_yard || caravansery
     // Clay                 -> tree_farm  || excavation  || clay_pit    || caravansery
@@ -342,71 +352,67 @@ bool Player::ProduceResource(int resource, int quant){
     // Ore                  -> clay_pit   || forest_cave || mine        || caravansery
     // Glass, Loom, Papyrus -> forum
 
-    // Very ugly, but hopefully it'll get the job done.
+    int cont = 0;
     if (resource == RESOURCE::wood) {
-        if (this->AvailableCard(CARD_ID::tree_farm)) {
-            resource_bckp++;
-            if (resource_bckp >= quant) return true;
-        } if (this->AvailableCard(CARD_ID::forest_cave)) {
-            resource_bckp++;
-            if (resource_bckp >= quant) return true;
-        } if (this->AvailableCard(CARD_ID::timber_yard)) {
-            resource_bckp++;
-            if (resource_bckp >= quant) return true;
-        } if (this->AvailableCard(CARD_ID::caravansery)) {
-            resource_bckp++;
-            if (resource_bckp >= quant) return true;
+        if (this->AvailableCard(CARD_ID::tree_farm, resource)) {
+            cont++;
+        } if (this->AvailableCard(CARD_ID::forest_cave, resource)) {
+            cont++;
+        } if (this->AvailableCard(CARD_ID::timber_yard, resource)) {
+            cont++;
+        } if (this->AvailableCard(CARD_ID::caravansery, resource)) {
+            cont++;
         }
     } else if (resource == RESOURCE::clay) {
-        if (this->AvailableCard(CARD_ID::tree_farm)) {
-            resource_bckp++;
-            if (resource_bckp >= quant) return true;
-        } if (this->AvailableCard(CARD_ID::excavation)) {
-            resource_bckp++;
-            if (resource_bckp >= quant) return true;
-        } if (this->AvailableCard(CARD_ID::clay_pit)) {
-            resource_bckp++;
-            if (resource_bckp >= quant) return true;
-        } if (this->AvailableCard(CARD_ID::caravansery)) {
-            resource_bckp++;
-            if (resource_bckp >= quant) return true;
+        if (this->AvailableCard(CARD_ID::tree_farm, resource)) {
+            cont++;
+        } if (this->AvailableCard(CARD_ID::excavation, resource)) {
+            cont++;
+        } if (this->AvailableCard(CARD_ID::clay_pit, resource)) {
+            cont++;
+        } if (this->AvailableCard(CARD_ID::caravansery, resource)) {
+            cont++;
         }
     } else if (resource == RESOURCE::stone) {
-        if (this->AvailableCard(CARD_ID::excavation)) {
-            resource_bckp++;
-            if (resource_bckp >= quant) return true;
-        } if (this->AvailableCard(CARD_ID::timber_yard)) {
-            resource_bckp++;
-            if (resource_bckp >= quant) return true;
-        } if (this->AvailableCard(CARD_ID::mine)) {
-            resource_bckp++;
-            if (resource_bckp >= quant) return true;
-        } if (this->AvailableCard(CARD_ID::caravansery)) {
-            resource_bckp++;
-            if (resource_bckp >= quant) return true;
+        if (this->AvailableCard(CARD_ID::excavation, resource)) {
+            cont++;
+        } if (this->AvailableCard(CARD_ID::timber_yard, resource)) {
+            cont++;
+        } if (this->AvailableCard(CARD_ID::mine, resource)) {
+            cont++;
+        } if (this->AvailableCard(CARD_ID::caravansery, resource)) {
+            cont++;
         }
     } else if (resource == RESOURCE::ore) {
-        if (this->AvailableCard(CARD_ID::clay_pit)) {
-            resource_bckp++;
-            if (resource_bckp >= quant) return true;
-        } if (this->AvailableCard(CARD_ID::forest_cave)) {
-            resource_bckp++;
-            if (resource_bckp >= quant) return true;
-        } if (this->AvailableCard(CARD_ID::mine)) {
-            resource_bckp++;
-            if (resource_bckp >= quant) return true;
-        } if (this->AvailableCard(CARD_ID::caravansery)) {
-            resource_bckp++;
-            if (resource_bckp >= quant) return true;
+        if (this->AvailableCard(CARD_ID::clay_pit, resource)) {
+            cont++;
+        } if (this->AvailableCard(CARD_ID::forest_cave, resource)) {
+            cont++;
+        } if (this->AvailableCard(CARD_ID::mine, resource)) {
+            cont++;
+        } if (this->AvailableCard(CARD_ID::caravansery, resource)) {
+            cont++;
         }
     } else if (resource == RESOURCE::glass || resource == RESOURCE::loom || resource == RESOURCE::papyrus) {
-        if (this->AvailableCard(CARD_ID::forum)) {
-            resource_bckp++;
-            if (resource_bckp >= quant) return true;
+        if (this->AvailableCard(CARD_ID::forum, resource)) {
+            cont++;
         }
     }
+    this->resources[resource] += cont;
+    return (needed - resources[resource]);
+}
 
-    return this->BuyResource(resource_bckp, quant);
+// The resources we incremented "on demand" for a turn should be decremented.
+// Part of ResetUsed to be called at the end of a turn.
+void Player::DecrementUsed(){
+    if (used_tree_farm >= 0)    this->resources[used_tree_farm]--;
+    if (used_forest_cave >= 0)  this->resources[used_forest_cave]--;
+    if (used_timber_yard >= 0)  this->resources[used_timber_yard]--;
+    if (used_excavation >= 0)   this->resources[used_excavation]--;
+    if (used_mine >= 0)         this->resources[used_mine]--;
+    if (used_clay_pit >= 0)     this->resources[used_clay_pit]--;
+    if (used_forum >= 0)        this->resources[used_forum]--;
+    if (used_caravansery >= 0)  this->resources[used_caravansery]--;
 }
 
 // Buys x quantity of a certain resource from any neighbor.
@@ -418,24 +424,29 @@ bool Player::BuyResource(int resource, int quant){
     Player* east = this->GetEastNeighbor();
     Player* west = this->GetWestNeighbor();
 
-    if (east->HasEnoughResource(resource, quant)) {
+    int needed_east = east->IncrementOnDemand(resource, quant);
+    int needed_west = west->IncrementOnDemand(resource, quant);
+
+    if (needed_east <= 0) {
         if (is_raw && (this->raw_cheap_east || this->wonder_raw_cheap)) cost = 1*quant;
         if (cost >= this->resources[RESOURCE::coins]) {
             this->resources[RESOURCE::coins] -= cost;
             east->AddResource(RESOURCE::coins, cost);
+            //east->DecrementUsed();
             return true;
         }
     }
-    if (west->HasEnoughResource(resource, quant)) {
+    if (needed_west <= 0) {
         if (is_raw && (this->raw_cheap_west || this->wonder_raw_cheap)) cost = 1*quant;
         if (cost >= this->resources[RESOURCE::coins]) {
             this->resources[RESOURCE::coins] -= cost;
             west->AddResource(RESOURCE::coins, cost);
+            //west->DecrementUsed();
             return true;
         }
     }
 
-    return false; // couldn't buy
+    return false; // Couldn't buy
 }
 
 // Adds x quantity of a certain resource.
@@ -472,13 +483,13 @@ void Player::Battle(int age){
 
     int this_shields = this->resources[RESOURCE::shields];
 
-    // battle with east neighbor
+    // Battle with east neighbor
     if (this_shields > player_east->GetShields())
         this->victory_tokens += current_age_value;
     else if (this_shields < player_east->GetShields())
         this->defeat_tokens += 1;
 
-    // battle with west neighbor
+    // Battle with west neighbor
     if (this_shields > player_west->GetShields())
         this->victory_tokens += current_age_value;
     else if (this_shields < player_west->GetShields())

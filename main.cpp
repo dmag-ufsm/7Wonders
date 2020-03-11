@@ -344,6 +344,7 @@ class Game{
                     // - BuildDiscardFree(Card c)         // end of the turn after the stage was built (?)
                     // - BuildHandFree (Card c)           // once per Age
                     // - CopyGuild(Card c, int side);     // end of game
+                    // - ...
                     }else if(command == "build_guild"){
                         //do something
                     }else if(command == "build_wonder"){
@@ -356,6 +357,7 @@ class Game{
                     }
 
                     // Moves the game to the next turn.
+                    // VERY IMPORTANT: call player->ResetUsed() for each player at the end of a turn!
                     NextTurn(0); // Have to fix this, and the method.
 
                     // TODO: show info

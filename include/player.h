@@ -29,14 +29,17 @@ private:
     int manuf_extra;           // The player has an additional manufactured good. (Forum and Alexandria B)
     int sci_extra;             // The player has an additional scientific piece. (Scientific Guild and Babylon A and B)
 
-    bool used_tree_farm;
-    bool used_forest_cave;
-    bool used_timber_yard;
-    bool used_excavation;
-    bool used_mine;
-    bool used_clay_pit;
-    bool used_forum;
-    bool used_caravansery;
+    // Possible values:
+    // -> -1 (not used)
+    // -> RESOURCE code (from resources.h)
+    int used_tree_farm;
+    int used_forest_cave;
+    int used_timber_yard;
+    int used_excavation;
+    int used_mine;
+    int used_clay_pit;
+    int used_forum;
+    int used_caravansery;
 
     // Key needs to be int because the underlying type in enums is int
     std::map<int, unsigned char> resources{
@@ -68,13 +71,15 @@ public:
     void ReceiveCards(std::vector<DMAG::Card> _cards_hand);
     void Discard();
     int AmountOfType(int card_type);
-    bool AvailableCard(int card_id);
+    bool AvailableCard(int card_id, int resource);
     void ResetUsed();
 
     // Resource-related:
     bool ProduceResource(int resource, int quant);
     bool BuyResource(int resource, int quant);
     void AddResource(int resource, int quant);
+    int IncrementOnDemand(int resource, int needed);
+    void DecrementUsed();
     bool HasEnoughResource(int resource, int quant);
 
     // Battle-related:
