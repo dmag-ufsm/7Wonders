@@ -295,7 +295,7 @@ bool Player::AvailableCard(int card_id, int resource){
                this->used_forum = resource;
                return true;
            }
-           if (this_card == CARD_ID::caravansery && !this->used_caravansery) {
+           if (this_card == CARD_ID::caravansery && this->used_caravansery == -1) {
                this->used_caravansery = resource;
                return true;
            }
