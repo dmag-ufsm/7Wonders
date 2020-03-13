@@ -335,7 +335,10 @@ class Game{
                     argument = json_object["command"]["argument"];
                     if(command == "build_structure"){
                         Card selected = GetCardByName(argument);
-                        player_list[i]->BuildStructure(selected, player_list[i]->GetHandCards(), false); // find card before calling this
+                        if(player_list[i]->BuildStructure(selected, player_list[i]->GetHandCards(), false))// find card before calling this
+                            cout << "Construiu" << endl;
+                        else
+                            cout << "Carta já construida" << endl;
                     // TODO:
                     // Most of these end up calling BuildStructure, but they are wonder-specific.
                     // - ChooseExtraManuf(int resource)   // end of game
