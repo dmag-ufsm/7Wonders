@@ -698,18 +698,18 @@ int Player::CalculateScientificScore(){
 // Calculates the player's TOTAL score using the methods defined above.
 int Player::CalculateScore(){
     int treasury_score = static_cast<int>(this->resources[RESOURCE::coins]/3); // 1 VP for every 3 coins
-    // TODO: all these:
     int civil_score = this->CalculateCivilianScore();
     int commercial_score = this->CalculateCommercialScore();
     int guild_score = this->CalculateGuildScore();
     int science_score = this->CalculateScientificScore();
-    this->victory_points += treasury_score + civil_score + commercial_score +
-                             guild_score + science_score + this->victory_tokens - this->defeat_tokens;
 
-    if ( this->board.GetStage() > 0) {
-        int wonder_score = this->board.GetWonderPoints();
-        this->victory_points += wonder_score;
-    }
+    int total_score = treasury_score + civil_score + commercial_score + guild_score +
+                       science_score + this->victory_tokens - this->defeat_tokens;
+
+    if (this->board.GetStage() > 0)
+        total_score += this->board.GetWonderPoints();
+
+    this->victory_points = total_score;
 
     return this->victory_points;
 }
