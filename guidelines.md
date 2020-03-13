@@ -38,6 +38,12 @@ ex, atributo "fichas de conflito":
 * Na linha 525 tem um TODO perdido: 
     * ```// TODO: choose the most advantageous scientific piece (this->sci_extra)```.
     * Ver com o Rafael (ou ignorar por enquanto :P).
+* Aparentemente a mesma carta está sendo jogada por algum motivo em
+  BuildStructure, mesmo com os checks (o player não pode jogar cartas
+  repetidas). Ver isso.
+* Revisar e tentar simplificar a lógica do BuildStructure e da parte de
+  incremento de recursos "on demand". Em suma, tentar diminuir a quantidade de
+  if..else.
 
 ## Debugging!
 
