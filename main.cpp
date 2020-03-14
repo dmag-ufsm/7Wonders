@@ -333,7 +333,7 @@ class Game{
                     // handle command inside json_object
                     command = json_object["command"]["subcommand"];
                     argument = json_object["command"]["argument"];
-                    if(command == "build_structure"){
+                    if(command == "build_structure" || command == "build_guild"){
                         Card selected = GetCardByName(argument);
                         if(player_list[i]->BuildStructure(selected, player_list[i]->GetHandCards(), false))// find card before calling this
                             cout << "Construiu" << endl;
@@ -348,8 +348,6 @@ class Game{
                     // - BuildHandFree (Card c)           // once per Age
                     // - CopyGuild(Card c, int side);     // end of game
                     // - ...
-                    }else if(command == "build_guild"){
-                        //do something
                     }else if(command == "build_wonder"){
                         Card sacrifice = GetCardByName(argument);
                         player_list[i]->BuildWonder(sacrifice);
