@@ -35,9 +35,6 @@ ex, atributo "fichas de conflito":
       sem intervenção do jogador. Isso é feito verificando as cartas que produzem 
       "um recurso OU outro"; as cartas cujo recurso já foi escolhido são
       marcadas como "used" e não são utilizadas mais uma vez no mesmo turno.
-* Na linha 525 tem um TODO perdido: 
-    * ```// TODO: choose the most advantageous scientific piece (this->sci_extra)```.
-    * Ver com o Rafael (ou ignorar por enquanto :P).
 * Aparentemente a mesma carta está sendo jogada por algum motivo em
   BuildStructure, mesmo com os checks (o player não pode jogar cartas
   repetidas). Ver isso.
