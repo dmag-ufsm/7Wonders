@@ -683,7 +683,37 @@ int Player::CalculateScientificScore(){
         }
     }
 
-    // TODO: choose the most advantageous scientific piece (this->sci_extra)
+    // Choose the most advantageous scientific piece for extra piece:
+    // First complete the set if possible. The pieces left over, add to what has more.
+    int remaining_tablets = 0, remaining_compasses = 0, remaining_gears = 0, extra = this->sci_extra;
+    if (tablet >= compass && tablet >= gear) {
+        remaining_compasses = tablet - compass;
+        remaining_gears = tablet - gear;
+        if (remaining_compasses + remaining_gears <= this->sci_extra) {
+            compass += remaining_compasses;
+            gear += remaining_gears;
+            extra -= remaining_compasses + remaining_gears;
+        }
+        tablet += extra;
+    } else if (compass >= tablet && compass >= gear) {
+        remaining_tablets = compass - tablet;
+        remaining_gears = compass - gear;
+        if (remaining_tablets + remaining_gears <= extra) {
+            tablet += remaining_tablets;
+            gear += remaining_gears;
+            extra -= remaining_tablets + remaining_gears;
+        }
+        compass += extra;
+    } else if (gear >= tablet && gear >= compass) {
+        remaining_tablets = gear - tablet;
+        remaining_compasses = gear - compass;
+        if (remaining_compasses + remaining_tablets <= extra) {
+            compass += remaining_compasses;
+            tablet += remaining_tablets;
+            extra -= remaining_compasses + remaining_tablets;
+        }
+        gear += extra;
+    }
 
     // The smallest value among the three is the amount of completed sets
     int completed_sets = 0;
