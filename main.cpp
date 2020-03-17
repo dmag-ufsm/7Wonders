@@ -45,6 +45,20 @@ class Game{
             return Card(0, "not found", 0, 0, 0, std::vector<int>(), std::vector<int>());
         }
 
+        int GetResourceByName(std::string name){
+            if (name == "Wood") return RESOURCE::wood;
+            if (name == "Ore") return RESOURCE::ore;
+            if (name == "Clay") return RESOURCE::clay;
+            if (name == "Stone") return RESOURCE::stone;
+            if (name == "Loom") return RESOURCE::loom;
+            if (name == "Glass") return RESOURCE::glass;
+            if (name == "Papyrus") return RESOURCE::papyrus;
+            if (name == "Gear") return RESOURCE::gear;
+            if (name == "Compass") return RESOURCE::compass;
+            if (name == "Tablet") return RESOURCE::tablet;
+            return -1;
+        }
+
         Game(){
             this->number_of_players = NUM_PLAYERS;
             this->era = 1;
@@ -340,14 +354,40 @@ class Game{
                         else
                             cout << "Carta já construida" << endl;
                     // TODO:
-                    // Most of these end up calling BuildStructure, but they are wonder-specific.
-                    // - ChooseExtraManuf(int resource)   // end of game
-                    // - ChooseExtraScience(int resource) // end of game
-                    // - ChooseExtraRaw(int resource)     // once per turn (?)
-                    // - BuildDiscardFree(Card c)         // end of the turn after the stage was built (?)
-                    // - BuildHandFree (Card c)           // once per Age
-                    // - CopyGuild(Card c, int side);     // end of game
-                    // - ...
+                    // -> "argument" will probably need to be a list (see "copy_guild" command)
+                    //
+                    // -> We need to restrict when certain special actions are made
+                    //    (end of the game, once per turn, etc.)
+                    //
+                    // -> All the actions on player.cpp are booleans specifically because
+                    //    it permits us better game flow control here in main.cpp. We're not
+                    //    making use of this! e.g. let the player "repeat" an action if he tried
+                    //    an invalid one.
+
+                    // Oviously these will need to change a bit.
+                    }else if (command == "choose_manuf"){
+                        // ONLY AT THE END OF THE GAME
+                        player_list[i]->ChooseExtraManuf(GetResourceByName(argument));
+                    }else if (command == "choose_science"){
+                        // ONLY AT THE END OF THE GAME
+                        player_list[i]->ChooseExtraScience(GetResourceByName(argument));
+                    }else if (command == "choose_raw"){
+                        // ONLY ONCE PER TURN (TURN?)
+                        player_list[i]->ChooseExtraRaw(GetResourceByName(argument));
+                    }else if (command == "build_discard_free"){
+                        // ONLY AT THE END OF THE TURN WHERE THE WONDER STAGE THAT PERMITS THIS ACTION WAS COMPLETED.
+                        // (halikarnassos_a stage 2 or halikarnassos_b stage >= 1)
+                        Card chosen = GetCardByName(argument);
+                        player_list[i]->BuildDiscardFree(chosen, discard_pile);
+                    }else if (command == "build_hand_free"){
+                        // ONCE PER AGE
+                        Card chosen = GetCardByName(argument);
+                        player_list[i]->BuildHandFree(chosen);
+                    }else if (command == "copy_guild"){
+                        // ONLY AT THE END OF THE GAME
+                        Card chosen = GetCardByName(argument);
+                        // int neighbor = argument[1] ???
+                        // player_list[i]->CopyGuild(chosen, neighbor)
                     }else if(command == "build_wonder"){
                         Card sacrifice = GetCardByName(argument);
                         player_list[i]->BuildWonder(sacrifice);
