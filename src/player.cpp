@@ -62,17 +62,13 @@ bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _f
     // Checks if card is in hand.
     size_t i = 0;
     for (i = 0; i < cards.size(); i++) {
-        std::cout << cards[i].GetName() << std::endl;
+        //std::cout << cards[i].GetName() << std::endl;
         if (cards[i].Equal(c)) break;
     }
     if (i == cards.size()) {
         // ERROR: Card played was not found in the vector
         return false;
-    } else {
-        cards.erase(cards.begin()+i);
-        cards_played.push_back(c);
     }
-
 
     bool free_card = _free_card;
 
@@ -222,6 +218,8 @@ bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _f
             break;
     }
 
+    cards.erase(cards.begin()+i);
+    cards_played.push_back(c);
     if (!free_card) this->resources[RESOURCE::coins] -= cost;
     std::cout << this->id << " -> SUCCESS -> " << "builds " << c.GetName() << std::endl;
     return true;
