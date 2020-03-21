@@ -23,15 +23,9 @@ int Filer::Init(int player_count){
 
 int Filer::WriteMessage(json message){
 
-	out_file.open("game_output.json");
+	out_file.open("game_status.json");
 	out_file  << message << std::endl;
-	turn_file.open("game_turn.txt");
-	turn_file << turn << std::endl;
-
-	turn_file.close();
 	out_file.close();
-	turn++;
-	output.clear();
 	return 0;
 }
 
