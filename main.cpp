@@ -334,10 +334,53 @@ class Game{
 
         }
 
+        void WriteGameStatus() {
+            json status;
+            std::vector<DMAG::Card> cards;
+            std::vector<std::string> card_names;
+            std::map<int, unsigned char> resources;
+
+            status["game"]["era"] = era;
+            status["game"]["turn"] = turn;
+
+            for (int i = 0; i < number_of_players; i++) {
+                std::string player = "player" + to_string(i+1);
+
+                cards = player_list[i]->GetHandCards();
+                card_names.clear();
+                for (DMAG::Card c : cards)
+                    card_names.push_back(c.GetName());
+                status[player]["cards_hand"] = card_names;
+
+                cards = player_list[i]->GetPlayedCards();
+                card_names.clear();
+                for (DMAG::Card c : cards)
+                    card_names.push_back(c.GetName());
+                status[player]["cards_played"] = card_names;
+
+                resources = player_list[i]->GetResources();
+                status[player]["resources"]["wood"] = resources[RESOURCE::wood];
+                status[player]["resources"]["ore"] = resources[RESOURCE::ore];
+                status[player]["resources"]["clay"] = resources[RESOURCE::clay];
+                status[player]["resources"]["stone"] = resources[RESOURCE::stone];
+                status[player]["resources"]["loom"] = resources[RESOURCE::loom];
+                status[player]["resources"]["glass"] = resources[RESOURCE::glass];
+                status[player]["resources"]["papyrus"] = resources[RESOURCE::papyrus];
+                status[player]["resources"]["gear"] = resources[RESOURCE::gear];
+                status[player]["resources"]["compass"] = resources[RESOURCE::compass];
+                status[player]["resources"]["tablet"] = resources[RESOURCE::tablet];
+                status[player]["resources"]["coins"] = resources[RESOURCE::coins];
+                status[player]["resources"]["shields"] = resources[RESOURCE::shields];
+            }
+
+            fp.WriteMessage(status);
+        }
+
         void Loop(){
             json json_object;
             std::string command, argument;
             while(InGame()){
+                WriteGameStatus();
                 while(!fp.ArePlayersReady());
                 for(int i = 0; i < number_of_players; i++){
                     json_object = fp.ReadMessages(i);
