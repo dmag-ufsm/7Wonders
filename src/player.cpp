@@ -153,10 +153,6 @@ bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _f
             }
             break;
 
-        case CARD_TYPE::civilian:
-            // nothing to do (the VP of these cards are calculated at the end of the game)
-            break;
-
         case CARD_TYPE::commercial:
             if (card == CARD_ID::tavern) {
                 this->resources[RESOURCE::coins] += 5;
@@ -209,17 +205,13 @@ bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _f
             }
             break;
 
-        case CARD_TYPE::scientific:
-            // nothing to do (the pieces and VP are calculated at the end of the game)
-            break;
-
-        case CARD_TYPE::guild:
-            // nothing to do (the VP of these cards are calculated at the end of the game)
+        default:
             break;
     }
 
     cards.erase(cards.begin()+i);
     cards_played.push_back(c);
+
     if (!free_card) this->resources[RESOURCE::coins] -= cost;
     std::cout << this->id << " -> SUCCESS -> " << "builds " << c.GetName() << std::endl;
     return true;
@@ -462,12 +454,12 @@ bool Player::BuyResource(int resource, int quant){
             this->resources[RESOURCE::coins] -= cost;
             west->AddResource(RESOURCE::coins, cost);
             //west->DecrementUsed();
-            std::cout <<  "  -> " << "bought the resource successfully!" << std::endl;
+            std::cout <<  "  -> SUCCESS -> " << "bought the resource successfully!" << std::endl;
             return true;
         }
     }
 
-    std::cout <<  "  -> " << "couldn't buy the resource." << std::endl;
+    std::cout <<  "  -> FAILURE -> " << "couldn't buy the resource." << std::endl;
     return false; // Couldn't buy
 }
 
@@ -506,16 +498,22 @@ void Player::Battle(int age){
     int this_shields = this->resources[RESOURCE::shields];
 
     // Battle with east neighbor
-    if (this_shields > player_east->GetShields())
+    if (this_shields > player_east->GetShields()) {
         this->victory_tokens += current_age_value;
-    else if (this_shields < player_east->GetShields())
+        std::cout <<  this->id << " -> WON battle with " << player_east->GetId() << std::endl;
+    } else if (this_shields < player_east->GetShields()) {
+        std::cout <<  this->id << " -> LOST battle with " << player_east->GetId() << std::endl;
         this->defeat_tokens += 1;
+    }
 
     // Battle with west neighbor
-    if (this_shields > player_west->GetShields())
+    if (this_shields > player_west->GetShields()) {
+        std::cout <<  this->id << " -> WON battle with " << player_west->GetId() << std::endl;
         this->victory_tokens += current_age_value;
-    else if (this_shields < player_west->GetShields())
+    } else if (this_shields < player_west->GetShields()) {
+        std::cout <<  this->id << " -> LOST battle with " << player_west->GetId() << std::endl;
         this->defeat_tokens += 1;
+    }
 }
 
 

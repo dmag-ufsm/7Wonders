@@ -44,7 +44,7 @@ json Filer::ReadMessages(int player_number){
 	sprintf(filename, "player_%d.json", player_number+1);
 	player_input.open(filename);
 	player_input >> ret;
-		
+
 	player_input.close(); //Puts the cursor back at the start
 	return ret;
 }
@@ -52,10 +52,10 @@ json Filer::ReadMessages(int player_number){
 bool Filer::ArePlayersReady(){
 	players_ready.open("ready.txt");
 	std::string ready;
-	for(int i = 0; i< player_count; i++){
+	for(int i = 0; i < player_count; i++){
 		getline(players_ready, ready);
 		if(ready != "ready"){
-			std::cout<< ready << " is not ready" <<std::endl;
+			std::cout << i << " is not ready" <<std::endl;
 			players_ready.close();
 			return false;
 		}
