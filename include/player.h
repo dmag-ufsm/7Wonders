@@ -72,6 +72,7 @@ public:
     void Discard();
     int AmountOfType(int card_type);
     bool AvailableCard(int card_id, int resource);
+    bool HasPlayedCard(DMAG::Card c);
     void ResetUsed();
 
     // Resource-related:
@@ -100,7 +101,7 @@ public:
     void CanBuyRawCheap();
     bool BuildDiscardFree(DMAG::Card c, std::vector<DMAG::Card> discard_pile); // At the end of the turn after the stage was built.
     bool BuildHandFree(DMAG::Card c); // Once per Age.
-    bool CopyGuild(DMAG::Card c, int side); // At the end of the game.
+    bool CopyGuild(DMAG::Card c); // At the end of the game.
 
     // Getters:
     int GetId();
