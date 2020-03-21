@@ -344,12 +344,7 @@ class Game{
                     // handle command inside json_object
                     command = json_object["command"]["subcommand"];
                     argument = json_object["command"]["argument"];
-                    if(command == "build_structure" || command == "build_guild"){
-                        Card selected = GetCardByName(argument);
-                        if(player_list[i]->BuildStructure(selected, player_list[i]->GetHandCards(), false))// find card before calling this
-                            cout << "<Construction OK>" << endl;
-                        else
-                            cout << "<Construction NOK>" << endl;
+
                     // TODO:
                     // -> We need to restrict when certain special actions are made
                     //    (end of the game, once per turn, etc.)
@@ -358,38 +353,68 @@ class Game{
                     //    it permits us better game flow control here in main.cpp. We're not
                     //    making use of this! e.g. let the player "repeat" an action if he tried
                     //    an invalid one.
+                    //
+                    // -> Also, if a player CanPlaySeventh(), he can play the seventh card of an Age
+                    //    instead of discarding it.
 
-                    // Obviously these will need to change a bit.
-                    }else if (command == "choose_manuf"){
+                    // These will probably need to change a bit.
+
+                    if (command == "build_structure"){
+                        Card selected = GetCardByName(argument);
+                        if(player_list[i]->BuildStructure(selected, player_list[i]->GetHandCards(), false))// find card before calling this
+                            cout << "<BuildStructure OK>" << endl;
+                        else cout << "<BuildStructure NOK>" << endl;
+
+                    } else if (command == "choose_manuf"){
                         // ONLY AT THE END OF THE GAME
-                        player_list[i]->ChooseExtraManuf(GetResourceByName(argument));
-                    }else if (command == "choose_science"){
+                        if (player_list[i]->ChooseExtraManuf(GetResourceByName(argument)))
+                            cout << "<ChooseExtraManuf OK>" << endl;
+                        else cout << "<ChooseExtraManuf NOK>" << endl;
+
+                    } else if (command == "choose_science"){
                         // ONLY AT THE END OF THE GAME
-                        player_list[i]->ChooseExtraScience(GetResourceByName(argument));
-                    }else if (command == "choose_raw"){
+                        if (player_list[i]->ChooseExtraScience(GetResourceByName(argument)))
+                            cout << "<ChooseExtraScience OK>" << endl;
+                        else cout << "<ChooseExtraScience NOK>" << endl;
+
+                    } else if (command == "choose_raw"){
                         // ONLY ONCE PER TURN (TURN?)
-                        player_list[i]->ChooseExtraRaw(GetResourceByName(argument));
-                    }else if (command == "build_discard_free"){
+                        if (player_list[i]->ChooseExtraRaw(GetResourceByName(argument)))
+                            cout << "<ChooseExtraRaw OK>" << endl;
+                        else cout << "<ChooseExtraRaw NOK>" << endl;
+
+                    } else if (command == "build_discard_free"){
                         // ONLY AT THE END OF THE TURN WHERE THE WONDER STAGE THAT PERMITS THIS ACTION WAS COMPLETED.
                         // (halikarnassos_a stage 2 or halikarnassos_b stage >= 1)
                         Card chosen = GetCardByName(argument);
-                        player_list[i]->BuildDiscardFree(chosen, discard_pile);
-                    }else if (command == "build_hand_free"){
+                        if (player_list[i]->BuildDiscardFree(chosen, discard_pile))
+                            cout << "<BuildDiscardFree OK>" << endl;
+                        else cout << "<BuildDiscardFree NOK>" << endl;
+
+                    } else if (command == "build_hand_free"){
                         // ONCE PER AGE
                         Card chosen = GetCardByName(argument);
-                        player_list[i]->BuildHandFree(chosen);
-                    }else if (command == "copy_guild"){
+                        if (player_list[i]->BuildHandFree(chosen))
+                            cout << "<BuildHandFree OK>" << endl;
+                        else cout << "<BuildHandFree NOK>" << endl;
+
+                    } else if (command == "copy_guild"){
                         // ONLY AT THE END OF THE GAME
                         Card chosen = GetCardByName(argument);
-                        player_list[i]->CopyGuild(chosen);
-                    }else if(command == "build_wonder"){
+                        if (player_list[i]->CopyGuild(chosen))
+                            cout << "<CopyGuild OK>" << endl;
+                        else cout << "<CopyGuild NOK>" << endl;
+
+                    } else if(command == "build_wonder"){
                         Card sacrifice = GetCardByName(argument);
                         if (player_list[i]->BuildWonder(sacrifice))
-                            cout << "<Wonder Stage OK>" << endl;
-                        else cout << "<Wonder Stage NOK>" << endl;
-                    }else if(command == "discard"){
+                            cout << "<BuildWonder OK>" << endl;
+                        else cout << "<BuildWonder NOK>" << endl;
+
+                    } else if(command == "discard"){
                         Card discard = GetCardByName(argument);
                         player_list[i]->Discard(); //Gives player 3 coins.
+                        cout << "<Discard OK>" << endl;
                         discard_pile.push_back(discard);
                     }
 
