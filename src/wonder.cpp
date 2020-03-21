@@ -53,13 +53,13 @@ Gizah_a::Gizah_a(){
 }
 
 bool Gizah_a::AddStage(Player *p){
-    //std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, unsigned char> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
     // Building stage 1
     case 0:
-        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone])) {
+        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone]-p_resources[RESOURCE::stone])) {
             this->stage++;
             this->wonder_points += 3;
             this->cost[RESOURCE::wood] = 3;
@@ -68,7 +68,7 @@ bool Gizah_a::AddStage(Player *p){
 
     // Building stage 2
     case 1:
-        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood])) {
+        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood]-p_resources[RESOURCE::wood])) {
             this->stage++;
             this->wonder_points += 5;
             this->cost[RESOURCE::stone] = 4;
@@ -77,7 +77,7 @@ bool Gizah_a::AddStage(Player *p){
 
     // Building stage 3
     case 2:
-        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone])) {
+        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone]-p_resources[RESOURCE::stone])) {
             this->stage++;
             this->wonder_points += 7;
             stage_built = true;
@@ -98,13 +98,13 @@ Gizah_b::Gizah_b(){
 }
 
 bool Gizah_b::AddStage(Player *p){
-    //std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, unsigned char> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
     // Building stage 1
     case 0:
-        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood])) {
+        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood]-p_resources[RESOURCE::wood])) {
             this->stage++;
             this->wonder_points += 3;
             this->cost[RESOURCE::stone] = 3;
@@ -113,7 +113,7 @@ bool Gizah_b::AddStage(Player *p){
 
     // Building stage 2
     case 1:
-        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone])) {
+        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone]-p_resources[RESOURCE::stone])) {
             this->stage++;
             this->wonder_points += 5;
             this->cost[RESOURCE::clay] = 3;
@@ -122,7 +122,7 @@ bool Gizah_b::AddStage(Player *p){
 
     // Building stage 3
     case 2:
-        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay])) {
+        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay]-p_resources[RESOURCE::clay])) {
             this->stage++;
             this->wonder_points += 5;
             this->cost[RESOURCE::stone] = 4;
@@ -132,8 +132,8 @@ bool Gizah_b::AddStage(Player *p){
 
     // Building stage 4
     case 4:
-        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone]) &&
-            p->ProduceResource(RESOURCE::papyrus, this->cost[RESOURCE::papyrus])) {
+        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone]-p_resources[RESOURCE::stone]) &&
+            p->ProduceResource(RESOURCE::papyrus, this->cost[RESOURCE::papyrus]-p_resources[RESOURCE::papyrus])) {
             this->stage++;
             this->wonder_points += 7;
             stage_built = true;
@@ -154,13 +154,13 @@ Babylon_a::Babylon_a(){
 }
 
 bool Babylon_a::AddStage(Player* p){
-    //std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, unsigned char> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
     // Building stage 1
     case 0:
-        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay])) {
+        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay]-p_resources[RESOURCE::clay])) {
             this->stage++;
             this->wonder_points += 3;
             this->cost[RESOURCE::wood] = 3;
@@ -169,16 +169,15 @@ bool Babylon_a::AddStage(Player* p){
 
     // Building stage 2
     case 1:
-        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood])) {
+        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood]-p_resources[RESOURCE::wood])) {
             this->stage++;
-            // TODO: Gives 1x Compass OR 1x Gear OR 1x Tablet
             this->cost[RESOURCE::clay] = 4;
             stage_built = true;
         } break;
 
     // Building stage 3
     case 2:
-        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay])) {
+        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay]-p_resources[RESOURCE::clay])) {
             this->stage++;
             this->wonder_points += 7;
             stage_built = true;
@@ -200,14 +199,14 @@ Babylon_b::Babylon_b(){
 }
 
 bool Babylon_b::AddStage(Player* p){
-    //std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, unsigned char> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
     // Building stage 1
     case 0:
-        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay]) &&
-            p->ProduceResource(RESOURCE::loom, this->cost[RESOURCE::loom])) {
+        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay]-p_resources[RESOURCE::clay]) &&
+            p->ProduceResource(RESOURCE::loom, this->cost[RESOURCE::loom]-p_resources[RESOURCE::loom])) {
             this->stage++;
             this->wonder_points += 3;
             this->cost[RESOURCE::glass] = 1;
@@ -217,8 +216,8 @@ bool Babylon_b::AddStage(Player* p){
 
     // Building stage 2
     case 1:
-        if (p->ProduceResource(RESOURCE::glass, this->cost[RESOURCE::glass]) &&
-            p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood])) {
+        if (p->ProduceResource(RESOURCE::glass, this->cost[RESOURCE::glass]-p_resources[RESOURCE::glass]) &&
+            p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood]-p_resources[RESOURCE::wood])) {
             this->stage++;
             this->cost[RESOURCE::clay] = 3;
             this->cost[RESOURCE::papyrus] = 1;
@@ -228,10 +227,9 @@ bool Babylon_b::AddStage(Player* p){
 
     // Building stage 3
     case 2:
-        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay]) &&
-            p->ProduceResource(RESOURCE::papyrus, this->cost[RESOURCE::papyrus])) {
+        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay]-p_resources[RESOURCE::clay]) &&
+            p->ProduceResource(RESOURCE::papyrus, this->cost[RESOURCE::papyrus]-p_resources[RESOURCE::papyrus])) {
             this->stage++;
-            // TODO: Gives 1x Compass OR 1x Gear OR 1x Tablet
             stage_built = true;
         } break;
     }
@@ -250,13 +248,13 @@ Olympia_a::Olympia_a(){
 }
 
 bool Olympia_a::AddStage(Player* p){
-    //std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, unsigned char> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
     // Building stage 1
     case 0:
-        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood])) {
+        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood]-p_resources[RESOURCE::wood])) {
             this->stage++;
             this->wonder_points += 3;
             this->cost[RESOURCE::stone] = 2;
@@ -265,7 +263,7 @@ bool Olympia_a::AddStage(Player* p){
 
     // Building stage 2
     case 1:
-        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone])) {
+        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone]-p_resources[RESOURCE::stone])) {
             this->stage++;
             this->cost[RESOURCE::ore] = 2;
             stage_built = true;
@@ -273,7 +271,7 @@ bool Olympia_a::AddStage(Player* p){
 
     // Building stage 3
     case 2:
-        if (p->ProduceResource(RESOURCE::ore, this->cost[RESOURCE::ore])) {
+        if (p->ProduceResource(RESOURCE::ore, this->cost[RESOURCE::ore]-p_resources[RESOURCE::ore])) {
             this->stage++;
             this->wonder_points += 7;
             stage_built = true;
@@ -294,13 +292,13 @@ Olympia_b::Olympia_b(){
 }
 
 bool Olympia_b::AddStage(Player* p){
-    //std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, unsigned char> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
     // Building stage 1
     case 0:
-        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood])) {
+        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood]-p_resources[RESOURCE::wood])) {
             this->stage++;
             this->cost[RESOURCE::stone] = 2;
             p->CanBuyRawCheap();
@@ -309,7 +307,7 @@ bool Olympia_b::AddStage(Player* p){
 
     // Building stage 2
     case 1:
-        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone])) {
+        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone]-p_resources[RESOURCE::stone])) {
             this->stage++;
             this->wonder_points += 5;
             this->cost[RESOURCE::ore] = 2;
@@ -319,8 +317,8 @@ bool Olympia_b::AddStage(Player* p){
 
     // Building stage 3
     case 2:
-        if (p->ProduceResource(RESOURCE::ore, this->cost[RESOURCE::ore]) &&
-            p->ProduceResource(RESOURCE::loom, this->cost[RESOURCE::loom])) {
+        if (p->ProduceResource(RESOURCE::ore, this->cost[RESOURCE::ore]-p_resources[RESOURCE::ore]) &&
+            p->ProduceResource(RESOURCE::loom, this->cost[RESOURCE::loom]-p_resources[RESOURCE::loom])) {
             this->stage++;
             stage_built = true;
         } break;
@@ -340,13 +338,13 @@ Rhodos_a::Rhodos_a(){
 }
 
 bool Rhodos_a::AddStage(Player* p){
-    //std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, unsigned char> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
     // Building stage 1
     case 0:
-        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood])) {
+        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood]-p_resources[RESOURCE::wood])) {
             this->stage++;
             this->wonder_points += 3;
             this->cost[RESOURCE::clay] = 3;
@@ -355,7 +353,7 @@ bool Rhodos_a::AddStage(Player* p){
 
     // Building stage 2
     case 1:
-        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay])) {
+        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay]-p_resources[RESOURCE::clay])) {
             this->stage++;
             p->AddResource(RESOURCE::shields, 2);
             this->cost[RESOURCE::ore] = 4;
@@ -364,7 +362,7 @@ bool Rhodos_a::AddStage(Player* p){
 
     // Building stage 3
     case 2:
-        if (p->ProduceResource(RESOURCE::ore, this->cost[RESOURCE::ore])) {
+        if (p->ProduceResource(RESOURCE::ore, this->cost[RESOURCE::ore]-p_resources[RESOURCE::ore])) {
             this->stage++;
             this->wonder_points += 7;
             stage_built = true;
@@ -385,13 +383,13 @@ Rhodos_b::Rhodos_b(){
 }
 
 bool Rhodos_b::AddStage(Player* p){
-    //std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, unsigned char> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
     // Building stage 1
     case 0:
-        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone])) {
+        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone]-p_resources[RESOURCE::stone])) {
             this->stage++;
             this->wonder_points += 3;
             p->AddResource(RESOURCE::shields, 1);
@@ -402,7 +400,7 @@ bool Rhodos_b::AddStage(Player* p){
 
     // Building stage 2
     case 1:
-        if (p->ProduceResource(RESOURCE::ore, this->cost[RESOURCE::ore])) {
+        if (p->ProduceResource(RESOURCE::ore, this->cost[RESOURCE::ore]-p_resources[RESOURCE::ore])) {
             this->stage++;
             this->wonder_points += 4;
             p->AddResource(RESOURCE::shields, 1);
@@ -425,13 +423,13 @@ Ephesos_a::Ephesos_a(){
 }
 
 bool Ephesos_a::AddStage(Player* p){
-    //std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, unsigned char> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
     // Building stage 1
     case 0:
-        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone])) {
+        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone]-p_resources[RESOURCE::stone])) {
             this->stage++;
             this->wonder_points += 3;
             this->cost[RESOURCE::wood] = 2;
@@ -440,7 +438,7 @@ bool Ephesos_a::AddStage(Player* p){
 
     // Building stage 2
     case 1:
-        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood])) {
+        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood]-p_resources[RESOURCE::wood])) {
             this->stage++;
             this->cost[RESOURCE::papyrus] = 2;
             p->AddResource(RESOURCE::coins, 9);
@@ -449,7 +447,7 @@ bool Ephesos_a::AddStage(Player* p){
 
     // Building stage 3
     case 2:
-        if (p->ProduceResource(RESOURCE::papyrus, this->cost[RESOURCE::papyrus])) {
+        if (p->ProduceResource(RESOURCE::papyrus, this->cost[RESOURCE::papyrus]-p_resources[RESOURCE::papyrus])) {
             this->stage++;
             this->wonder_points += 7;
             stage_built = true;
@@ -470,13 +468,13 @@ Ephesos_b::Ephesos_b(){
 }
 
 bool Ephesos_b::AddStage(Player* p){
-    //std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, unsigned char> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
     // Building stage 1
     case 0:
-        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone])) {
+        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone]-p_resources[RESOURCE::stone])) {
             this->stage++;
             this->wonder_points += 2;
             this->cost[RESOURCE::wood] = 2;
@@ -486,7 +484,7 @@ bool Ephesos_b::AddStage(Player* p){
 
     // Building stage 2
     case 1:
-        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood])) {
+        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood]-p_resources[RESOURCE::wood])) {
             this->stage++;
             this->wonder_points += 3;
             this->cost[RESOURCE::glass] = 1;
@@ -498,9 +496,9 @@ bool Ephesos_b::AddStage(Player* p){
 
     // Building stage 3
     case 2:
-        if (p->ProduceResource(RESOURCE::glass, this->cost[RESOURCE::glass]) &&
-            p->ProduceResource(RESOURCE::loom, this->cost[RESOURCE::loom]) &&
-            p->ProduceResource(RESOURCE::papyrus, this->cost[RESOURCE::papyrus])) {
+        if (p->ProduceResource(RESOURCE::glass, this->cost[RESOURCE::glass]-p_resources[RESOURCE::glass]) &&
+            p->ProduceResource(RESOURCE::loom, this->cost[RESOURCE::loom]-p_resources[RESOURCE::loom]) &&
+            p->ProduceResource(RESOURCE::papyrus, this->cost[RESOURCE::papyrus]-p_resources[RESOURCE::papyrus])) {
             this->stage++;
             this->wonder_points += 5;
             p->AddResource(RESOURCE::coins, 4);
@@ -522,13 +520,13 @@ Alexandria_a::Alexandria_a(){
 }
 
 bool Alexandria_a::AddStage(Player* p){
-    //std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, unsigned char> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
     // Building stage 1
     case 0:
-        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone])) {
+        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone]-p_resources[RESOURCE::stone])) {
             this->stage++;
             this->wonder_points += 3;
             this->cost[RESOURCE::ore] = 2;
@@ -537,7 +535,7 @@ bool Alexandria_a::AddStage(Player* p){
 
     // Building stage 2
     case 1:
-        if (p->ProduceResource(RESOURCE::ore, this->cost[RESOURCE::ore])) {
+        if (p->ProduceResource(RESOURCE::ore, this->cost[RESOURCE::ore]-p_resources[RESOURCE::ore])) {
             this->stage++;
             this->cost[RESOURCE::glass] = 2;
             stage_built = true;
@@ -545,7 +543,7 @@ bool Alexandria_a::AddStage(Player* p){
 
     // Building stage 3
     case 2:
-        if (p->ProduceResource(RESOURCE::glass, this->cost[RESOURCE::glass])) {
+        if (p->ProduceResource(RESOURCE::glass, this->cost[RESOURCE::glass]-p_resources[RESOURCE::glass])) {
             this->stage++;
             this->wonder_points += 7;
             stage_built = true;
@@ -566,13 +564,13 @@ Alexandria_b::Alexandria_b(){
 }
 
 bool Alexandria_b::AddStage(Player* p){
-    //std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, unsigned char> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
     // Building stage 1
     case 0:
-        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay])) {
+        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay]-p_resources[RESOURCE::clay])) {
             this->stage++;
             this->cost[RESOURCE::wood] = 2;
             stage_built = true;
@@ -580,7 +578,7 @@ bool Alexandria_b::AddStage(Player* p){
 
     // Building stage 2
     case 1:
-        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood])) {
+        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood]-p_resources[RESOURCE::wood])) {
             this->stage++;
             this->cost[RESOURCE::stone] = 3;
             stage_built = true;
@@ -588,7 +586,7 @@ bool Alexandria_b::AddStage(Player* p){
 
     // Building stage 3
     case 2:
-        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone])) {
+        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone]-p_resources[RESOURCE::stone])) {
             this->stage++;
             this->wonder_points += 7;
             stage_built = true;
@@ -609,13 +607,13 @@ Halikarnassos_a::Halikarnassos_a(){
 }
 
 bool Halikarnassos_a::AddStage(Player* p){
-    //std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, unsigned char> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
     // Building stage 1
     case 0:
-        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay])) {
+        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay]-p_resources[RESOURCE::clay])) {
             this->stage++;
             this->wonder_points += 3;
             this->cost[RESOURCE::ore] = 3;
@@ -624,7 +622,7 @@ bool Halikarnassos_a::AddStage(Player* p){
 
     // Building stage 2
     case 1:
-        if (p->ProduceResource(RESOURCE::ore, this->cost[RESOURCE::ore])) {
+        if (p->ProduceResource(RESOURCE::ore, this->cost[RESOURCE::ore]-p_resources[RESOURCE::ore])) {
             this->stage++;
             this->cost[RESOURCE::loom] = 2;
             stage_built = true;
@@ -632,7 +630,7 @@ bool Halikarnassos_a::AddStage(Player* p){
 
     // Building stage 3
     case 2:
-        if (p->ProduceResource(RESOURCE::loom, this->cost[RESOURCE::loom])) {
+        if (p->ProduceResource(RESOURCE::loom, this->cost[RESOURCE::loom]-p_resources[RESOURCE::loom])) {
             this->stage++;
             this->wonder_points += 7;
             stage_built = true;
@@ -653,13 +651,13 @@ Halikarnassos_b::Halikarnassos_b(){
 }
 
 bool Halikarnassos_b::AddStage(Player* p){
-    //std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, unsigned char> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
     // Building stage 1
     case 0:
-        if (p->ProduceResource(RESOURCE::ore, this->cost[RESOURCE::ore])) {
+        if (p->ProduceResource(RESOURCE::ore, this->cost[RESOURCE::ore]-p_resources[RESOURCE::ore])) {
             this->stage++;
             this->wonder_points += 2;
             this->cost[RESOURCE::clay] = 3;
@@ -668,7 +666,7 @@ bool Halikarnassos_b::AddStage(Player* p){
 
     // Building stage 2
     case 1:
-        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay])) {
+        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay]-p_resources[RESOURCE::clay])) {
             this->stage++;
             this->wonder_points += 1;
             this->cost[RESOURCE::glass] = 1;
@@ -679,9 +677,9 @@ bool Halikarnassos_b::AddStage(Player* p){
 
     // Building stage 3
     case 2:
-        if (p->ProduceResource(RESOURCE::glass, this->cost[RESOURCE::glass]) &&
-            p->ProduceResource(RESOURCE::loom, this->cost[RESOURCE::loom]) &&
-            p->ProduceResource(RESOURCE::papyrus, this->cost[RESOURCE::papyrus])) {
+        if (p->ProduceResource(RESOURCE::glass, this->cost[RESOURCE::glass]-p_resources[RESOURCE::glass]) &&
+            p->ProduceResource(RESOURCE::loom, this->cost[RESOURCE::loom]-p_resources[RESOURCE::loom]) &&
+            p->ProduceResource(RESOURCE::papyrus, this->cost[RESOURCE::papyrus]-p_resources[RESOURCE::papyrus])) {
             this->stage++;
             stage_built = true;
         } break;
