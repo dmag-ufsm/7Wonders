@@ -16,33 +16,23 @@ ex, atributo "fichas de conflito":
 
 # TODO
 ## Main
-* Terminar de incluir os comandos de possíveis jogadas
-    * Decidir como controlar os comandos, afinal, algumas jogadas são especiais
-      e aplicadas em momentos específicos do jogo.
-      * Para tirar o "burden" de fazer isso em player, a verificação de jogadas
-        válidas em um turno X poderia ser feita aqui mesmo (também faz mais
-        sentido).
+* Ver TODO na linha 348!
+    * Para tirar o "burden" de fazer isso em player, a verificação de jogadas
+      válidas em um turno X poderia ser feita aqui mesmo (também faz mais
+      sentido). Em outras palavras, certas ações devem ser restringidas até o
+      momento certo.
+    * Escrever os "stats" do jogo num arquivo. 
+    * Não sei se é válido já que são os bots que vão jogar, mas talvez seja
+      interessante fazer com que seja possível "repetir" outra jogada caso uma
+      ação tenha retornado false. Isso facilita para players humanos, já que é
+      possível fazer uma jogada sem notar que ela dará errado; no atual esquema
+      do loop, o turno do jogador é perdido independentemente da jogada dando
+      certo ou não.
 
 ## Player
-* ~~Pensei que tinha terminado de implementá-la, mas vendo aqui vi que ainda
-  faltam algumas coisas em ```BuildStructure(...)```..~~
-    * ~~Dependendo do que o jogador construir, ele pode escolhir dentre dois
-      recursos qual incrementar.
-      Talvez dê pra resolver incluindo *mais um* argumento na função; um valor
-      opcional que represente o recurso escolhido.~~
-    * O problema acima foi (provavelmente) resolvido com a função
-      ```ProduceResource(...)```, que produz o recurso necessário sob demanda,
-      sem intervenção do jogador. Isso é feito verificando as cartas que produzem 
-      "um recurso OU outro"; as cartas cujo recurso já foi escolhido são
-      marcadas como "used" e não são utilizadas mais uma vez no mesmo turno.
-* Aparentemente a mesma carta está sendo jogada por algum motivo em
-  BuildStructure, mesmo com os checks (o player não pode jogar cartas
-  repetidas). Ver isso.
-* Revisar e tentar simplificar a lógica do BuildStructure e da parte de
-  incremento de recursos "on demand". Em suma, tentar diminuir a quantidade de
-  if..else.
-
-## Debugging!
+* Aparentemente está ok -- foram feitos alguns testes usando um
+  player. Resta terminar de implementar a main para que seja possível simular
+  um jogo real e assim buscar possíveis erros.
 
 # Classe player:
 
