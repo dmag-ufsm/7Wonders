@@ -1,5 +1,6 @@
 #include <player.h>
 #include <algorithm>
+#include <iostream>
 
 namespace DMAG {
 Player::Player()
@@ -44,9 +45,11 @@ bool Player::BuildWonder(DMAG::Card c){
             if (this->cards_hand[i].Equal(c)) break;
         }
         this->cards_hand.erase(this->cards_hand.begin()+i);
-        // this->cards_played.push_back(c); Actually, this is not needed.
+        std::cout << this->id << " -> SUCCESS -> " << "builds a " << this->board.GetName() << " stage!" << std::endl;
         return true;
     }
+
+    std::cout << this->id << " -> FAILURE -> " << "couldn't build the next " << this->board.GetName() << " stage." << std::endl;
     return false;
 }
 
@@ -55,6 +58,21 @@ bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _f
     // Returns false if the card has already been played (cannot play the same card twice).
     for (DMAG::Card const& card : this->cards_played)
         if (c.Equal(card)) return false;
+
+    // Checks if card is in hand.
+    size_t i = 0;
+    for (i = 0; i < cards.size(); i++) {
+        std::cout << cards[i].GetName() << std::endl;
+        if (cards[i].Equal(c)) break;
+    }
+    if (i == cards.size()) {
+        // ERROR: Card played was not found in the vector
+        return false;
+    } else {
+        cards.erase(cards.begin()+i);
+        cards_played.push_back(c);
+    }
+
 
     bool free_card = _free_card;
 
@@ -75,6 +93,7 @@ bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _f
                         if (!could_produce) {
                             this->resources = resources_bckp;
                             this->ResetUsed();
+                            std::cout << this->id << " -> FAILURE -> " << "couldn't produce resources." << std::endl;
                             return false;
                         }
                     }
@@ -203,19 +222,8 @@ bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _f
             break;
     }
 
-    size_t i = 0;
-    for (i = 0; i < cards.size(); i++) {
-        if (cards[i].Equal(c)) break;
-    }
-    if (i == cards.size()) {
-        // ERROR: Card played was not found in the vector
-        return false;
-    } else {
-        cards.erase(cards.begin()+i);
-        cards_played.push_back(c);
-    }
-
     if (!free_card) this->resources[RESOURCE::coins] -= cost;
+    std::cout << this->id << " -> SUCCESS -> " << "builds " << c.GetName() << std::endl;
     return true;
 }
 
@@ -304,6 +312,13 @@ bool Player::AvailableCard(int card_id, int resource){
    return false;
 }
 
+bool Player::HasPlayedCard(DMAG::Card c){
+   for (DMAG::Card const& card : this->cards_played) {
+       if (c.Equal(card)) return true;
+    }
+   return false;
+}
+
 // Prepare for the next turn.
 // - called at the end of a turn.
 void Player::ResetUsed() {
@@ -328,14 +343,20 @@ void Player::ResetUsed() {
 // If he can't produce by himself, try buying it from neighbors.
 // - this function is a "step" in BuildStructure.
 bool Player::ProduceResource(int resource, int quant){
+    std::cout <<  "  -> " << "needs " << resource << ":" << quant << std::endl;
     // Extra check to verify if the player can build directly without needing to produce.
-    if (this->resources[resource] >= quant)
+    if (this->resources[resource] >= quant) {
+        std::cout <<  "  -> " << "produced the resource successfully!" << std::endl;
         return true;
+    }
 
     // Produce "on demand" resources.
     // Ugly, but hopefully it'll get the job done.
     int needed = this->IncrementOnDemand(resource, quant);
-    if (needed <= 0) return true;
+    if (needed <= 0) {
+        std::cout <<  "  -> " << "produced the resource successfully!" << std::endl;
+        return true;
+    }
 
     // if the player couldn't produce the resource by himself, try buying it from a neighbor.
     return this->BuyResource(resource, needed);
@@ -433,6 +454,7 @@ bool Player::BuyResource(int resource, int quant){
             this->resources[RESOURCE::coins] -= cost;
             east->AddResource(RESOURCE::coins, cost);
             //east->DecrementUsed();
+            std::cout <<  "  -> " << "bought the resource successfully!" << std::endl;
             return true;
         }
     }
@@ -442,10 +464,12 @@ bool Player::BuyResource(int resource, int quant){
             this->resources[RESOURCE::coins] -= cost;
             west->AddResource(RESOURCE::coins, cost);
             //west->DecrementUsed();
+            std::cout <<  "  -> " << "bought the resource successfully!" << std::endl;
             return true;
         }
     }
 
+    std::cout <<  "  -> " << "couldn't buy the resource." << std::endl;
     return false; // Couldn't buy
 }
 
@@ -834,19 +858,29 @@ bool Player::BuildHandFree(DMAG::Card c){
 //        Card c      ->  Guild to be copied
 //        int side 0  ->  GetEastNeighbor
 //        int side 1  ->  GetWestNeighbor
-bool Player::CopyGuild(DMAG::Card c, int side){
-    Player* neighbor = side ? this->GetWestNeighbor() : this->GetEastNeighbor();
+bool Player::CopyGuild(DMAG::Card c){
+    Player* neighbor = nullptr;
+
+    if (this->GetWestNeighbor()->HasPlayedCard(c))
+        neighbor = this->GetWestNeighbor();
+    else if (this->GetEastNeighbor()->HasPlayedCard(c))
+        neighbor = this->GetEastNeighbor();
+
+    if (neighbor == nullptr) {
+        std::cout << this->id << " -> FAILURE -> " << "neighbors don't have guild " << c.GetName() << std::endl;
+        return false;
+    }
+
     int id = this->board.GetType();
     int stage = this->board.GetStage();
 
     if (c.GetType() == CARD_TYPE::guild && (id == WONDER_ID::olympia_b && stage >= 3)) {
-        for (DMAG::Card const& card : neighbor->cards_played) {
-            if (c.Equal(card)) {
-                this->cards_played.push_back(c);
-                return true;;
-            }
-        }
+        this->cards_played.push_back(c);
+        std::cout << this->id << " -> SUCCESS -> " << "copies guild " << c.GetName() << std::endl;
+        return true;;
     }
+
+    std::cout << this->id << " -> FAILURE -> " << "couldn't copy guild " << c.GetName() << std::endl;
     return false;
 }
 
