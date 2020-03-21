@@ -134,7 +134,6 @@ class Game{
 
             random_shuffle(deck[era-1].begin(), deck[era-1].end());
 
-
             for (Player* & player : player_list) {
                 cards.clear();
                 for (int i = 0; i < 7; i++) {
@@ -162,7 +161,6 @@ class Game{
         }
 
         void CreateWonders(){
-
             wonders.push_back(Gizah_a());
             wonders.push_back(Babylon_a());
             wonders.push_back(Olympia_a());
@@ -310,8 +308,8 @@ class Game{
             }
 
             CreateDecks();
-            //GiveWonders();
-            //GiveCards();
+            GiveWonders();
+            GiveCards();
 
             return 0;
         }
@@ -323,7 +321,6 @@ class Game{
         }
 
         void Close(){
-
             // deallocate memory
         }
 
@@ -350,12 +347,10 @@ class Game{
                     if(command == "build_structure" || command == "build_guild"){
                         Card selected = GetCardByName(argument);
                         if(player_list[i]->BuildStructure(selected, player_list[i]->GetHandCards(), false))// find card before calling this
-                            cout << "Construiu" << endl;
+                            cout << "<Construction OK>" << endl;
                         else
-                            cout << "Carta já construida" << endl;
+                            cout << "<Construction NOK>" << endl;
                     // TODO:
-                    // -> "argument" will probably need to be a list (see "copy_guild" command)
-                    //
                     // -> We need to restrict when certain special actions are made
                     //    (end of the game, once per turn, etc.)
                     //
@@ -364,7 +359,7 @@ class Game{
                     //    making use of this! e.g. let the player "repeat" an action if he tried
                     //    an invalid one.
 
-                    // Oviously these will need to change a bit.
+                    // Obviously these will need to change a bit.
                     }else if (command == "choose_manuf"){
                         // ONLY AT THE END OF THE GAME
                         player_list[i]->ChooseExtraManuf(GetResourceByName(argument));
@@ -386,11 +381,12 @@ class Game{
                     }else if (command == "copy_guild"){
                         // ONLY AT THE END OF THE GAME
                         Card chosen = GetCardByName(argument);
-                        // int neighbor = argument[1] ???
-                        // player_list[i]->CopyGuild(chosen, neighbor)
+                        player_list[i]->CopyGuild(chosen);
                     }else if(command == "build_wonder"){
                         Card sacrifice = GetCardByName(argument);
-                        player_list[i]->BuildWonder(sacrifice);
+                        if (player_list[i]->BuildWonder(sacrifice))
+                            cout << "<Wonder Stage OK>" << endl;
+                        else cout << "<Wonder Stage NOK>" << endl;
                     }else if(command == "discard"){
                         Card discard = GetCardByName(argument);
                         player_list[i]->Discard(); //Gives player 3 coins.
