@@ -70,7 +70,7 @@ public:
     std::vector<DMAG::Card> GetHandCards();
     std::vector<DMAG::Card> GetPlayedCards();
     void ReceiveCards(std::vector<DMAG::Card> _cards_hand);
-    void Discard();
+    void Discard(DMAG::Card c);
     int AmountOfType(int card_type);
     bool AvailableCard(int card_id, int resource);
     bool HasPlayedCard(DMAG::Card c);
