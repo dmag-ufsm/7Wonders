@@ -17,6 +17,7 @@ private:
     DMAG::Wonder board;
     std::vector<DMAG::Card> cards_hand;
     std::vector<DMAG::Card> cards_played;
+    std::vector<DMAG::Card> cards_playable;
     signed char victory_tokens, defeat_tokens;
     unsigned char victory_points;
 
@@ -74,6 +75,7 @@ public:
     int AmountOfType(int card_type);
     bool AvailableCard(int card_id, int resource);
     bool HasPlayedCard(DMAG::Card c);
+    std::vector<DMAG::Card> GetPlayableCards();
     void ResetUsed();
 
     // Resource-related:
@@ -117,6 +119,7 @@ public:
     void SetNeighbors(DMAG::Player* east, DMAG::Player* west);
     void SetWonder(DMAG::Wonder _board);
     void SetId(int id);
+    void SetResources(std::map<int, unsigned char> r);
 };
 
 }

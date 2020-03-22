@@ -383,10 +383,17 @@ class Game{
             json json_object;
             std::string command, argument;
             while(InGame()){
+
                 WriteGameStatus();
-                
+
                 cout << "<Waiting players...>" << endl;
                 while(!fp.ArePlayersReady());
+
+                /* Test just to see the playable cards for a turn.
+                for (DMAG::Card const& card : player_list[0]->GetPlayableCards()) {
+                    cout << card.GetName() << endl;
+                }
+                */
 
                 for(int i = 0; i < number_of_players; i++){
                     json_object = fp.ReadMessages(i);
@@ -394,7 +401,6 @@ class Game{
                     command = json_object["command"]["subcommand"];
                     argument = json_object["command"]["argument"];
 
-                    // TODO:
                     // -> We need to restrict when certain special actions are made
                     //    (end of the game, once per turn, etc.)
                     //
@@ -449,7 +455,7 @@ class Game{
                     player_list[i]->ResetUsed();
 
                 NextTurn(0); // Have to fix this, and the method.
-            
+
 
                 // TODO: show info
 #ifndef NDEBUG
@@ -462,7 +468,7 @@ class Game{
                 //calculate stuff
 
                 //end game?
-            
+
             }
 
             // output results after game

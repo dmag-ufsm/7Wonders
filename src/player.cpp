@@ -245,6 +245,49 @@ std::vector<Card> Player::GetPlayedCards(){
     return this->cards_played;
 }
 
+std::vector<Card> Player::GetPlayableCards(){
+    this->cards_playable.clear();
+
+    std::map<int, unsigned char> this_bckp = this->resources;
+
+    Player* east = this->GetEastNeighbor();
+    std::map<int, unsigned char> east_bckp = east->GetResources();
+
+    Player* west = this->GetWestNeighbor();
+    std::map<int, unsigned char> west_bckp = west->GetResources();
+
+    for (DMAG::Card c : this->cards_hand) {
+        //std::cout << " Checking ---> " << c.GetName() << std::endl;
+        // Check if you can play the card directly.
+        if (c.CanBePlayed(this->resources) || this->CheckFreeCard(c)) {
+        //std::cout << "         Can Play ---> " << c.GetName() << std::endl;
+            this->cards_playable.push_back(c);
+        }
+        // Check if you can potentially play the card.
+        else {
+            std::map<int, unsigned char> resources_needed = c.MissingCards(this->resources);
+            for (std::map<int, unsigned char>::iterator it = resources_needed.begin();
+                 it != resources_needed.end(); ++it) {
+                int quant_needed = resources_needed[it->first];
+                if (quant_needed > 0) { // Just an extra check.
+                    if (this->ProduceResource(it->first, quant_needed)) {
+                        //std::cout << " Produced ---> " << c.GetName() << std::endl;
+                        this->cards_playable.push_back(c);
+                    }
+                    // Undo all changes on the resource map.
+                    this->ResetUsed();
+                    this->resources = this_bckp;
+                    east->ResetUsed();
+                    east->SetResources(east_bckp);
+                    west->ResetUsed();
+                    west->SetResources(west_bckp);
+                }
+            }
+        }
+    }
+    return this->cards_playable;
+}
+
 void Player::ReceiveCards(std::vector<Card> _cards_hand){
     this->cards_hand = _cards_hand;
 }
@@ -448,6 +491,10 @@ bool Player::BuyResource(int resource, int quant){
     int needed_east = east->IncrementOnDemand(resource, quant);
     int needed_west = west->IncrementOnDemand(resource, quant);
 
+    // Wonder initial resource is not buyable!
+    east->AddResource(east->board.GetProduction(), -1);
+    west->AddResource(west->board.GetProduction(), -1);
+
     if (needed_east <= 0) {
         if (is_raw && (this->raw_cheap_east || this->wonder_raw_cheap)) cost = 1*quant;
         if (cost >= this->resources[RESOURCE::coins]) {
@@ -468,6 +515,9 @@ bool Player::BuyResource(int resource, int quant){
             return true;
         }
     }
+
+    east->AddResource(east->board.GetProduction(), 1);
+    west->AddResource(west->board.GetProduction(), 1);
 
     std::cout <<  "  -> FAILURE -> " << "couldn't buy the resource." << std::endl;
     return false; // Couldn't buy
@@ -717,7 +767,7 @@ int Player::CalculateScientificScore(){
     int stage = this->board.GetStage();
     if ((id == WONDER_ID::babylon_a && stage >= 2) ||
             (id == WONDER_ID::babylon_b && stage >= 3)) {
-        this->sci_extra++
+        this->sci_extra++;
     }
 
     // Choose the most advantageous scientific piece for extra piece:
@@ -927,6 +977,10 @@ void Player::SetId(int id){
 
 int Player::GetId(){
     return this->id;
+}
+
+void Player::SetResources(std::map<int, unsigned char> r){
+    this->resources = r;
 }
 
 }
