@@ -54,7 +54,8 @@ bool Player::BuildWonder(DMAG::Card c){
 }
 
 // Play a card.
-bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _free_card){
+// * arg cards is necessary for any special situation? it is equal to this->cards_hand
+bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool free_card){
     // Returns false if the card has already been played (cannot play the same card twice).
     for (DMAG::Card const& card : this->cards_played)
         if (c.Equal(card)) return false;
@@ -69,8 +70,6 @@ bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _f
         // ERROR: Card played was not found in the vector
         return false;
     }
-
-    bool free_card = _free_card;
 
     if (!free_card) {
         // If there are not enough resources.
@@ -209,11 +208,12 @@ bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _f
             break;
     }
 
-    cards.erase(cards.begin()+i);
+    cards_hand.erase(cards.begin()+i);
     cards_played.push_back(c);
 
     if (!free_card) this->resources[RESOURCE::coins] -= cost;
     std::cout << this->id << " -> SUCCESS -> " << "builds " << c.GetName() << std::endl;
+
     return true;
 }
 
@@ -239,6 +239,10 @@ bool Player::CheckFreeCard(DMAG::Card c){
 
 std::vector<Card> Player::GetHandCards(){
     return this->cards_hand;
+}
+
+std::vector<Card> Player::GetPlayedCards(){
+    return this->cards_played;
 }
 
 void Player::ReceiveCards(std::vector<Card> _cards_hand){
@@ -773,7 +777,7 @@ int Player::CalculateScore(){
 // - called at the end of the game, before scoring.
 bool Player::ChooseExtraManuf(int resource){
     if (resource == RESOURCE::loom || resource == RESOURCE::glass || resource == RESOURCE::papyrus) {
-        if (this->board.GetType() == WONDER_ID::alexandria_b && this->board.GetStage() >= 2) {
+        if (this->board.GetId() == WONDER_ID::alexandria_b && this->board.GetStage() >= 2) {
             this->resources[resource]++;
             return true;
         }
@@ -785,7 +789,7 @@ bool Player::ChooseExtraManuf(int resource){
 // - called at the end of the game, before scoring.
 bool Player::ChooseExtraScience(int resource){
     if (resource == RESOURCE::gear || resource == RESOURCE::compass || resource == RESOURCE::tablet) {
-        int id = this->board.GetType();
+        int id = this->board.GetId();
         int stage = this->board.GetStage();
         if ((id == WONDER_ID::babylon_a && stage >= 2) ||
              (id == WONDER_ID::babylon_b && stage >= 3)) {
@@ -802,7 +806,7 @@ bool Player::ChooseExtraScience(int resource){
 bool Player::ChooseExtraRaw(int resource){
     if (resource == RESOURCE::wood || resource == RESOURCE::ore ||
         resource == RESOURCE::clay || resource == RESOURCE::stone) {
-        int id = this->board.GetType();
+        int id = this->board.GetId();
         int stage = this->board.GetStage();
         if ((id == WONDER_ID::alexandria_a && stage >= 2) ||
             (id == WONDER_ID::alexandria_b && stage >= 1)) {
@@ -829,7 +833,7 @@ void Player::CanBuyRawCheap(){
 // - will be changed depending on which type discard_pile will be.
 // - called at the end of the turn after the stage was built.
 bool Player::BuildDiscardFree(DMAG::Card c, std::vector<DMAG::Card> discard_pile){
-    int id = this->board.GetType();
+    int id = this->board.GetId();
     int stage = this->board.GetStage();
 
     if ((id == WONDER_ID::halikarnassos_a && stage == 2) ||
@@ -842,7 +846,7 @@ bool Player::BuildDiscardFree(DMAG::Card c, std::vector<DMAG::Card> discard_pile
 // Builds a card from the hand for free.
 // - called ONCE per age.
 bool Player::BuildHandFree(DMAG::Card c){
-    if (this->board.GetType() == WONDER_ID::olympia_a && this->board.GetStage() >= 2) {
+    if (this->board.GetId() == WONDER_ID::olympia_a && this->board.GetStage() >= 2) {
         return this->BuildStructure(c, this->cards_hand, true);
     }
     return false;
@@ -867,7 +871,7 @@ bool Player::CopyGuild(DMAG::Card c){
         return false;
     }
 
-    int id = this->board.GetType();
+    int id = this->board.GetId();
     int stage = this->board.GetStage();
 
     if (c.GetType() == CARD_TYPE::guild && (id == WONDER_ID::olympia_b && stage >= 3)) {
