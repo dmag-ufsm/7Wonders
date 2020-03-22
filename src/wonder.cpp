@@ -13,7 +13,7 @@ std::string Wonder::GetName() const{
     return this->name;
 }
 
-int Wonder::GetType() const{
+int Wonder::GetId() const{
     return this->id;
 }
 
