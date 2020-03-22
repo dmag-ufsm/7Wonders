@@ -106,8 +106,6 @@ class Game{
                 GiveCards();
             }
             else {
-                // needs to be tested
-
                 Player *player, *p1, *neighbor;
                 p1 = player = player_list.front();
                 vector<Card> neighbor_deck, player_deck = p1->GetHandCards();
@@ -119,12 +117,14 @@ class Game{
                     // The neighbor receives the cards from player p
                     // The neighbor becomes the player p
                     // Continue until you reach the first player again
-                    neighbor = clockwise ? player->GetEastNeighbor() : player->GetWestNeighbor();
+                    neighbor = clockwise ? player->GetWestNeighbor() : player->GetEastNeighbor();
                     neighbor_deck = neighbor->GetHandCards();
                     neighbor->ReceiveCards(player_deck);
                     player = neighbor;
                     player_deck = neighbor_deck;
+                    cout << "Passou" << endl;
                 } while (p1 != player);
+                cout << "Passou tudo" << endl;
             }
         }
 
@@ -414,24 +414,6 @@ class Game{
                             cout << "<BuildStructure OK>" << endl;
                         else cout << "<BuildStructure NOK>" << endl;
 
-                    } else if (command == "choose_manuf"){
-                        // ONLY AT THE END OF THE GAME
-                        if (player_list[i]->ChooseExtraManuf(GetResourceByName(argument)))
-                            cout << "<ChooseExtraManuf OK>" << endl;
-                        else cout << "<ChooseExtraManuf NOK>" << endl;
-
-                    } else if (command == "choose_science"){
-                        // ONLY AT THE END OF THE GAME
-                        if (player_list[i]->ChooseExtraScience(GetResourceByName(argument)))
-                            cout << "<ChooseExtraScience OK>" << endl;
-                        else cout << "<ChooseExtraScience NOK>" << endl;
-
-                    } else if (command == "choose_raw"){
-                        // ONLY ONCE PER TURN (TURN?)
-                        if (player_list[i]->ChooseExtraRaw(GetResourceByName(argument)))
-                            cout << "<ChooseExtraRaw OK>" << endl;
-                        else cout << "<ChooseExtraRaw NOK>" << endl;
-
                     } else if (command == "build_discard_free"){
                         // ONLY AT THE END OF THE TURN WHERE THE WONDER STAGE THAT PERMITS THIS ACTION WAS COMPLETED.
                         // (halikarnassos_a stage 2 or halikarnassos_b stage >= 1)
@@ -447,13 +429,6 @@ class Game{
                             cout << "<BuildHandFree OK>" << endl;
                         else cout << "<BuildHandFree NOK>" << endl;
 
-                    } else if (command == "copy_guild"){
-                        // ONLY AT THE END OF THE GAME
-                        Card chosen = GetCardByName(argument);
-                        if (player_list[i]->CopyGuild(chosen))
-                            cout << "<CopyGuild OK>" << endl;
-                        else cout << "<CopyGuild NOK>" << endl;
-
                     } else if(command == "build_wonder"){
                         Card sacrifice = GetCardByName(argument);
                         if (player_list[i]->BuildWonder(sacrifice))
@@ -462,7 +437,7 @@ class Game{
 
                     } else if(command == "discard"){
                         Card discard = GetCardByName(argument);
-                        player_list[i]->Discard(); //Gives player 3 coins.
+                        player_list[i]->Discard(discard); //Gives player 3 coins.
                         cout << "<Discard OK>" << endl;
                         discard_pile.push_back(discard);
                     }
@@ -470,7 +445,11 @@ class Game{
 
                 // Moves the game to the next turn.
                 // VERY IMPORTANT: call player->ResetUsed() for each player at the end of a turn!
-                //NextTurn(0); // Have to fix this, and the method.
+                for (int i = 0; i < player_list.size(); i++)
+                    player_list[i]->ResetUsed();
+
+                NextTurn(0); // Have to fix this, and the method.
+            
 
                 // TODO: show info
 #ifndef NDEBUG
