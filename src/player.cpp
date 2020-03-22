@@ -249,9 +249,15 @@ void Player::ReceiveCards(std::vector<Card> _cards_hand){
     this->cards_hand = _cards_hand;
 }
 
-void Player::Discard(){
+void Player::Discard(DMAG::Card c){
 	// This just adds some coins to the player total.
     this->resources[RESOURCE::coins] += 3;
+
+    int i;
+    for (i = 0; i < this->cards_hand.size(); i++) {
+        if (this->cards_hand[i].Equal(c)) break;
+    }
+    this->cards_hand.erase(this->cards_hand.begin()+i);
 }
 
 // Returns the quantity of played cards of a given type (commercial, military, materials, etc.)
@@ -707,6 +713,13 @@ int Player::CalculateScientificScore(){
         }
     }
 
+    int id = this->board.GetId();
+    int stage = this->board.GetStage();
+    if ((id == WONDER_ID::babylon_a && stage >= 2) ||
+            (id == WONDER_ID::babylon_b && stage >= 3)) {
+        this->sci_extra++
+    }
+
     // Choose the most advantageous scientific piece for extra piece:
     // First complete the set if possible. The pieces left over, add to what has more.
     int remaining_tablets = 0, remaining_compasses = 0, remaining_gears = 0, extra = this->sci_extra;
@@ -778,21 +791,6 @@ int Player::CalculateScore(){
 bool Player::ChooseExtraManuf(int resource){
     if (resource == RESOURCE::loom || resource == RESOURCE::glass || resource == RESOURCE::papyrus) {
         if (this->board.GetId() == WONDER_ID::alexandria_b && this->board.GetStage() >= 2) {
-            this->resources[resource]++;
-            return true;
-        }
-    }
-    return false;
-}
-
-// The player chooses one of the 3 scientific symbols to get for free at the end of the game.
-// - called at the end of the game, before scoring.
-bool Player::ChooseExtraScience(int resource){
-    if (resource == RESOURCE::gear || resource == RESOURCE::compass || resource == RESOURCE::tablet) {
-        int id = this->board.GetId();
-        int stage = this->board.GetStage();
-        if ((id == WONDER_ID::babylon_a && stage >= 2) ||
-             (id == WONDER_ID::babylon_b && stage >= 3)) {
             this->resources[resource]++;
             return true;
         }
