@@ -99,7 +99,7 @@ protected:
 public:
     Wonder();
     std::string GetName() const;
-    int GetType() const;
+    int GetId() const;
     int GetProduction() const;
     int GetStage() const;
     int GetWonderPoints() const;
