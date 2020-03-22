@@ -68,6 +68,7 @@ public:
     bool BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _free_card);
     bool CheckFreeCard(DMAG::Card c);
     std::vector<DMAG::Card> GetHandCards();
+    std::vector<DMAG::Card> GetPlayedCards();
     void ReceiveCards(std::vector<DMAG::Card> _cards_hand);
     void Discard();
     int AmountOfType(int card_type);
