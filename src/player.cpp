@@ -260,7 +260,7 @@ std::vector<Card> Player::GetPlayableCards(){
         //std::cout << " Checking ---> " << c.GetName() << std::endl;
         // Check if you can play the card directly.
         if (c.CanBePlayed(this->resources) || this->CheckFreeCard(c)) {
-        //std::cout << "         Can Play ---> " << c.GetName() << std::endl;
+            //std::cout << "         Can Play ---> " << c.GetName() << std::endl;
             this->cards_playable.push_back(c);
         }
         // Check if you can potentially play the card.
@@ -463,7 +463,7 @@ int Player::IncrementOnDemand(int resource, int needed){
         }
     }
     this->resources[resource] += cont;
-    return (needed - resources[resource]);
+    return (needed - this->resources[resource]);
 }
 
 // The resources we incremented "on demand" for a turn should be decremented.
@@ -483,21 +483,24 @@ void Player::DecrementUsed(){
 // - this function is a "step" in BuildStructure.
 bool Player::BuyResource(int resource, int quant){
     bool is_raw = resource <= 3 ? true : false; // raw materials have code <= 3 in resources.h
-    int cost = !is_raw && this->manuf_cheap ? 1*quant : 2*quant;
+    int cost = 2*quant;
+    cost = !is_raw && this->manuf_cheap ? 1*quant : 2*quant;
 
     Player* east = this->GetEastNeighbor();
     Player* west = this->GetWestNeighbor();
 
-    int needed_east = east->IncrementOnDemand(resource, quant);
-    int needed_west = west->IncrementOnDemand(resource, quant);
-
     // Wonder initial resource is not buyable!
     east->AddResource(east->board.GetProduction(), -1);
     west->AddResource(west->board.GetProduction(), -1);
+    //std::cout << "east: " << (int)east->resources[east->board.GetProduction()] << std::endl;
+    //std::cout << "west: " <<  (int)west->resources[west->board.GetProduction()] << std::endl;
 
-    if (needed_east <= 0) {
+    int needed_east = east->IncrementOnDemand(resource, quant);
+    int needed_west = west->IncrementOnDemand(resource, quant);
+
+    if (needed_east <= 0) { // neeed_east/west <= 0 means that the neightbor has the resource.
         if (is_raw && (this->raw_cheap_east || this->wonder_raw_cheap)) cost = 1*quant;
-        if (cost >= this->resources[RESOURCE::coins]) {
+        if (this->resources[RESOURCE::coins] >= cost) {
             this->resources[RESOURCE::coins] -= cost;
             east->AddResource(RESOURCE::coins, cost);
             east->AddResource(east->board.GetProduction(), 1);
@@ -508,7 +511,7 @@ bool Player::BuyResource(int resource, int quant){
     }
     if (needed_west <= 0) {
         if (is_raw && (this->raw_cheap_west || this->wonder_raw_cheap)) cost = 1*quant;
-        if (cost >= this->resources[RESOURCE::coins]) {
+        if (this->resources[RESOURCE::coins] >= cost) {
             this->resources[RESOURCE::coins] -= cost;
             west->AddResource(RESOURCE::coins, cost);
             west->AddResource(west->board.GetProduction(), 1);
