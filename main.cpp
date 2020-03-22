@@ -339,38 +339,41 @@ class Game{
             std::vector<DMAG::Card> cards;
             std::vector<std::string> card_names;
             std::map<int, unsigned char> resources;
+            DMAG::Wonder wonder;
 
             status["game"]["era"] = era;
             status["game"]["turn"] = turn;
 
             for (int i = 0; i < number_of_players; i++) {
-                std::string player = "player" + to_string(i+1);
+                wonder = player_list[i]->GetBoard();
+                status["players"][to_string(i)]["wonder_id"] = wonder.GetId();
+                status["players"][to_string(i)]["wonder_stage"] = wonder.GetStage();
 
                 cards = player_list[i]->GetHandCards();
                 card_names.clear();
                 for (DMAG::Card c : cards)
                     card_names.push_back(c.GetName());
-                status[player]["cards_hand"] = card_names;
+                status["players"][to_string(i)]["cards_hand"] = card_names;
 
                 cards = player_list[i]->GetPlayedCards();
                 card_names.clear();
                 for (DMAG::Card c : cards)
                     card_names.push_back(c.GetName());
-                status[player]["cards_played"] = card_names;
+                status["players"][to_string(i)]["cards_played"] = card_names;
 
                 resources = player_list[i]->GetResources();
-                status[player]["resources"]["wood"] = resources[RESOURCE::wood];
-                status[player]["resources"]["ore"] = resources[RESOURCE::ore];
-                status[player]["resources"]["clay"] = resources[RESOURCE::clay];
-                status[player]["resources"]["stone"] = resources[RESOURCE::stone];
-                status[player]["resources"]["loom"] = resources[RESOURCE::loom];
-                status[player]["resources"]["glass"] = resources[RESOURCE::glass];
-                status[player]["resources"]["papyrus"] = resources[RESOURCE::papyrus];
-                status[player]["resources"]["gear"] = resources[RESOURCE::gear];
-                status[player]["resources"]["compass"] = resources[RESOURCE::compass];
-                status[player]["resources"]["tablet"] = resources[RESOURCE::tablet];
-                status[player]["resources"]["coins"] = resources[RESOURCE::coins];
-                status[player]["resources"]["shields"] = resources[RESOURCE::shields];
+                status["players"][to_string(i)]["resources"]["wood"] = resources[RESOURCE::wood];
+                status["players"][to_string(i)]["resources"]["ore"] = resources[RESOURCE::ore];
+                status["players"][to_string(i)]["resources"]["clay"] = resources[RESOURCE::clay];
+                status["players"][to_string(i)]["resources"]["stone"] = resources[RESOURCE::stone];
+                status["players"][to_string(i)]["resources"]["loom"] = resources[RESOURCE::loom];
+                status["players"][to_string(i)]["resources"]["glass"] = resources[RESOURCE::glass];
+                status["players"][to_string(i)]["resources"]["papyrus"] = resources[RESOURCE::papyrus];
+                status["players"][to_string(i)]["resources"]["gear"] = resources[RESOURCE::gear];
+                status["players"][to_string(i)]["resources"]["compass"] = resources[RESOURCE::compass];
+                status["players"][to_string(i)]["resources"]["tablet"] = resources[RESOURCE::tablet];
+                status["players"][to_string(i)]["resources"]["coins"] = resources[RESOURCE::coins];
+                status["players"][to_string(i)]["resources"]["shields"] = resources[RESOURCE::shields];
             }
 
             fp.WriteMessage(status);
@@ -381,7 +384,10 @@ class Game{
             std::string command, argument;
             while(InGame()){
                 WriteGameStatus();
+                
+                cout << "<Waiting players...>" << endl;
                 while(!fp.ArePlayersReady());
+
                 for(int i = 0; i < number_of_players; i++){
                     json_object = fp.ReadMessages(i);
                     // handle command inside json_object
@@ -460,23 +466,24 @@ class Game{
                         cout << "<Discard OK>" << endl;
                         discard_pile.push_back(discard);
                     }
+                }
 
-                    // Moves the game to the next turn.
-                    // VERY IMPORTANT: call player->ResetUsed() for each player at the end of a turn!
-                    NextTurn(0); // Have to fix this, and the method.
+                // Moves the game to the next turn.
+                // VERY IMPORTANT: call player->ResetUsed() for each player at the end of a turn!
+                //NextTurn(0); // Have to fix this, and the method.
 
-                    // TODO: show info
+                // TODO: show info
 #ifndef NDEBUG
-                    ShowInfo();
+                ShowInfo();
 #endif
 
 
-                    //get commands
+                //get commands
 
-                    //calculate stuff
+                //calculate stuff
 
-                    //end game?
-                }
+                //end game?
+            
             }
 
             // output results after game
