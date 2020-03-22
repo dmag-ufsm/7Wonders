@@ -500,6 +500,7 @@ bool Player::BuyResource(int resource, int quant){
         if (cost >= this->resources[RESOURCE::coins]) {
             this->resources[RESOURCE::coins] -= cost;
             east->AddResource(RESOURCE::coins, cost);
+            east->AddResource(east->board.GetProduction(), 1);
             //east->DecrementUsed();
             std::cout <<  "  -> " << "bought the resource successfully!" << std::endl;
             return true;
@@ -510,6 +511,7 @@ bool Player::BuyResource(int resource, int quant){
         if (cost >= this->resources[RESOURCE::coins]) {
             this->resources[RESOURCE::coins] -= cost;
             west->AddResource(RESOURCE::coins, cost);
+            west->AddResource(west->board.GetProduction(), 1);
             //west->DecrementUsed();
             std::cout <<  "  -> SUCCESS -> " << "bought the resource successfully!" << std::endl;
             return true;
