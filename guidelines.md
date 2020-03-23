@@ -17,22 +17,15 @@ ex, atributo "fichas de conflito":
 # TODO
 ## Main
 * Ver TODO na linha 348!
-    * Para tirar o "burden" de fazer isso em player, a verificação de jogadas
-      válidas em um turno X poderia ser feita aqui mesmo (também faz mais
-      sentido). Em outras palavras, certas ações devem ser restringidas até o
-      momento certo.
-    * Escrever os "stats" do jogo num arquivo. 
-    * Não sei se é válido já que são os bots que vão jogar, mas talvez seja
-      interessante fazer com que seja possível "repetir" outra jogada caso uma
-      ação tenha retornado false. Isso facilita para players humanos, já que é
-      possível fazer uma jogada sem notar que ela dará errado; no atual esquema
-      do loop, o turno do jogador é perdido independentemente da jogada dando
-      certo ou não.
+    * Adicionar cards_playable no game_status.json e algumas outras
+      informações faltantes;
+    * Aplicar as ações especiais das Wonders, que ocorrem em momentos
+      específicos do jogo.
 
 ## Player
 * Aparentemente está ok -- foram feitos alguns testes usando um
   player. Resta terminar de implementar a main para que seja possível simular
-  um jogo real e assim buscar possíveis erros.
+  um jogo completo e assim buscar possíveis erros.
 
 # Classe player:
 
