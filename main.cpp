@@ -122,9 +122,9 @@ class Game{
                     neighbor->ReceiveCards(player_deck);
                     player = neighbor;
                     player_deck = neighbor_deck;
-                    cout << "Passou" << endl;
+                    //cout << "Passou" << endl;
                 } while (p1 != player);
-                cout << "Passou tudo" << endl;
+                //cout << "Passou tudo" << endl;
             }
         }
 
@@ -386,14 +386,18 @@ class Game{
 
                 WriteGameStatus();
 
+                cout << "\n:::TURN " << (short)this->turn << ":::" << endl;
+
+                // Print Playable Cards for each player.
+                for (int i = 0; i < number_of_players; i++) {
+                    cout << "> Playable cards for player " << i << ":" << endl;
+                    for (DMAG::Card const& card : player_list[i]->GetPlayableCards()) {
+                        cout << "  (" << i << ") " << card.GetName() << endl;
+                    }
+                }
+
                 cout << "<Waiting players...>" << endl;
                 while(!fp.ArePlayersReady());
-
-                /* Test just to see the playable cards for a turn.
-                for (DMAG::Card const& card : player_list[0]->GetPlayableCards()) {
-                    cout << card.GetName() << endl;
-                }
-                */
 
                 for(int i = 0; i < number_of_players; i++){
                     json_object = fp.ReadMessages(i);
