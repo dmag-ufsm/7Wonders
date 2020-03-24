@@ -395,7 +395,7 @@ bool Player::ProduceResource(int resource, int quant){
 
     // Produce "on demand" resources.
     // Ugly, but hopefully it'll get the job done.
-    int needed = this->IncrementOnDemand(resource, quant);
+    int needed = this->IncrementOnDemand(resource, quant, false);
     if (needed <= 0) {
         std::cout <<  "  -> " << "produced the resource successfully!" << std::endl;
         return true;
@@ -407,8 +407,10 @@ bool Player::ProduceResource(int resource, int quant){
 
 // Some cards can produce one resource OR the other each turn. This function takes care of this by
 // incrementing the needed resource if a structure that fits the criteria is available (not used already).
+// -> If "is_neighbor" = true, don't increment even if they can ChooseExtraManuf or ChooseExtraRaw, as the "extra"
+//    resource is not tradeable.
 // Returns the needed resources - quantity produced.
-int Player::IncrementOnDemand(int resource, int needed){
+int Player::IncrementOnDemand(int resource, int needed, bool is_neighbor){
     // From: https://github.com/dmag-ufsm/Game/blob/master/references/cards.csv
     // Wood                 -> tree_farm  || forest_cave || timber_yard || caravansery
     // Clay                 -> tree_farm  || excavation  || clay_pit    || caravansery
@@ -460,8 +462,12 @@ int Player::IncrementOnDemand(int resource, int needed){
     } else if (resource == RESOURCE::glass || resource == RESOURCE::loom || resource == RESOURCE::papyrus) {
         if (this->AvailableCard(CARD_ID::forum, resource)) {
             cont++;
+        } if (!is_neighbor && this->ChooseExtraManuf(resource)) {
+            cont++;
         }
     }
+    if (!is_neighbor && this->ChooseExtraRaw(resource)) cont++;
+
     this->resources[resource] += cont;
     return (needed - this->resources[resource]);
 }
@@ -495,8 +501,8 @@ bool Player::BuyResource(int resource, int quant){
     //std::cout << "east: " << (int)east->resources[east->board.GetProduction()] << std::endl;
     //std::cout << "west: " <<  (int)west->resources[west->board.GetProduction()] << std::endl;
 
-    int needed_east = east->IncrementOnDemand(resource, quant);
-    int needed_west = west->IncrementOnDemand(resource, quant);
+    int needed_east = east->IncrementOnDemand(resource, quant, true);
+    int needed_west = west->IncrementOnDemand(resource, quant, true);
 
     if (needed_east <= 0) { // neeed_east/west <= 0 means that the neightbor has the resource.
         if (is_raw && (this->raw_cheap_east || this->wonder_raw_cheap)) cost = 1*quant;
@@ -569,6 +575,8 @@ void Player::Battle(int age){
     } else if (this_shields < player_east->GetShields()) {
         std::cout <<  this->id << " -> LOST battle with " << player_east->GetId() << std::endl;
         this->defeat_tokens += 1;
+    } else {
+        std::cout <<  this->id << " -> DRAW battle with " << player_east->GetId() << std::endl;
     }
 
     // Battle with west neighbor
@@ -578,6 +586,8 @@ void Player::Battle(int age){
     } else if (this_shields < player_west->GetShields()) {
         std::cout <<  this->id << " -> LOST battle with " << player_west->GetId() << std::endl;
         this->defeat_tokens += 1;
+    } else {
+        std::cout <<  this->id << " -> DRAW battle with " << player_west->GetId() << std::endl;
     }
 }
 
@@ -842,11 +852,11 @@ int Player::CalculateScore(){
 ////////////////////////////
 
 // The player chooses one of the 3 manufactured resources to get for free at the end of the game.
-// - called at the end of the game, before scoring.
+// - called ONCE each turn; part of IncrementOnDemand().
 bool Player::ChooseExtraManuf(int resource){
     if (resource == RESOURCE::loom || resource == RESOURCE::glass || resource == RESOURCE::papyrus) {
         if (this->board.GetId() == WONDER_ID::alexandria_b && this->board.GetStage() >= 2) {
-            this->resources[resource]++;
+            //this->resources[resource]++;
             return true;
         }
     }
@@ -855,7 +865,7 @@ bool Player::ChooseExtraManuf(int resource){
 
 
 // The player chooses one of the 4 raw resources to receive for free at each turn (untradable).
-// - called ONCE each turn; unsure exactly how this works tbh.
+// - called ONCE each turn; part of IncrementOnDemand().
 bool Player::ChooseExtraRaw(int resource){
     if (resource == RESOURCE::wood || resource == RESOURCE::ore ||
         resource == RESOURCE::clay || resource == RESOURCE::stone) {
@@ -863,7 +873,7 @@ bool Player::ChooseExtraRaw(int resource){
         int stage = this->board.GetStage();
         if ((id == WONDER_ID::alexandria_a && stage >= 2) ||
             (id == WONDER_ID::alexandria_b && stage >= 1)) {
-            this->resources[resource]++;
+            //this->resources[resource]++;
             return true;
         }
     }

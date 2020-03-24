@@ -82,7 +82,7 @@ public:
     bool ProduceResource(int resource, int quant);
     bool BuyResource(int resource, int quant);
     void AddResource(int resource, int quant);
-    int IncrementOnDemand(int resource, int needed);
+    int IncrementOnDemand(int resource, int needed, bool is_neighbor);
     void DecrementUsed();
     bool HasEnoughResource(int resource, int quant);
 
