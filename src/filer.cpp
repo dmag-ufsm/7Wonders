@@ -22,7 +22,6 @@ int Filer::Init(int player_count){
  */
 
 int Filer::WriteMessage(json message){
-
 	out_file.open("game_status.json");
 	out_file  << message << std::endl;
 	out_file.close();
@@ -30,7 +29,6 @@ int Filer::WriteMessage(json message){
 }
 
 json Filer::ReadMessages(int player_number){
-
 	json ret;
 	if(player_number >= player_count)
 		return json({});
@@ -49,7 +47,7 @@ bool Filer::ArePlayersReady(){
 	for(int i = 0; i < player_count; i++){
 		getline(players_ready, ready);
 		if(ready != "ready"){
-			std::cout << i << " is not ready" <<std::endl;
+			//std::cout << i << " is not ready" <<std::endl;
 			players_ready.close();
 			return false;
 		}
