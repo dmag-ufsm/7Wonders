@@ -25,8 +25,8 @@ Player::Player()
     this->used_forum = -1;
     this->used_caravansery = -1;
 
-    this->raw_extra = 0;
-    this->manuf_extra = 0;
+    this->raw_extra = false;
+    this->manuf_extra = false;
 
     this->player_east = NULL;
     this->player_west = NULL;
@@ -162,9 +162,9 @@ bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool fr
             } else if (card == CARD_ID::marketplace) {
                 this->manuf_cheap = true;
             } else if (card == CARD_ID::forum) {
-                this->manuf_extra++;
+                this->manuf_extra = true;
             } else if (card == CARD_ID::caravansery) {
-                this->raw_extra++;
+                this->raw_extra = true;
             } else if (card == CARD_ID::vineyard) {
                 int brown_cards = player_east->AmountOfType(CARD_TYPE::materials)
                                 + player_west->AmountOfType(CARD_TYPE::materials)
@@ -386,10 +386,10 @@ void Player::ResetUsed() {
 // If he can't produce by himself, try buying it from neighbors.
 // - this function is a "step" in BuildStructure.
 bool Player::ProduceResource(int resource, int quant){
-    std::cout <<  "  -> " << "needs " << resource << ":" << quant << std::endl;
+    //std::cout <<  "  -> " << "needs " << resource << ":" << quant << std::endl;
     // Extra check to verify if the player can build directly without needing to produce.
     if (this->resources[resource] >= quant) {
-        std::cout <<  "  -> " << "produced the resource successfully!" << std::endl;
+        //std::cout <<  "  -> " << "produced the resource successfully!" << std::endl;
         return true;
     }
 
@@ -397,7 +397,7 @@ bool Player::ProduceResource(int resource, int quant){
     // Ugly, but hopefully it'll get the job done.
     int needed = this->IncrementOnDemand(resource, quant, false);
     if (needed <= 0) {
-        std::cout <<  "  -> " << "produced the resource successfully!" << std::endl;
+        //std::cout <<  "  -> " << "produced the resource successfully!" << std::endl;
         return true;
     }
 
@@ -464,9 +464,12 @@ int Player::IncrementOnDemand(int resource, int needed, bool is_neighbor){
             cont++;
         } if (!is_neighbor && this->ChooseExtraManuf(resource)) {
             cont++;
+        } if (!is_neighbor && this->raw_extra) {
+            cont++;
         }
     }
     if (!is_neighbor && this->ChooseExtraRaw(resource)) cont++;
+    if (!is_neighbor && this->raw_extra) cont++;
 
     this->resources[resource] += cont;
     return (needed - this->resources[resource]);
@@ -498,8 +501,6 @@ bool Player::BuyResource(int resource, int quant){
     // Wonder initial resource is not buyable!
     east->AddResource(east->board.GetProduction(), -1);
     west->AddResource(west->board.GetProduction(), -1);
-    //std::cout << "east: " << (int)east->resources[east->board.GetProduction()] << std::endl;
-    //std::cout << "west: " <<  (int)west->resources[west->board.GetProduction()] << std::endl;
 
     int needed_east = east->IncrementOnDemand(resource, quant, true);
     int needed_west = west->IncrementOnDemand(resource, quant, true);
@@ -511,7 +512,7 @@ bool Player::BuyResource(int resource, int quant){
             east->AddResource(RESOURCE::coins, cost);
             east->AddResource(east->board.GetProduction(), 1);
             //east->DecrementUsed();
-            std::cout <<  "  -> " << "bought the resource successfully!" << std::endl;
+            //std::cout <<  "  -> " << "bought the resource successfully!" << std::endl;
             return true;
         }
     }
@@ -522,7 +523,7 @@ bool Player::BuyResource(int resource, int quant){
             west->AddResource(RESOURCE::coins, cost);
             west->AddResource(west->board.GetProduction(), 1);
             //west->DecrementUsed();
-            std::cout <<  "  -> SUCCESS -> " << "bought the resource successfully!" << std::endl;
+            //std::cout <<  "  -> SUCCESS -> " << "bought the resource successfully!" << std::endl;
             return true;
         }
     }
@@ -530,7 +531,7 @@ bool Player::BuyResource(int resource, int quant){
     east->AddResource(east->board.GetProduction(), 1);
     west->AddResource(west->board.GetProduction(), 1);
 
-    std::cout <<  "  -> FAILURE -> " << "couldn't buy the resource." << std::endl;
+    //std::cout <<  "  -> FAILURE -> " << "couldn't buy the resource." << std::endl;
     return false; // Couldn't buy
 }
 
