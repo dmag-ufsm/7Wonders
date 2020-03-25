@@ -26,8 +26,9 @@ private:
     bool raw_cheap_east;       // Can the player buy raw resources from eastern neighbor for 1 coin? (East Trading Post)
     bool raw_cheap_west;       // Can the player buy raw resources from western neighbor for 1 coin? (West Trading Post)
     bool manuf_cheap;          // Can the player buy manufactured resources from neighbors for 1 coin? (Marketplace)
-    int raw_extra;             // The player has an additional raw material. (Caravansery and Alexandria A)
-    int manuf_extra;           // The player has an additional manufactured good. (Forum and Alexandria B)
+
+    bool raw_extra;            // The player has an additional raw material. (Caravansery and Alexandria A)
+    bool manuf_extra;          // The player has an additional manufactured good. (Forum and Alexandria B)
     int sci_extra;             // The player has an additional scientific piece. (Scientific Guild and Babylon A and B)
 
     // Possible values:
@@ -82,7 +83,7 @@ public:
     bool ProduceResource(int resource, int quant);
     bool BuyResource(int resource, int quant);
     void AddResource(int resource, int quant);
-    int IncrementOnDemand(int resource, int needed);
+    int IncrementOnDemand(int resource, int needed, bool is_neighbor);
     void DecrementUsed();
     bool HasEnoughResource(int resource, int quant);
 
