@@ -16,11 +16,10 @@ ex, atributo "fichas de conflito":
 
 # TODO
 ## Main
-* Ver TODO na linha 348!
-    * Adicionar cards_playable no game_status.json e algumas outras
-      informações faltantes;
-    * Aplicar as ações especiais das Wonders, que ocorrem em momentos
-      específicos do jogo.
+* Aplicar algumas as ações especiais das Wonders, que ocorrem em momentos
+  específicos do jogo (e.g. jogar a sétima carta, construir uma carta de
+  graça, etc.).
+* ?
 
 ## Player
 * Aparentemente está ok -- foram feitos alguns testes usando um
