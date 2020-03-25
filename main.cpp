@@ -465,12 +465,20 @@ class Game{
 
                 //get commands
 
-                //calculate stuff
-
-                //end game?
 
             }
 
+            //calculate stuff
+            std::ofstream results;
+            results.open("results.txt");
+
+            for(int i = 0; i< NUM_PLAYERS; ++i){
+                results << "Player " << i+1 << " score: " << player_list[i]->CalculateScore() << std::endl;
+            }
+
+            results << std::endl;
+            results.close();
+            //end game?
             // output results after game
         }
 };
