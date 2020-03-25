@@ -361,6 +361,12 @@ class Game{
                     card_names.push_back(c.GetName());
                 status["players"][to_string(i)]["cards_played"] = card_names;
 
+                cards = player_list[i]->GetPlayableCards();
+                card_names.clear();
+                for (DMAG::Card c : cards)
+                    card_names.push_back(c.GetName());
+                status["players"][to_string(i)]["cards_playable"] = card_names;
+
                 resources = player_list[i]->GetResources();
                 status["players"][to_string(i)]["resources"]["wood"] = resources[RESOURCE::wood];
                 status["players"][to_string(i)]["resources"]["ore"] = resources[RESOURCE::ore];
