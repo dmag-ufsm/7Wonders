@@ -347,6 +347,7 @@ class Game{
             for (int i = 0; i < number_of_players; i++) {
                 wonder = player_list[i]->GetBoard();
                 status["players"][to_string(i)]["wonder_id"] = wonder.GetId();
+                status["players"][to_string(i)]["wonder_name"] = wonder.GetName();
                 status["players"][to_string(i)]["wonder_stage"] = wonder.GetStage();
 
                 cards = player_list[i]->GetHandCards();
