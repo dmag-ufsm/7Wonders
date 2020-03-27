@@ -15,6 +15,9 @@ w_width = 1300
 w_height = 665
 pad = 5
 bg='#FFFFFF'
+action_active = [0]*players
+card_selected = [(-1, '')]*players
+
 canvas = Canvas(root, bg=bg)
 canvas.pack(expand=YES, fill=BOTH)
 
@@ -26,6 +29,15 @@ def load_image(local, f):
     if f_ss != 1:
         img = img.subsample(f_ss)
     return img
+
+def greyscale(image):
+#    return image
+    for x in range(image.width()):
+        for y in range(image.height()):
+            p = image.get(x, y)
+            p = int(p[0]*0.3 + p[1]*0.59 + p[2]*0.11)
+            image.put('#%02x%02x%02x' % (p, p, p), (x, y))
+    return image
 
 ###############
 size = {
@@ -62,15 +74,47 @@ for i in range(players):
 ###############
 
 ############### HAND CARDS ###############
+def card_position(player, card):
+    x = pad + (w_width/players)*player
+    y = img['wonder'].height() + img['wonder_stage'].height() + pad*(card+2) + img['hand_card'].height()*card
+    return (x, y)
+
 img_hand_cards = [None]*players
 for i in range(players):
     cards_hand = game_json['players'][str(i)]['cards_hand']
+    cards_playable = game_json['players'][str(i)]['cards_playable']
     img_hand_cards[i] = [None]*len(cards_hand)
     for j, c in enumerate(cards_hand):
         img_hand_cards[i][j] = load_image('images/cards/' + c + '.png', size['hand_card'])
-        x = pad + (w_width/players)*i
-        y = img['wonder'].height() + img['wonder_stage'].height() + pad*(j+2) + img['hand_card'].height()*j
-        canvas.create_image(x, y, image=img_hand_cards[i][j], anchor=NW)
+        x, y = card_position(i, j)
+        canvas.create_image(x, y, image=img_hand_cards[i][j] if (c in cards_playable) else greyscale(img_hand_cards[i][j]), anchor=NW)
+
+def select_card(player, card):
+    card_deselected = card_selected[player]
+    if card_deselected[0] != -1:
+        cards_playable = game_json['players'][str(player)]['cards_playable']
+        x, y = card_position(player, card_deselected[0])
+        img_hand_cards[player][card_deselected[0]] = load_image('images/cards/' + card_deselected[1] + '.png', size['hand_card'])
+        canvas.create_image(x, y, image=img_hand_cards[player][card_deselected[0]] if (card_deselected[1] in cards_playable) else greyscale(img_hand_cards[player][card_deselected[0]]), anchor=NW)
+
+    card_selected[player] = (card, game_json['players'][str(player)]['cards_hand'][card])
+    x, y = card_position(player, card)
+    img_hand_cards[player][card] = img_hand_cards[player][card].zoom(7)
+    img_hand_cards[player][card] = img_hand_cards[player][card].subsample(8)
+    f = (1-7/8)/2
+    x = x + img_hand_cards[player][card].width()*f
+    y = y + img_hand_cards[player][card].height()*f
+    canvas.create_image(x, y, image=img_hand_cards[player][card], anchor=NW)
+
+def mouse_clicked(event):
+    for i in range(players):
+        for j in range(len(cards_hand)):
+            x, y = card_position(i, j)
+            if x < event.x < (x + img['hand_card'].width()) and y < event.y < (y + img['hand_card'].height()):
+                select_card(i, j)
+                return
+
+canvas.bind("<Button-1>", mouse_clicked)
 ###############
 
 ############# RESOURCES ###############
@@ -114,35 +158,36 @@ for i in range(players):
 ###############
 
 ############### BUTTONS ###############
-button_active = [0]*players
-card_selected = ['']*players
-
-def build_structure():
-    print(str(0)+' apertou build_structure')
-    #myLabel = Label(canvas, text="Card!")
-    #myLabel.place(x=500, y=500)
-
-def build_wonder(player):
-    print(str(player)+' apertou build_wonder')
-    #myLabel = Label(canvas, text="Wonder!")
-    #myLabel.place(x=500, y=500)
-
-def discard(player):
-    print(str(player)+' apertou discard')
-    #myLabel = Label(canvas, text="Coins!")
-    #myLabel.place(x=500, y=500)
-
 actions = ['build_structure', 'build_wonder', 'discard']
 img_buttons = [None]*players
+button = [None]*players
+btn_bg = '#CCCCCC'
+btn_bg_active = '#449944'
 for i in range(players):
     img_buttons[i] = [None]*3
+    button[i] = [None]*3
     for j in range(len(actions)):
         img_buttons[i][j] = load_image('images/resources/' + actions[j] + '.png', size['button'])
         x = pad*3 + (w_width/players)*i + img['wonder'].width()
         y = pad + j*(img['button'].height() + 2*pad)
-        bg_color = '#449944' if button_active[i] == j else '#CCCCCC'
-        card_button = Button(canvas, image=img_buttons[i][j], bg=bg_color, width=img['button'].width()*2.5, command=build_structure)
-        card_button.place(x=x, y=y, anchor=NW)
+        bg_color = btn_bg_active if action_active[i] == j else btn_bg
+        button[i][j] = Button(canvas, image=img_buttons[i][j], bg=bg_color, width=img['button'].width()*2.5, command=lambda p=i, a=j : action(p, a))
+        button[i][j].place(x=x, y=y, anchor=NW)
+
+def action(player, action):
+    button[player][action_active[player]]['bg'] = btn_bg
+    action_active[player] = action
+    button[player][action]['bg'] = btn_bg_active
+
+# JOGAR
+def play():
+    print('Jogando...')
+    for i in range(players):
+        print('Player', i, actions[action_active[i]], card_selected[i][1])
+
+btn_play = Button(canvas, width=20, text='Jogar', font=('Verdana', 11), command=play)
+btn_play.place(x=w_width/2-60, y=5)
+
 ###############
 
 root.geometry(str(w_width) + 'x' + str(w_height))
