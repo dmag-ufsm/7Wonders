@@ -1,6 +1,7 @@
 # Graphical Interface for 7 Wonders DMAG implementation
 
 from tkinter import *
+from time import sleep
 import json
 
 ### variables
@@ -26,7 +27,8 @@ img_played_cards = [None]*players
 img_buttons = [None]*players
 buttons = [None]*players
 actions = ['build_structure', 'build_wonder', 'discard']
-with open('game_status.json') as f:
+build_folder = '../build/'
+with open(build_folder+'game_status.json') as f:
     game_json = json.load(f)
 
 def load_image(local, f):
@@ -142,7 +144,7 @@ def load_header():
     btn_play = Button(canvas, width=20, text='Jogar', font=('Verdana', 11), command=play)
     btn_play.place(x=w_width/2-60, y=5)
 
-def action(player, action):
+def change_action(player, action):
     global buttons
     buttons[player][action_active[player]]['bg'] = btn_bg
     action_active[player] = action
@@ -158,7 +160,7 @@ def load_action_buttons():
             x = pad*3 + (w_width/players)*i + img['wonder'].width()
             y = header_h + pad + j*(img['button'].height() + 2*pad)
             bg_color = btn_bg_active if action_active[i] == j else btn_bg
-            buttons[i][j] = Button(canvas, image=img_buttons[i][j], bg=bg_color, width=img['button'].width()*2.5, command=lambda p=i, a=j : action(p, a))
+            buttons[i][j] = Button(canvas, image=img_buttons[i][j], bg=bg_color, width=img['button'].width()*2.5, command=lambda p=i, a=j : change_action(p, a))
             buttons[i][j].place(x=x, y=y, anchor=NW)
 
 def mouse_clicked(event):
@@ -186,7 +188,7 @@ def mouse_clicked(event):
 
 def new_turn():
     global game_json, label_infos
-    with open('game_status.json') as f:
+    with open(build_folder+'game_status.json') as f:
         game_json = json.load(f)
     label_infos['text'] = 'Era: ' + str(game_json['game']['era']) + '\tTurn: ' + str(game_json['game']['turn'])
     load_wonder_stages()
@@ -196,9 +198,20 @@ def new_turn():
 
 def play():
     print('playing era ' + str(game_json['game']['era']) + ' turn ' + str(game_json['game']['turn']) + '...')
+    file_ready = open(build_folder+'ready.txt', 'w')
+    data = {}
     for i in range(players):
-        print('player', i, action_active[action_active[i]], card_selected[i][1])
+        data['command'] = {
+            'subcommand': actions[action_active[i]],
+            'argument': card_selected[i][1]
+        }
+        with open(build_folder+'player_'+str(i)+'.json', 'w') as f:
+            json.dump(data, f)
+        file_ready.write('ready\n')
+        print('player', i, actions[action_active[i]], card_selected[i][1])
+    file_ready.close()
     print('loading next turn...')
+    sleep(3)
     new_turn()
     print('done\n')
 
