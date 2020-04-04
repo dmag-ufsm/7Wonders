@@ -1,5 +1,6 @@
 #include <wonder.h>
 #include <player.h>
+#include <iostream>
 
 namespace DMAG {
 
@@ -33,7 +34,10 @@ std::vector<int> Wonder::GetEffects() const{
     return this->effects;
 }
 
-bool Wonder::AddStage(Player* p) { return false; }
+bool Wonder::AddStage(Player* p) {
+    std::cout << "Shouldn't execute this!" << std::endl;
+    return false;
+}
 
 /*
  * Every Wonder has its own constructor and AddStage() method.

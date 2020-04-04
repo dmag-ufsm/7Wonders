@@ -14,7 +14,7 @@ class Player
 {
 private:
     unsigned int id;
-    DMAG::Wonder board;
+    DMAG::Wonder *board;
     std::vector<DMAG::Card> cards_hand;
     std::vector<DMAG::Card> cards_played;
     std::vector<DMAG::Card> cards_playable;
@@ -110,7 +110,7 @@ public:
     // Getters:
     int GetId();
     int GetShields();
-    DMAG::Wonder GetBoard();
+    DMAG::Wonder* GetBoard();
     int GetDefeatTokens();
     std::map<int, unsigned char> GetResources();
     DMAG::Player* GetEastNeighbor();
@@ -118,7 +118,7 @@ public:
 
     // Setters:
     void SetNeighbors(DMAG::Player* east, DMAG::Player* west);
-    void SetWonder(DMAG::Wonder _board);
+    void SetWonder(DMAG::Wonder *_board);
     void SetId(int id);
     void SetResources(std::map<int, unsigned char> r);
 };

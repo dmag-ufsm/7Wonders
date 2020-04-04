@@ -26,7 +26,7 @@ class Game{
         unsigned char number_of_players;
         short era;
         unsigned char turn;
-        vector<Wonder> wonders;
+        vector<Wonder*> wonders;
         vector<Card> deck[3]; // need to change to Deck deck[3];
         vector<Card> discard_pile; // need to change to Deck discard_pile;
 
@@ -161,20 +161,20 @@ class Game{
         }
 
         void CreateWonders(){
-            wonders.push_back(Gizah_a());
-            wonders.push_back(Babylon_a());
-            wonders.push_back(Olympia_a());
-            wonders.push_back(Rhodos_a());
-            wonders.push_back(Ephesos_a());
-            wonders.push_back(Alexandria_a());
-            wonders.push_back(Halikarnassos_a());
-            wonders.push_back(Gizah_b());
-            wonders.push_back(Babylon_b());
-            wonders.push_back(Olympia_b());
-            wonders.push_back(Rhodos_b());
-            wonders.push_back(Ephesos_b());
-            wonders.push_back(Alexandria_b());
-            wonders.push_back(Halikarnassos_b());
+            wonders.push_back(new Gizah_a());
+            wonders.push_back(new Babylon_a());
+            wonders.push_back(new Olympia_a());
+            wonders.push_back(new Rhodos_a());
+            wonders.push_back(new Ephesos_a());
+            wonders.push_back(new Alexandria_a());
+            wonders.push_back(new Halikarnassos_a());
+            wonders.push_back(new Gizah_b());
+            wonders.push_back(new Babylon_b());
+            wonders.push_back(new Olympia_b());
+            wonders.push_back(new Rhodos_b());
+            wonders.push_back(new Ephesos_b());
+            wonders.push_back(new Alexandria_b());
+            wonders.push_back(new Halikarnassos_b());
         }
 
         void CreateDecks(){
@@ -339,16 +339,16 @@ class Game{
             std::vector<DMAG::Card> cards;
             std::vector<std::string> card_names;
             std::map<int, unsigned char> resources;
-            DMAG::Wonder wonder;
+            DMAG::Wonder* wonder;
 
             status["game"]["era"] = era;
             status["game"]["turn"] = turn;
 
             for (int i = 0; i < number_of_players; i++) {
                 wonder = player_list[i]->GetBoard();
-                status["players"][to_string(i)]["wonder_id"] = wonder.GetId();
-                status["players"][to_string(i)]["wonder_name"] = wonder.GetName();
-                status["players"][to_string(i)]["wonder_stage"] = wonder.GetStage();
+                status["players"][to_string(i)]["wonder_id"] = wonder->GetId();
+                status["players"][to_string(i)]["wonder_name"] = wonder->GetName();
+                status["players"][to_string(i)]["wonder_stage"] = wonder->GetStage();
 
                 cards = player_list[i]->GetHandCards();
                 card_names.clear();

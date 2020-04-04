@@ -39,22 +39,23 @@ Player::Player()
 bool Player::BuildWonder(DMAG::Card c){
     // 1) Build Wonder stage if possible.
     // 2) If the stage was built, remove card 'c' from the hand.
-    if (this->board.AddStage(this)) {
+    if (this->board->AddStage(this)) {
         size_t i = 0;
         for (i = 0; i < this->cards_hand.size(); i++) {
             if (this->cards_hand[i].Equal(c)) break;
         }
         this->cards_hand.erase(this->cards_hand.begin()+i);
-        std::cout << this->id << " -> SUCCESS -> " << "builds a " << this->board.GetName() << " stage!" << std::endl;
+        std::cout << this->id << " -> SUCCESS -> " << "builds a " << this->board->GetName() << " stage!" << std::endl;
         return true;
     }
 
-    std::cout << this->id << " -> FAILURE -> " << "couldn't build the next " << this->board.GetName() << " stage." << std::endl;
+    std::cout << this->id << " -> FAILURE -> " << "couldn't build the next " << this->board->GetName() << " stage." << std::endl;
     return false;
 }
 
 // Play a card.
 // * arg cards is necessary for any special situation? it is equal to this->cards_hand
+// P: Yes, in case we want to build a free card from the discard pile.
 bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool free_card){
     // Returns false if the card has already been played (cannot play the same card twice).
     for (DMAG::Card const& card : this->cards_played)
@@ -185,7 +186,7 @@ bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool fr
                 int grey_cards = this->AmountOfType(CARD_TYPE::manufactured);
                 this->resources[RESOURCE::coins] += 2 * grey_cards;
             } else if (card == CARD_ID::arena) {
-                int stages = this->board.GetStage();
+                int stages = this->board->GetStage();
                 this->resources[RESOURCE::coins] += 3 * stages;
             }
             break;
@@ -387,9 +388,10 @@ void Player::ResetUsed() {
 // - this function is a "step" in BuildStructure.
 bool Player::ProduceResource(int resource, int quant){
     //std::cout <<  "  -> " << "needs " << resource << ":" << quant << std::endl;
+    std::cout <<  "  -> " << "has " << (int)this->resources[resource] << " needs " << quant << std::endl;
     // Extra check to verify if the player can build directly without needing to produce.
-    if (this->resources[resource] >= quant) {
-        //std::cout <<  "  -> " << "produced the resource successfully!" << std::endl;
+    if ((int)this->resources[resource] >= quant) {
+        std::cout <<  "  -> " << "produced the resource successfully!" << std::endl;
         return true;
     }
 
@@ -499,8 +501,8 @@ bool Player::BuyResource(int resource, int quant){
     Player* west = this->GetWestNeighbor();
 
     // Wonder initial resource is not buyable!
-    east->AddResource(east->board.GetProduction(), -1);
-    west->AddResource(west->board.GetProduction(), -1);
+    east->AddResource(east->board->GetProduction(), -1);
+    west->AddResource(west->board->GetProduction(), -1);
 
     int needed_east = east->IncrementOnDemand(resource, quant, true);
     int needed_west = west->IncrementOnDemand(resource, quant, true);
@@ -510,7 +512,7 @@ bool Player::BuyResource(int resource, int quant){
         if (this->resources[RESOURCE::coins] >= cost) {
             this->resources[RESOURCE::coins] -= cost;
             east->AddResource(RESOURCE::coins, cost);
-            east->AddResource(east->board.GetProduction(), 1);
+            east->AddResource(east->board->GetProduction(), 1);
             //east->DecrementUsed();
             //std::cout <<  "  -> " << "bought the resource successfully!" << std::endl;
             return true;
@@ -521,15 +523,15 @@ bool Player::BuyResource(int resource, int quant){
         if (this->resources[RESOURCE::coins] >= cost) {
             this->resources[RESOURCE::coins] -= cost;
             west->AddResource(RESOURCE::coins, cost);
-            west->AddResource(west->board.GetProduction(), 1);
+            west->AddResource(west->board->GetProduction(), 1);
             //west->DecrementUsed();
             //std::cout <<  "  -> SUCCESS -> " << "bought the resource successfully!" << std::endl;
             return true;
         }
     }
 
-    east->AddResource(east->board.GetProduction(), 1);
-    west->AddResource(west->board.GetProduction(), 1);
+    east->AddResource(east->board->GetProduction(), 1);
+    west->AddResource(west->board->GetProduction(), 1);
 
     //std::cout <<  "  -> FAILURE -> " << "couldn't buy the resource." << std::endl;
     return false; // Couldn't buy
@@ -673,7 +675,7 @@ int Player::CalculateCommercialScore(){
 
             case (CARD_ID::arena):
                 // +1 VP Coin per Wonder stage constructed in your own city.
-                comm_score += this->board.GetStage();
+                comm_score += this->board->GetStage();
                 break;
         }
     }
@@ -738,9 +740,9 @@ int Player::CalculateGuildScore(){
                 break;
 
             case CARD_ID::builders:
-                guild_score = player_east->GetBoard().GetStage()
-                            + player_west->GetBoard().GetStage()
-                            + this->board.GetStage();
+                guild_score = player_east->GetBoard()->GetStage()
+                            + player_west->GetBoard()->GetStage()
+                            + this->board->GetStage();
                 break;
         }
     }
@@ -779,8 +781,8 @@ int Player::CalculateScientificScore(){
         }
     }
 
-    int id = this->board.GetId();
-    int stage = this->board.GetStage();
+    int id = this->board->GetId();
+    int stage = this->board->GetStage();
     if ((id == WONDER_ID::babylon_a && stage >= 2) ||
             (id == WONDER_ID::babylon_b && stage >= 3)) {
         this->sci_extra++;
@@ -839,8 +841,8 @@ int Player::CalculateScore(){
     int total_score = treasury_score + civil_score + commercial_score + guild_score +
                        science_score + this->victory_tokens - this->defeat_tokens;
 
-    if (this->board.GetStage() > 0)
-        total_score += this->board.GetWonderPoints();
+    if (this->board->GetStage() > 0)
+        total_score += this->board->GetWonderPoints();
 
     this->victory_points = total_score;
 
@@ -856,7 +858,7 @@ int Player::CalculateScore(){
 // - called ONCE each turn; part of IncrementOnDemand().
 bool Player::ChooseExtraManuf(int resource){
     if (resource == RESOURCE::loom || resource == RESOURCE::glass || resource == RESOURCE::papyrus) {
-        if (this->board.GetId() == WONDER_ID::alexandria_b && this->board.GetStage() >= 2) {
+        if (this->board->GetId() == WONDER_ID::alexandria_b && this->board->GetStage() >= 2) {
             //this->resources[resource]++;
             return true;
         }
@@ -870,8 +872,8 @@ bool Player::ChooseExtraManuf(int resource){
 bool Player::ChooseExtraRaw(int resource){
     if (resource == RESOURCE::wood || resource == RESOURCE::ore ||
         resource == RESOURCE::clay || resource == RESOURCE::stone) {
-        int id = this->board.GetId();
-        int stage = this->board.GetStage();
+        int id = this->board->GetId();
+        int stage = this->board->GetStage();
         if ((id == WONDER_ID::alexandria_a && stage >= 2) ||
             (id == WONDER_ID::alexandria_b && stage >= 1)) {
             //this->resources[resource]++;
@@ -897,8 +899,8 @@ void Player::CanBuyRawCheap(){
 // - will be changed depending on which type discard_pile will be.
 // - called at the end of the turn after the stage was built.
 bool Player::BuildDiscardFree(DMAG::Card c, std::vector<DMAG::Card> discard_pile){
-    int id = this->board.GetId();
-    int stage = this->board.GetStage();
+    int id = this->board->GetId();
+    int stage = this->board->GetStage();
 
     if ((id == WONDER_ID::halikarnassos_a && stage == 2) ||
         (id == WONDER_ID::halikarnassos_b && stage >= 1)) {
@@ -910,7 +912,7 @@ bool Player::BuildDiscardFree(DMAG::Card c, std::vector<DMAG::Card> discard_pile
 // Builds a card from the hand for free.
 // - called ONCE per age.
 bool Player::BuildHandFree(DMAG::Card c){
-    if (this->board.GetId() == WONDER_ID::olympia_a && this->board.GetStage() >= 2) {
+    if (this->board->GetId() == WONDER_ID::olympia_a && this->board->GetStage() >= 2) {
         return this->BuildStructure(c, this->cards_hand, true);
     }
     return false;
@@ -935,8 +937,8 @@ bool Player::CopyGuild(DMAG::Card c){
         return false;
     }
 
-    int id = this->board.GetId();
-    int stage = this->board.GetStage();
+    int id = this->board->GetId();
+    int stage = this->board->GetStage();
 
     if (c.GetType() == CARD_TYPE::guild && (id == WONDER_ID::olympia_b && stage >= 3)) {
         this->cards_played.push_back(c);
@@ -956,7 +958,7 @@ int Player::GetShields() {
     return this->resources[RESOURCE::shields];
 }
 
-DMAG::Wonder Player::GetBoard() {
+DMAG::Wonder* Player::GetBoard() {
     return this->board;
 }
 
@@ -981,10 +983,10 @@ void Player::SetNeighbors(DMAG::Player* east, DMAG::Player* west){
 	this->player_west = west;
 }
 
-void Player::SetWonder(DMAG::Wonder _board){
+void Player::SetWonder(DMAG::Wonder *_board){
     this->board = _board;
     // Wonders provide specific initial resources
-    this->resources[this->board.GetProduction()] += 1;
+    this->resources[this->board->GetProduction()] += 1;
 }
 
 void Player::SetId(int id){
