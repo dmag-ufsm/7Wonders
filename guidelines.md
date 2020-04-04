@@ -14,17 +14,23 @@ ex, atributo "fichas de conflito":
 * [Regras rápidas](https://waa.ai/O48z)
 * [Informações sobre cartas e maravilhas (tabuladas)](https://github.com/dmag-ufsm/Game/tree/master/references)
 
+# Problemas encontrados
+* O map de recursos está zerando em determinados momentos do jogo (e.g.
+  comércio).
+* No geral, o comércio está um tanto bugado:
+    * Às vezes os recursos não estão sendo atualizados corretamente, inclusive
+      as moedas. Tem que ver isso aí.
+* Alguns recursos estão indo pro valor 255 após algumas jogadas.
+    * Acho que isso tem a ver com overflow do ```unsigned char``` sendo usado
+      no map. Sugestão: trocar pra short ou int; talvez em algum cálculo o
+      unsigned char fique negativo por algum motivo.
+
 # TODO
 ## Main
 * Aplicar algumas as ações especiais das Wonders, que ocorrem em momentos
   específicos do jogo (e.g. jogar a sétima carta, construir uma carta de
   graça, etc.).
 * ?
-
-## Player
-* Aparentemente está ok -- foram feitos alguns testes usando um
-  player. Resta terminar de implementar a main para que seja possível simular
-  um jogo completo e assim buscar possíveis erros.
 
 # Classe player:
 
