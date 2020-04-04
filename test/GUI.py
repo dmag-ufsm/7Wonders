@@ -104,7 +104,7 @@ def hand_card_position(player, card):
 def load_resources():
     global img_resources, img_resources_v
     p = {'wood' : 0, 'stone' : 1, 'ore' : 2, 'clay' : 3, 'papyrus' : 4, 'loom' : 5,
-         'glass' : 6, 'coins' : 7, 'compass': -1, 'gear' : -1, 'tablet' : -1, 'shields' : -1}
+         'glass' : 6, 'coins' : 7, 'compass': -1, 'gear' : -1, 'tablet' : -1, 'shields' : 8}
     for i in range(players):
         resources = game_json['players'][str(i)]['resources']
         img_resources[i] = [None]*len(resources)
@@ -114,12 +114,12 @@ def load_resources():
             if p[r] == -1:
                 continue
             img_resources[i][j] = load_image('images/resources/' + r + '.png', size['resource'])
-            x = pad*5 + (w_width/players)*i + img['hand_card'].width() + (5+img['resource'].width())*p[r]
+            x = pad*2 + (w_width/players)*i + img['hand_card'].width() + (5+img['resource'].width())*p[r]
             y = header_h + pad*2 + img['wonder'].height() + img['wonder_stage'].height()
             canvas.create_image(x, y, image=img_resources[i][j], anchor=NW)
 
             img_resources_v[i][j] = Label(canvas, bg=bg, text=resources[r], font=("Verdana", 11))
-            x = pad*5 + (w_width/players)*i + img['hand_card'].width() + (5+img['resource'].width())*p[r]
+            x = pad*2 + (w_width/players)*i + img['hand_card'].width() + (5+img['resource'].width())*p[r]
             x = x if resources[r] >= 10 else x + img['resource'].width()*0.15
             y = header_h + pad*2 + img['wonder'].height() + img['wonder_stage'].height() + img['resource'].height()
             img_resources_v[i][j].place(x=x, y=y)
