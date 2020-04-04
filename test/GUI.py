@@ -1,11 +1,13 @@
 # Graphical Interface for 7 Wonders DMAG implementation
 
 from tkinter import *
+from tkinter import messagebox
 from time import sleep
 import json
 
 ### variables
 players = 3
+secs_to_load = 0.5 # segundos de espera para carregar novos dados (processamento da rodada)
 w_width = 1300
 w_height = 705
 header_h = 38
@@ -65,6 +67,17 @@ img = {
     'button' : load_image('images/resources/discard.png', size['button'])
 }
 
+def sort(cards):
+    with open('cards_id.json') as f:
+        ids = json.load(f)
+    for passnum in range(len(cards)-1,0,-1):
+        for i in range(passnum):
+            if ids[cards[i]] > ids[cards[i+1]]:
+                tmp = cards[i]
+                cards[i] = cards[i+1]
+                cards[i+1] = tmp
+    return cards
+
 def load_wonder():
     global img_wonder
     for i in range(players):
@@ -87,17 +100,6 @@ def hand_card_position(player, card):
     x = pad + (w_width/players)*player
     y = header_h + img['wonder'].height() + img['wonder_stage'].height() + pad*(card+2) + img['hand_card'].height()*card
     return (x, y)
-
-def load_hand_cards():
-    global img_hand_cards
-    for i in range(players):
-        cards_hand = game_json['players'][str(i)]['cards_hand']
-        cards_playable = game_json['players'][str(i)]['cards_playable']
-        img_hand_cards[i] = [None]*len(cards_hand)
-        for j, c in enumerate(cards_hand):
-            img_hand_cards[i][j] = load_image('images/cards/' + c + '.png', size['hand_card'])
-            x, y = hand_card_position(i, j)
-            canvas.create_image(x, y, image=img_hand_cards[i][j] if (c in cards_playable) else greyscale(img_hand_cards[i][j]), anchor=NW)
 
 def load_resources():
     global img_resources, img_resources_v
@@ -123,10 +125,21 @@ def load_resources():
             img_resources_v[i][j].place(x=x, y=y)
             j = j + 1
 
+def load_hand_cards():
+    global img_hand_cards
+    for i in range(players):
+        cards_hand = game_json['players'][str(i)]['cards_hand']
+        cards_playable = game_json['players'][str(i)]['cards_playable']
+        img_hand_cards[i] = [None]*len(cards_hand)
+        for j, c in enumerate(cards_hand):
+            img_hand_cards[i][j] = load_image('images/cards/' + c + '.png', size['hand_card'])
+            x, y = hand_card_position(i, j)
+            canvas.create_image(x, y, image=img_hand_cards[i][j] if (c in cards_playable) else greyscale(img_hand_cards[i][j]), anchor=NW)
+
 def load_played_cards():
     global img_played_cards
     for i in range(players):
-        cards_played = game_json['players'][str(i)]['cards_played']
+        cards_played = sort(game_json['players'][str(i)]['cards_played'])
         img_played_cards[i] = [None]*len(cards_played)
         for j, c in enumerate(cards_played):
             img_played_cards[i][j] = load_image('images/cards/' + c + '.png', size['played_card'])
@@ -190,13 +203,23 @@ def new_turn():
     global game_json, label_infos
     with open(build_folder+'game_status.json') as f:
         game_json = json.load(f)
-    label_infos['text'] = 'Era: ' + str(game_json['game']['era']) + '\tTurn: ' + str(game_json['game']['turn'])
+    label_infos['text'] = 'Era: ' + str(game_json['game']['era']) + '\tTurn: ' + str(game_json['game']['turn']%7+1)
+    for i in range(players):
+        card_selected[i] = (-1, '')
     load_wonder_stages()
     load_hand_cards()
     load_resources()
     load_played_cards()
 
 def play():
+    for i in range(players):
+        if card_selected[i][0] == -1:
+            messagebox.showinfo('', 'Player '+str(i)+'\nSelect a card')
+            return
+        if action_active[i] == 0 and not card_selected[i][1] in game_json['players'][str(i)]['cards_playable']:
+            messagebox.showinfo('', 'Player '+str(i)+'\nSelect a playable card')
+            return
+
     print('playing era ' + str(game_json['game']['era']) + ' turn ' + str(game_json['game']['turn']) + '...')
     file_ready = open(build_folder+'ready.txt', 'w')
     data = {}
@@ -205,13 +228,13 @@ def play():
             'subcommand': actions[action_active[i]],
             'argument': card_selected[i][1]
         }
-        with open(build_folder+'player_'+str(i)+'.json', 'w') as f:
+        with open(build_folder+'player_'+str(i+1)+'.json', 'w') as f:
             json.dump(data, f)
         file_ready.write('ready\n')
         print('player', i, actions[action_active[i]], card_selected[i][1])
     file_ready.close()
     print('loading next turn...')
-    sleep(3)
+    sleep(secs_to_load)
     new_turn()
     print('done\n')
 
