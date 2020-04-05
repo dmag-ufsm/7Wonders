@@ -21,9 +21,13 @@ ex, atributo "fichas de conflito":
     * Às vezes os recursos não estão sendo atualizados corretamente, inclusive
       as moedas. Tem que ver isso aí.
 * Alguns recursos estão indo pro valor 255 após algumas jogadas.
-    * Acho que isso tem a ver com overflow do ```unsigned char``` sendo usado
+    * ~~Acho que isso tem a ver com overflow do ```unsigned char``` sendo usado
       no map. Sugestão: trocar pra short ou int; talvez em algum cálculo o
-      unsigned char fique negativo por algum motivo.
+      ```unsigned char``` fique negativo por algum motivo.~~
+      * Troquei a quantidade de recursos de ```unsigned char``` para ```int```, que é o tipo mais usual. 
+      _Provavelmente_ o under/overflow não vai mais ocorrer. Pode não ser o
+      melhor tipo para expressar uma quantidade que não é grande, mas ao menos
+      é o que tipicamente causa menos problemas.
 
 # TODO
 ## Main
