@@ -338,7 +338,7 @@ class Game{
             json status;
             std::vector<DMAG::Card> cards;
             std::vector<std::string> card_names;
-            std::map<int, unsigned char> resources;
+            std::map<int, int> resources;
             DMAG::Wonder* wonder;
 
             status["game"]["era"] = era;
