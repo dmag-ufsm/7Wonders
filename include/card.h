@@ -126,7 +126,7 @@ private:
     int era;
     int freeWithId;
     int amountPerPlayers[5];
-    std::map<int, unsigned char> cost{
+    std::map<int, int> cost{
         { RESOURCE::wood, 0 },
         { RESOURCE::ore, 0 },
         { RESOURCE::clay, 0 },
@@ -147,8 +147,8 @@ public:
     int GetFreeWith() const;
     int GetAmount(int) const;
     bool Equal(Card c);
-    bool CanBePlayed(std::map<int, unsigned char> resources);
-    std::map<int, unsigned char> MissingCards(std::map<int, unsigned char> resources);
+    bool CanBePlayed(std::map<int, int> resources);
+    std::map<int, int> MissingCards(std::map<int, int> resources);
 };
 
 }

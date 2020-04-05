@@ -83,7 +83,7 @@ protected:
     int stage;
     int wonder_points;
 
-    std::map<int, unsigned char> cost{
+    std::map<int, int> cost{
         { RESOURCE::wood, 0 },
         { RESOURCE::ore, 0 },
         { RESOURCE::clay, 0 },

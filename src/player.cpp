@@ -78,9 +78,9 @@ bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool fr
             // Check if the card can be played for free, otherwise try to produce the resources needed.
             if (this->CheckFreeCard(c)) free_card = true;
             else {
-                std::map<int, unsigned char> resources_bckp = this->resources;
-                std::map<int, unsigned char> resources_needed = c.MissingCards(this->resources);
-                for (std::map<int, unsigned char>::iterator it = resources_needed.begin();
+                std::map<int, int> resources_bckp = this->resources;
+                std::map<int, int> resources_needed = c.MissingCards(this->resources);
+                for (std::map<int, int>::iterator it = resources_needed.begin();
                      it!=resources_needed.end(); ++it) {
                     int quant_needed = resources_needed[it->first];
                     if (quant_needed > 0) {
@@ -249,13 +249,13 @@ std::vector<Card> Player::GetPlayedCards(){
 std::vector<Card> Player::GetPlayableCards(){
     this->cards_playable.clear();
 
-    std::map<int, unsigned char> this_bckp = this->resources;
+    std::map<int, int> this_bckp = this->resources;
 
     Player* east = this->GetEastNeighbor();
-    std::map<int, unsigned char> east_bckp = east->GetResources();
+    std::map<int, int> east_bckp = east->GetResources();
 
     Player* west = this->GetWestNeighbor();
-    std::map<int, unsigned char> west_bckp = west->GetResources();
+    std::map<int, int> west_bckp = west->GetResources();
 
     for (DMAG::Card c : this->cards_hand) {
         //std::cout << " Checking ---> " << c.GetName() << std::endl;
@@ -266,8 +266,8 @@ std::vector<Card> Player::GetPlayableCards(){
         }
         // Check if you can potentially play the card.
         else {
-            std::map<int, unsigned char> resources_needed = c.MissingCards(this->resources);
-            for (std::map<int, unsigned char>::iterator it = resources_needed.begin();
+            std::map<int, int> resources_needed = c.MissingCards(this->resources);
+            for (std::map<int, int>::iterator it = resources_needed.begin();
                  it != resources_needed.end(); ++it) {
                 int quant_needed = resources_needed[it->first];
                 if (quant_needed > 0) { // Just an extra check.
@@ -387,11 +387,10 @@ void Player::ResetUsed() {
 // If he can't produce by himself, try buying it from neighbors.
 // - this function is a "step" in BuildStructure.
 bool Player::ProduceResource(int resource, int quant){
-    //std::cout <<  "  -> " << "needs " << resource << ":" << quant << std::endl;
-    std::cout <<  "  -> " << "has " << (int)this->resources[resource] << " needs " << quant << std::endl;
+    //std::cout <<  "  -> " << "has " << (int)this->resources[resource] << " needs " << quant << std::endl;
     // Extra check to verify if the player can build directly without needing to produce.
-    if ((int)this->resources[resource] >= quant) {
-        std::cout <<  "  -> " << "produced the resource successfully!" << std::endl;
+    if (this->resources[resource] >= quant) {
+        std::cout <<  "  -> " << "already has the needed resource!" << std::endl;
         return true;
     }
 
@@ -399,7 +398,7 @@ bool Player::ProduceResource(int resource, int quant){
     // Ugly, but hopefully it'll get the job done.
     int needed = this->IncrementOnDemand(resource, quant, false);
     if (needed <= 0) {
-        //std::cout <<  "  -> " << "produced the resource successfully!" << std::endl;
+        std::cout <<  "  -> " << "produced the resource successfully!" << std::endl;
         return true;
     }
 
@@ -513,6 +512,7 @@ bool Player::BuyResource(int resource, int quant){
             this->resources[RESOURCE::coins] -= cost;
             east->AddResource(RESOURCE::coins, cost);
             east->AddResource(east->board->GetProduction(), 1);
+            west->AddResource(west->board->GetProduction(), 1);
             //east->DecrementUsed();
             //std::cout <<  "  -> " << "bought the resource successfully!" << std::endl;
             return true;
@@ -524,6 +524,7 @@ bool Player::BuyResource(int resource, int quant){
             this->resources[RESOURCE::coins] -= cost;
             west->AddResource(RESOURCE::coins, cost);
             west->AddResource(west->board->GetProduction(), 1);
+            east->AddResource(east->board->GetProduction(), 1);
             //west->DecrementUsed();
             //std::cout <<  "  -> SUCCESS -> " << "bought the resource successfully!" << std::endl;
             return true;
@@ -966,7 +967,7 @@ int Player::GetDefeatTokens() {
     return this->defeat_tokens;
 }
 
-std::map<int, unsigned char> Player::GetResources(){
+std::map<int, int> Player::GetResources(){
     return this->resources;
 }
 
@@ -997,7 +998,7 @@ int Player::GetId(){
     return this->id;
 }
 
-void Player::SetResources(std::map<int, unsigned char> r){
+void Player::SetResources(std::map<int, int> r){
     this->resources = r;
 }
 

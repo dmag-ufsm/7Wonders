@@ -18,8 +18,8 @@ private:
     std::vector<DMAG::Card> cards_hand;
     std::vector<DMAG::Card> cards_played;
     std::vector<DMAG::Card> cards_playable;
-    signed char victory_tokens, defeat_tokens;
-    unsigned char victory_points;
+    int victory_tokens, defeat_tokens;
+    unsigned int victory_points;
 
     bool play_seventh;         // Can the player play the seventh card or not? (Wonder effect)
     bool wonder_raw_cheap;     // Can the player buy raw resources from neighbors for 1 coin? (Wonder effect)
@@ -44,7 +44,7 @@ private:
     int used_caravansery;
 
     // Key needs to be int because the underlying type in enums is int
-    std::map<int, unsigned char> resources{
+    std::map<int, int> resources{
         { RESOURCE::wood, 0 },
         { RESOURCE::ore, 0 },
         { RESOURCE::clay, 0 },
@@ -112,7 +112,7 @@ public:
     int GetShields();
     DMAG::Wonder* GetBoard();
     int GetDefeatTokens();
-    std::map<int, unsigned char> GetResources();
+    std::map<int, int> GetResources();
     DMAG::Player* GetEastNeighbor();
     DMAG::Player* GetWestNeighbor();
 
@@ -120,7 +120,7 @@ public:
     void SetNeighbors(DMAG::Player* east, DMAG::Player* west);
     void SetWonder(DMAG::Wonder *_board);
     void SetId(int id);
-    void SetResources(std::map<int, unsigned char> r);
+    void SetResources(std::map<int, int> r);
 };
 
 }

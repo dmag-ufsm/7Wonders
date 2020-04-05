@@ -59,7 +59,7 @@ bool Card::Equal(Card c){
 }
 
 // Checks if we have enough resources to play the card.
-bool Card::CanBePlayed(std::map<int, unsigned char> resources){
+bool Card::CanBePlayed(std::map<int, int> resources){
     return (this->cost[RESOURCE::wood] <= resources[RESOURCE::wood] &&
             this->cost[RESOURCE::ore] <= resources[RESOURCE::ore] &&
             this->cost[RESOURCE::clay] <= resources[RESOURCE::clay] &&
@@ -71,8 +71,8 @@ bool Card::CanBePlayed(std::map<int, unsigned char> resources){
 }
 
 // Returns a map with the quantities needed of each resource to play the card.
-std::map<int, unsigned char> Card::MissingCards(std::map<int, unsigned char> resources) {
-    std::map<int, unsigned char> missing{
+std::map<int, int> Card::MissingCards(std::map<int, int> resources) {
+    std::map<int, int> missing{
         { RESOURCE::wood, 0 },
         { RESOURCE::ore, 0 },
         { RESOURCE::clay, 0 },
@@ -83,7 +83,7 @@ std::map<int, unsigned char> Card::MissingCards(std::map<int, unsigned char> res
         { RESOURCE::coins, 0 }
     };
 
-    for (std::map<int, unsigned char>::iterator it = missing.begin(); it!=missing.end(); ++it) {
+    for (std::map<int, int>::iterator it = missing.begin(); it!=missing.end(); ++it) {
         if (resources[it->first] < this->cost[it->first]) {
             missing[it->first] = this->cost[it->first] - resources[it->first];
         }

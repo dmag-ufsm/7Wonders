@@ -57,7 +57,7 @@ Gizah_a::Gizah_a(){
 }
 
 bool Gizah_a::AddStage(Player *p){
-    std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, int> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
@@ -102,7 +102,7 @@ Gizah_b::Gizah_b(){
 }
 
 bool Gizah_b::AddStage(Player *p){
-    std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, int> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
@@ -158,7 +158,7 @@ Babylon_a::Babylon_a(){
 }
 
 bool Babylon_a::AddStage(Player* p){
-    std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, int> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
@@ -203,7 +203,7 @@ Babylon_b::Babylon_b(){
 }
 
 bool Babylon_b::AddStage(Player* p){
-    std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, int> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
@@ -252,7 +252,7 @@ Olympia_a::Olympia_a(){
 }
 
 bool Olympia_a::AddStage(Player* p){
-    std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, int> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
@@ -296,7 +296,7 @@ Olympia_b::Olympia_b(){
 }
 
 bool Olympia_b::AddStage(Player* p){
-    std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, int> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
@@ -342,7 +342,7 @@ Rhodos_a::Rhodos_a(){
 }
 
 bool Rhodos_a::AddStage(Player* p){
-    std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, int> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
@@ -387,7 +387,7 @@ Rhodos_b::Rhodos_b(){
 }
 
 bool Rhodos_b::AddStage(Player* p){
-    std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, int> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
@@ -427,7 +427,7 @@ Ephesos_a::Ephesos_a(){
 }
 
 bool Ephesos_a::AddStage(Player* p){
-    std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, int> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
@@ -472,7 +472,7 @@ Ephesos_b::Ephesos_b(){
 }
 
 bool Ephesos_b::AddStage(Player* p){
-    std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, int> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
@@ -524,7 +524,7 @@ Alexandria_a::Alexandria_a(){
 }
 
 bool Alexandria_a::AddStage(Player* p){
-    std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, int> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
@@ -568,7 +568,7 @@ Alexandria_b::Alexandria_b(){
 }
 
 bool Alexandria_b::AddStage(Player* p){
-    std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, int> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
@@ -611,7 +611,7 @@ Halikarnassos_a::Halikarnassos_a(){
 }
 
 bool Halikarnassos_a::AddStage(Player* p){
-    std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, int> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
@@ -655,7 +655,7 @@ Halikarnassos_b::Halikarnassos_b(){
 }
 
 bool Halikarnassos_b::AddStage(Player* p){
-    std::map<int, unsigned char> p_resources = p->GetResources();
+    std::map<int, int> p_resources = p->GetResources();
     bool stage_built = false;
 
     switch (this->stage) {
