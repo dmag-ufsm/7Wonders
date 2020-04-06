@@ -465,15 +465,16 @@ int Player::IncrementOnDemand(int resource, int needed, bool is_neighbor){
             cont++;
         } if (!is_neighbor && this->ChooseExtraManuf(resource)) {
             cont++;
-        } if (!is_neighbor && this->raw_extra) {
-            cont++;
         }
     }
-    if (!is_neighbor && this->ChooseExtraRaw(resource)) cont++;
-    if (!is_neighbor && this->raw_extra) cont++;
+
+    if (resource <= 3 && !is_neighbor) { // resource <= 3 is a raw
+        if (this->ChooseExtraRaw(resource)) cont++;
+        if (this->raw_extra) cont++;
+    }
 
     this->resources[resource] += cont;
-    return (needed - this->resources[resource]);
+    return (needed - this->resources[resource]); // If this ends up <= 0, the resource was produced.
 }
 
 // The resources we incremented "on demand" for a turn should be decremented.
