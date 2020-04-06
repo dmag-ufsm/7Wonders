@@ -480,14 +480,14 @@ int Player::IncrementOnDemand(int resource, int needed, bool is_neighbor){
 // The resources we incremented "on demand" for a turn should be decremented.
 // Part of ResetUsed to be called at the end of a turn.
 void Player::DecrementUsed(){
-    if (used_tree_farm >= 0)    this->resources[used_tree_farm]--;
-    if (used_forest_cave >= 0)  this->resources[used_forest_cave]--;
-    if (used_timber_yard >= 0)  this->resources[used_timber_yard]--;
-    if (used_excavation >= 0)   this->resources[used_excavation]--;
-    if (used_mine >= 0)         this->resources[used_mine]--;
-    if (used_clay_pit >= 0)     this->resources[used_clay_pit]--;
-    if (used_forum >= 0)        this->resources[used_forum]--;
-    if (used_caravansery >= 0)  this->resources[used_caravansery]--;
+    if (this->used_tree_farm >= 0)    this->resources[this->used_tree_farm]--;
+    if (this->used_forest_cave >= 0)  this->resources[this->used_forest_cave]--;
+    if (this->used_timber_yard >= 0)  this->resources[this->used_timber_yard]--;
+    if (this->used_excavation >= 0)   this->resources[this->used_excavation]--;
+    if (this->used_mine >= 0)         this->resources[this->used_mine]--;
+    if (this->used_clay_pit >= 0)     this->resources[this->used_clay_pit]--;
+    if (this->used_forum >= 0)        this->resources[this->used_forum]--;
+    if (this->used_caravansery >= 0)  this->resources[this->used_caravansery]--;
 }
 
 // Buys x quantity of a certain resource from any neighbor.
