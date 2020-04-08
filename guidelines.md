@@ -28,7 +28,8 @@ ex, atributo "fichas de conflito":
       _Provavelmente_ o under/overflow não vai mais ocorrer. Pode não ser o
       melhor tipo para expressar uma quantidade que não é grande, mas ao menos
       é o que tipicamente causa menos problemas.
-
+   * Algumas vezes recursos ficam com valor negativo.
+* Depois da sexta rodada a última carta não é descartada.
 # TODO
 ## Main
 * Aplicar algumas as ações especiais das Wonders, que ocorrem em momentos
