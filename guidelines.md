@@ -39,6 +39,7 @@ ex, atributo "fichas de conflito":
 
 # TODO
 ## Main
+* Não pode comprar recurso de vizinhos provenientes de cartas amarelas.
 * Aplicar algumas as ações especiais das Wonders, que ocorrem em momentos
   específicos do jogo (e.g. jogar a sétima carta, construir uma carta de
   graça, etc.).
