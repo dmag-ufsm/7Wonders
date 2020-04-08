@@ -412,6 +412,13 @@ class Game{
                     command = json_object["command"]["subcommand"];
                     argument = json_object["command"]["argument"];
 
+                    // Turns 6 13 and 20 -> last card in hand card.
+                    // If the player doesn't have the ability to play the seventh card,
+                    // just skip the turn (i.e. don't do anything).
+                    if (this->turn == 6 || this->turn == 13 || this->turn == 20) {
+                        if (!player_list[i]->PlaySeventh()) continue;
+                    }
+
                     // -> We need to restrict when certain special actions are made
                     //    (end of the game, once per turn, etc.)
                     //
@@ -419,9 +426,6 @@ class Game{
                     //    it permits us better game flow control here in main.cpp. We're not
                     //    making use of this! e.g. let the player "repeat" an action if he tried
                     //    an invalid one.
-                    //
-                    // -> Also, if a player CanPlaySeventh(), he can play the seventh card of an Age
-                    //    instead of discarding it.
 
                     // These will probably need to change a bit.
 

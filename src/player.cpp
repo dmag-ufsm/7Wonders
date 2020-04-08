@@ -899,6 +899,10 @@ void Player::CanPlaySeventh(){
     this->play_seventh = true;
 }
 
+bool Player::PlaySeventh(){
+    return this->play_seventh;
+}
+
 // The player can buy resources for 1 coin instead of 2 from neighbors.
 // - automatically called when Olympia A stage 1 is constructed.
 void Player::CanBuyRawCheap(){
