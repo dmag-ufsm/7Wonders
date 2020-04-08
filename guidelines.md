@@ -30,7 +30,9 @@ ex, atributo "fichas de conflito":
       melhor tipo para expressar uma quantidade que não é grande, mas ao menos
       é o que tipicamente causa menos problemas.
    * Algumas vezes recursos ficam com valor negativo.
-* Depois da sexta rodada a última carta não é descartada.
+* ~~Depois da sexta rodada a última carta não é descartada.~~
+    * Corrigido. Ainda, a possibilidade de jogar a sétima carta (se o jogador
+      tiver essa habilidade) foi adicionada.
 * Algumas cartas aparecem como jogáveis mesmo sem serem jogáveis.
     * Acho que é erro em GetPlayableCards, pois mesmo ao escolhê-las elas não
       são jogadas.
