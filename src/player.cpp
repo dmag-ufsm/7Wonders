@@ -78,6 +78,10 @@ bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool fr
             // Check if the card can be played for free, otherwise try to produce the resources needed.
             if (this->CheckFreeCard(c)) free_card = true;
             else {
+                Player* east = this->GetEastNeighbor();
+                Player* west = this->GetWestNeighbor();
+                std::map<int, int> resources_east = east->GetResources();
+                std::map<int, int> resources_west = west->GetResources();
                 std::map<int, int> resources_bckp = this->resources;
                 std::map<int, int> resources_needed = c.MissingCards(this->resources);
                 for (std::map<int, int>::iterator it = resources_needed.begin();
@@ -89,6 +93,10 @@ bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool fr
                         if (!could_produce) {
                             this->resources = resources_bckp;
                             this->ResetUsed();
+                            east->SetResources(resources_east);
+                            east->ResetUsed();
+                            west->SetResources(resources_west);
+                            west->ResetUsed();
                             std::cout << this->id << " -> FAILURE -> " << "couldn't produce resources." << std::endl;
                             return false;
                         }
