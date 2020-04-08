@@ -19,7 +19,8 @@ ex, atributo "fichas de conflito":
   comércio).
 * No geral, o comércio está um tanto bugado:
     * Às vezes os recursos não estão sendo atualizados corretamente, inclusive
-      as moedas. Tem que ver isso aí.
+      as moedas. Tem que ver isso aí. Pior: às vezes tá incrementando as moedas
+      de quem tá comprando.
 * Alguns recursos estão indo pro valor 255 após algumas jogadas.
     * ~~Acho que isso tem a ver com overflow do ```unsigned char``` sendo usado
       no map. Sugestão: trocar pra short ou int; talvez em algum cálculo o
@@ -30,6 +31,10 @@ ex, atributo "fichas de conflito":
       é o que tipicamente causa menos problemas.
    * Algumas vezes recursos ficam com valor negativo.
 * Depois da sexta rodada a última carta não é descartada.
+* Algumas cartas aparecem como jogáveis mesmo sem serem jogáveis.
+    * Acho que é erro em GetPlayableCards, pois mesmo ao escolhê-las elas não
+      são jogadas.
+
 # TODO
 ## Main
 * Aplicar algumas as ações especiais das Wonders, que ocorrem em momentos
