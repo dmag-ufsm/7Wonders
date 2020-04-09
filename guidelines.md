@@ -40,6 +40,9 @@ ex, atributo "fichas de conflito":
       são jogadas.~~
     * Corrigido (?). Resta fazer mais testes.
 
+**Aviso: cuidem as cartas que podem ser construídas de graça em caso de
+combos.**. 
+
 # TODO
 ## Main
 * ~~Não pode comprar recurso de vizinhos provenientes de cartas amarelas.~~
