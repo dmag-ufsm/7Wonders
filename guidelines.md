@@ -33,14 +33,17 @@ ex, atributo "fichas de conflito":
 * ~~Depois da sexta rodada a última carta não é descartada.~~
     * Corrigido. Ainda, a possibilidade de jogar a sétima carta (se o jogador
       tiver essa habilidade) foi adicionada.
-* Algumas cartas aparecem como jogáveis mesmo sem serem jogáveis.
-    * Acho que é erro em GetPlayableCards, pois mesmo ao escolhê-las elas não
-      são jogadas.
+* ~~Algumas cartas aparecem como jogáveis mesmo sem serem jogáveis.~~
+    * ~~Acho que é erro em GetPlayableCards, pois mesmo ao escolhê-las elas não
+      são jogadas.~~
+    * Corrigido (?). Resta fazer mais testes.
 
 # TODO
 ## Main
-* Não pode comprar recurso de vizinhos provenientes de cartas amarelas.
+* ~~Não pode comprar recurso de vizinhos provenientes de cartas amarelas.~~
+    * Corrigido. As cartas em questão são "caravansery" e "forum".
 * Aplicar algumas as ações especiais das Wonders, que ocorrem em momentos
-  específicos do jogo (e.g. jogar a sétima carta, construir uma carta de
-  graça, etc.).
+  específicos do jogo (e.g. construir uma carta de
+  graça, etc.). Cuidar quando e quantas vezes alguns especiais são realizados,
+  pois eles são limitados a momentos específicos do jogo.
 * ?
