@@ -77,7 +77,7 @@ public:
     bool AvailableCard(int card_id, int resource);
     bool HasPlayedCard(DMAG::Card c);
     std::vector<DMAG::Card> GetPlayableCards();
-    void ResetUsed();
+    void ResetUsed(bool decrement);
 
     // Resource-related:
     bool ProduceResource(int resource, int quant);

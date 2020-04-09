@@ -92,11 +92,11 @@ bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool fr
                         // If it was not possible to produce/buy, revert changes and return.
                         if (!could_produce) {
                             this->resources = resources_bckp;
-                            this->ResetUsed();
+                            this->ResetUsed(false);
                             east->SetResources(resources_east);
-                            east->ResetUsed();
+                            east->ResetUsed(false);
                             west->SetResources(resources_west);
-                            west->ResetUsed();
+                            west->ResetUsed(false);
                             std::cout << this->id << " -> FAILURE -> " << "couldn't produce resources." << std::endl;
                             return false;
                         }
@@ -287,11 +287,11 @@ std::vector<Card> Player::GetPlayableCards(){
             if (push_card) this->cards_playable.push_back(c);
         }
         // Undo all changes on the resource maps.
-        this->ResetUsed();
+        this->ResetUsed(false);
         this->resources = this_bckp;
-        east->ResetUsed();
+        east->ResetUsed(false);
         east->SetResources(east_bckp);
-        west->ResetUsed();
+        west->ResetUsed(false);
         west->SetResources(west_bckp);
     }
 
@@ -374,8 +374,8 @@ bool Player::HasPlayedCard(DMAG::Card c){
 
 // Prepare for the next turn.
 // - called at the end of a turn.
-void Player::ResetUsed() {
-    this->DecrementUsed();
+void Player::ResetUsed(bool decrement) {
+    if (decrement) this->DecrementUsed();
     this->used_tree_farm    = -1;
     this->used_forest_cave  = -1;
     this->used_timber_yard  = -1;
