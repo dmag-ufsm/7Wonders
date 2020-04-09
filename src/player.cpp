@@ -266,6 +266,7 @@ std::vector<Card> Player::GetPlayableCards(){
     std::map<int, int> west_bckp = west->GetResources();
 
     for (DMAG::Card c : this->cards_hand) {
+        bool push_card = true;
         //std::cout << " Checking ---> " << c.GetName() << std::endl;
         // Check if you can play the card directly.
         if (c.CanBePlayed(this->resources) || this->CheckFreeCard(c)) {
@@ -278,22 +279,22 @@ std::vector<Card> Player::GetPlayableCards(){
             for (std::map<int, int>::iterator it = resources_needed.begin();
                  it != resources_needed.end(); ++it) {
                 int quant_needed = resources_needed[it->first];
-                if (quant_needed > 0) { // Just an extra check.
-                    if (this->ProduceResource(it->first, quant_needed)) {
-                        //std::cout << " Produced ---> " << c.GetName() << std::endl;
-                        this->cards_playable.push_back(c);
-                    }
-                    // Undo all changes on the resource map.
-                    this->ResetUsed();
-                    this->resources = this_bckp;
-                    east->ResetUsed();
-                    east->SetResources(east_bckp);
-                    west->ResetUsed();
-                    west->SetResources(west_bckp);
+                if (quant_needed > 0) {
+                    bool could_produce = this->ProduceResource(it->first, quant_needed);
+                    if (!could_produce) { push_card = false; break; }
                 }
             }
+            if (push_card) this->cards_playable.push_back(c);
         }
+        // Undo all changes on the resource maps.
+        this->ResetUsed();
+        this->resources = this_bckp;
+        east->ResetUsed();
+        east->SetResources(east_bckp);
+        west->ResetUsed();
+        west->SetResources(west_bckp);
     }
+
     return this->cards_playable;
 }
 
@@ -465,11 +466,11 @@ int Player::IncrementOnDemand(int resource, int needed, bool is_neighbor){
             cont++;
         } if (this->AvailableCard(CARD_ID::mine, resource)) {
             cont++;
-        } if (this->AvailableCard(CARD_ID::caravansery, resource)) {
+        } if (!is_neighbor && this->AvailableCard(CARD_ID::caravansery, resource)) {
             cont++;
         }
     } else if (resource == RESOURCE::glass || resource == RESOURCE::loom || resource == RESOURCE::papyrus) {
-        if (this->AvailableCard(CARD_ID::forum, resource)) {
+        if (!is_neighbor && this->AvailableCard(CARD_ID::forum, resource)) {
             cont++;
         } if (!is_neighbor && this->ChooseExtraManuf(resource)) {
             cont++;
