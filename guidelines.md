@@ -15,13 +15,13 @@ ex, atributo "fichas de conflito":
 * [Informações sobre cartas e maravilhas (tabuladas)](https://github.com/dmag-ufsm/Game/tree/master/references)
 
 # Problemas encontrados
-* O map de recursos está zerando em determinados momentos do jogo (e.g.
+* a. O map de recursos está zerando em determinados momentos do jogo (e.g.
   comércio).
-* No geral, o comércio está um tanto bugado:
+    * Acho que corrigi isso... acho! Precisamos de mais testes para confirmar.
+* b. No geral, o comércio está um tanto bugado:
     * Às vezes os recursos não estão sendo atualizados corretamente, inclusive
-      as moedas. Tem que ver isso aí. Pior: às vezes tá incrementando as moedas
-      de quem tá comprando.
-* Alguns recursos estão indo pro valor 255 após algumas jogadas.
+      as moedas. Tem que ver isso aí.
+* c. ~~Alguns recursos estão indo pro valor 255 após algumas jogadas.~~
     * ~~Acho que isso tem a ver com overflow do ```unsigned char``` sendo usado
       no map. Sugestão: trocar pra short ou int; talvez em algum cálculo o
       ```unsigned char``` fique negativo por algum motivo.~~
@@ -29,11 +29,13 @@ ex, atributo "fichas de conflito":
       _Provavelmente_ o under/overflow não vai mais ocorrer. Pode não ser o
       melhor tipo para expressar uma quantidade que não é grande, mas ao menos
       é o que tipicamente causa menos problemas.
-   * Algumas vezes recursos ficam com valor negativo.
-* ~~Depois da sexta rodada a última carta não é descartada.~~
+* d. Algumas vezes recursos ficam com valor negativo.
+    * P: testei várias vezes e ainda não consegui reproduzir isso. Talvez
+          esteja relacionado com o problema (a).
+* e. ~~Depois da sexta rodada a última carta não é descartada.~~
     * Corrigido. Ainda, a possibilidade de jogar a sétima carta (se o jogador
       tiver essa habilidade) foi adicionada.
-* ~~Algumas cartas aparecem como jogáveis mesmo sem serem jogáveis.~~
+* f. ~~Algumas cartas aparecem como jogáveis mesmo sem serem jogáveis.~~
     * ~~Acho que é erro em GetPlayableCards, pois mesmo ao escolhê-las elas não
       são jogadas.~~
     * Corrigido (?). Resta fazer mais testes.
