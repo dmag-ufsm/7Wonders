@@ -472,7 +472,7 @@ class Game{
                 // Moves the game to the next turn.
                 // VERY IMPORTANT: call player->ResetUsed() for each player at the end of a turn!
                 for (int i = 0; i < player_list.size(); i++)
-                    player_list[i]->ResetUsed(false);
+                    player_list[i]->ResetUsed(true);
 
                 NextTurn(0); // Have to fix this, and the method.
 
