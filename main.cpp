@@ -433,7 +433,12 @@ class Game{
                         Card selected = GetCardByName(argument);
                         if(player_list[i]->BuildStructure(selected, player_list[i]->GetHandCards(), false))// find card before calling this
                             cout << "<BuildStructure OK>" << endl;
-                        else cout << "<BuildStructure NOK>" << endl;
+                        else{
+                            cout << "<BuildStructure NOK>" << endl;
+                            cout << "<Discarding Card Instead>" << endl;
+                            player_list[i]->Discard(selected);
+                            discard_pile.push_back(selected);
+                        }
 
                     } else if (command == "build_discard_free"){
                         // ONLY AT THE END OF THE TURN WHERE THE WONDER STAGE THAT PERMITS THIS ACTION WAS COMPLETED.
@@ -467,7 +472,7 @@ class Game{
                 // Moves the game to the next turn.
                 // VERY IMPORTANT: call player->ResetUsed() for each player at the end of a turn!
                 for (int i = 0; i < player_list.size(); i++)
-                    player_list[i]->ResetUsed();
+                    player_list[i]->ResetUsed(false);
 
                 NextTurn(0); // Have to fix this, and the method.
 
