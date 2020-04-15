@@ -26,6 +26,7 @@ private:
     bool raw_cheap_east;       // Can the player buy raw resources from eastern neighbor for 1 coin? (East Trading Post)
     bool raw_cheap_west;       // Can the player buy raw resources from western neighbor for 1 coin? (West Trading Post)
     bool manuf_cheap;          // Can the player buy manufactured resources from neighbors for 1 coin? (Marketplace)
+    bool free_card_once;       // EXTRA check whether the player can build a card for free once per Age or not.
 
     bool raw_extra;            // The player has an additional raw material. (Caravansery and Alexandria A)
     bool manuf_extra;          // The player has an additional manufactured good. (Forum and Alexandria B)
@@ -107,6 +108,7 @@ public:
     bool BuildHandFree(DMAG::Card c); // Once per Age.
     bool CopyGuild(DMAG::Card c); // At the end of the game.
     bool PlaySeventh();
+    void FreeCardOnce(bool flag);
 
     // Getters:
     int GetId();

@@ -86,8 +86,10 @@ class Game{
 
             // if end of an era (turns 7 14 and 21)
             if (turn % 7 == 0) {
-                for (Player* & player : player_list)
+                for (Player* & player : player_list) {
+                    player->FreeCardOnce(true);
                     player->Battle(era);
+                }
 
                 era++;
                 cout << "-----------------------------------------------------------------\n";
@@ -431,13 +433,17 @@ class Game{
 
                     if (command == "build_structure"){
                         Card selected = GetCardByName(argument);
-                        if(player_list[i]->BuildStructure(selected, player_list[i]->GetHandCards(), false))// find card before calling this
-                            cout << "<BuildStructure OK>" << endl;
-                        else{
-                            cout << "<BuildStructure NOK>" << endl;
-                            cout << "<Discarding Card Instead>" << endl;
-                            player_list[i]->Discard(selected);
-                            discard_pile.push_back(selected);
+                        if (player_list[i]->BuildHandFree(selected)) {
+                            cout << "<BuildHandFree OK>" << endl;
+                        } else {
+                            if(player_list[i]->BuildStructure(selected, player_list[i]->GetHandCards(), false)) {
+                                cout << "<BuildStructure OK>" << endl;
+                            } else {
+                                cout << "<BuildStructure NOK>" << endl;
+                                cout << "<Discarding Card Instead>" << endl;
+                                player_list[i]->Discard(selected);
+                                discard_pile.push_back(selected);
+                            }
                         }
 
                     } else if (command == "build_discard_free"){
@@ -447,13 +453,6 @@ class Game{
                         if (player_list[i]->BuildDiscardFree(chosen, discard_pile))
                             cout << "<BuildDiscardFree OK>" << endl;
                         else cout << "<BuildDiscardFree NOK>" << endl;
-
-                    } else if (command == "build_hand_free"){
-                        // ONCE PER AGE
-                        Card chosen = GetCardByName(argument);
-                        if (player_list[i]->BuildHandFree(chosen))
-                            cout << "<BuildHandFree OK>" << endl;
-                        else cout << "<BuildHandFree NOK>" << endl;
 
                     } else if(command == "build_wonder"){
                         Card sacrifice = GetCardByName(argument);

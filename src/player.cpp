@@ -15,6 +15,7 @@ Player::Player()
     this->raw_cheap_east = false;
     this->raw_cheap_west = false;
     this->manuf_cheap = false;
+    this->free_card_once = true; // Olympia 2A -> can build one card for free once per Age.
 
     this->used_tree_farm = -1;
     this->used_forest_cave = -1;
@@ -904,6 +905,13 @@ bool Player::PlaySeventh(){
     return this->play_seventh;
 }
 
+// Called at the end of each age to permit the player to build another card
+// for free if he has the ability to do so. If he doesn't have such ability,
+// free_card_once is just another useless bool :(
+void Player::FreeCardOnce(bool flag) {
+    this->free_card_once = flag;
+}
+
 // The player can buy resources for 1 coin instead of 2 from neighbors.
 // - automatically called when Olympia A stage 1 is constructed.
 void Player::CanBuyRawCheap(){
@@ -924,11 +932,13 @@ bool Player::BuildDiscardFree(DMAG::Card c, std::vector<DMAG::Card> discard_pile
     return false;
 }
 
-// Builds a card from the hand for free.
-// - called ONCE per age.
+// Builds a card from the hand for free, once per Age, if the player has the requirements.
 bool Player::BuildHandFree(DMAG::Card c){
     if (this->board->GetId() == WONDER_ID::olympia_a && this->board->GetStage() >= 2) {
-        return this->BuildStructure(c, this->cards_hand, true);
+        if (this->free_card_once) {
+            this->free_card_once = false; // now the player won't be able to build for free in the same Age
+            return this->BuildStructure(c, this->cards_hand, true);
+        }
     }
     return false;
 }
