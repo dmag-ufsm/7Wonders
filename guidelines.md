@@ -17,7 +17,7 @@ ex, atributo "fichas de conflito":
 # Problemas encontrados
 * a. O map de recursos está zerando em determinados momentos do jogo (e.g.
   comércio).
-    * Acho que corrigi isso... acho! Precisamos de mais testes para confirmar.
+    * Isso ainda tá acontecendo acontece com moedas :/
 * b. No geral, o comércio está um tanto bugado:
     * Às vezes os recursos não estão sendo atualizados corretamente, inclusive
       as moedas. Tem que ver isso aí.
@@ -45,10 +45,8 @@ combos.**.
 
 # TODO
 ## Main
-* ~~Não pode comprar recurso de vizinhos provenientes de cartas amarelas.~~
-    * Corrigido. As cartas em questão são "caravansery" e "forum".
-* Aplicar algumas as ações especiais das Wonders, que ocorrem em momentos
-  específicos do jogo (e.g. construir uma carta de
-  graça, etc.). Cuidar quando e quantas vezes alguns especiais são realizados,
-  pois eles são limitados a momentos específicos do jogo.
-* ?
+* Efeitos de Wonders:
+    * BuildDiscardFree: baixa uma carta de graça do descarte LOGO APÓS construir o
+      estágio 2/3 de Halikarnassus B ou o estágio 2 de Halikarnassus A.
+    * CopyGuild: no final do jogo, o player pode copiar uma guilda de um dos
+      seus vizinhos. Precisa ter o estágio 3 de Olympia B construído.
