@@ -388,7 +388,7 @@ class Game{
             fp.WriteMessage(status);
         }
 
-        void try_building_or_discard(Player* p, Card selected){
+        void TryBuildingOrDiscard(Player* p, Card selected){
             if(p->BuildStructure(selected, p->GetHandCards(), false)) {
                 cout << "<BuildStructure OK>" << endl;
             } else {
@@ -434,14 +434,14 @@ class Game{
 
                     if (command == "build_structure"){
                         Card selected = GetCardByName(argument);
-                        try_building_or_discard(player_list[i], selected);
+                        TryBuildingOrDiscard(player_list[i], selected);
 
                     } else if (command == "build_hand_free"){
                         Card selected = GetCardByName(argument);
                         if (player_list[i]->BuildHandFree(selected))
                             cout << "BuildHandFree OK>" << endl;
                         else
-                            try_building_or_discard(player_list[i], selected);
+                            TryBuildingOrDiscard(player_list[i], selected);
 
                     } else if (command == "build_discard_free"){
                         // ONLY AT THE END OF THE TURN WHERE THE WONDER STAGE THAT PERMITS THIS ACTION WAS COMPLETED.
