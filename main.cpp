@@ -388,6 +388,17 @@ class Game{
             fp.WriteMessage(status);
         }
 
+        void try_building_or_discard(Player* p, Card selected){
+            if(p->BuildStructure(selected, p->GetHandCards(), false)) {
+                cout << "<BuildStructure OK>" << endl;
+            } else {
+                cout << "<BuildStructure NOK>" << endl;
+                cout << "<Discarding Card Instead>" << endl;
+                p->Discard(selected);
+                discard_pile.push_back(selected);
+            }
+        }
+
         void Loop(){
             json json_object;
             std::string command, argument;
@@ -421,30 +432,16 @@ class Game{
                         if (!player_list[i]->PlaySeventh()) continue;
                     }
 
-                    // -> We need to restrict when certain special actions are made
-                    //    (end of the game, once per turn, etc.)
-                    //
-                    // -> All the actions on player.cpp are booleans specifically because
-                    //    it permits us better game flow control here in main.cpp. We're not
-                    //    making use of this! e.g. let the player "repeat" an action if he tried
-                    //    an invalid one.
-
-                    // These will probably need to change a bit.
-
                     if (command == "build_structure"){
                         Card selected = GetCardByName(argument);
-                        if (player_list[i]->BuildHandFree(selected)) {
-                            cout << "<BuildHandFree OK>" << endl;
-                        } else {
-                            if(player_list[i]->BuildStructure(selected, player_list[i]->GetHandCards(), false)) {
-                                cout << "<BuildStructure OK>" << endl;
-                            } else {
-                                cout << "<BuildStructure NOK>" << endl;
-                                cout << "<Discarding Card Instead>" << endl;
-                                player_list[i]->Discard(selected);
-                                discard_pile.push_back(selected);
-                            }
-                        }
+                        try_building_or_discard(player_list[i], selected);
+
+                    } else if (command == "build_hand_free"){
+                        Card selected = GetCardByName(argument);
+                        if (player_list[i]->BuildHandFree(selected))
+                            cout << "BuildHandFree OK>" << endl;
+                        else
+                            try_building_or_discard(player_list[i], selected);
 
                     } else if (command == "build_discard_free"){
                         // ONLY AT THE END OF THE TURN WHERE THE WONDER STAGE THAT PERMITS THIS ACTION WAS COMPLETED.
@@ -452,13 +449,15 @@ class Game{
                         Card chosen = GetCardByName(argument);
                         if (player_list[i]->BuildDiscardFree(chosen, discard_pile))
                             cout << "<BuildDiscardFree OK>" << endl;
-                        else cout << "<BuildDiscardFree NOK>" << endl;
+                        else
+                            cout << "<BuildDiscardFree NOK>" << endl;
 
                     } else if(command == "build_wonder"){
                         Card sacrifice = GetCardByName(argument);
                         if (player_list[i]->BuildWonder(sacrifice))
                             cout << "<BuildWonder OK>" << endl;
-                        else cout << "<BuildWonder NOK>" << endl;
+                        else
+                            cout << "<BuildWonder NOK>" << endl;
 
                     } else if(command == "discard"){
                         Card discard = GetCardByName(argument);
