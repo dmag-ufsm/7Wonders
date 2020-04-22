@@ -106,7 +106,7 @@ public:
     void CanBuyRawCheap();
     bool BuildDiscardFree(DMAG::Card c, std::vector<DMAG::Card> discard_pile); // At the end of the turn after the stage was built.
     bool BuildHandFree(DMAG::Card c); // Once per Age.
-    bool CopyGuild(DMAG::Card c); // At the end of the game.
+    bool CopyGuild(); // At the end of the game.
     bool PlaySeventh();
     void FreeCardOnce(bool flag);
 

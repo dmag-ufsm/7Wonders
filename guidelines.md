@@ -48,5 +48,3 @@ combos.**.
 * Efeitos de Wonders:
     * BuildDiscardFree: baixa uma carta de graça do descarte LOGO APÓS construir o
       estágio 2/3 de Halikarnassus B ou o estágio 2 de Halikarnassus A.
-    * CopyGuild: no final do jogo, o player pode copiar uma guilda de um dos
-      seus vizinhos. Precisa ter o estágio 3 de Olympia B construído.

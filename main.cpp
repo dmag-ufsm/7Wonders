@@ -491,6 +491,8 @@ class Game{
             results.open("results.txt");
 
             for(int i = 0; i< NUM_PLAYERS; ++i){
+                // Copies a neighbor guild before scoring if the player has the ability to do so.
+                player_list[i]->CopyGuild();
                 results << "Player " << i+1 << " score: " << player_list[i]->CalculateScore() << std::endl;
             }
 

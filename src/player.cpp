@@ -943,35 +943,97 @@ bool Player::BuildHandFree(DMAG::Card c){
     return false;
 }
 
-// Copies a neighbor's Guild.
+// Copies a neighbor's Guild based on which one provides more VPs.
 // - called at the END of the game, before scoring.
-// - where:
-//        Card c      ->  Guild to be copied
-//        int side 0  ->  GetEastNeighbor
-//        int side 1  ->  GetWestNeighbor
-bool Player::CopyGuild(DMAG::Card c){
-    Player* neighbor = nullptr;
-
-    if (this->GetWestNeighbor()->HasPlayedCard(c))
-        neighbor = this->GetWestNeighbor();
-    else if (this->GetEastNeighbor()->HasPlayedCard(c))
-        neighbor = this->GetEastNeighbor();
-
-    if (neighbor == nullptr) {
-        std::cout << this->id << " -> FAILURE -> " << "neighbors don't have guild " << c.GetName() << std::endl;
-        return false;
-    }
+// UNTESTED!
+bool Player::CopyGuild(){
+    Player* east = this->GetEastNeighbor();
+    Player* west = this->GetWestNeighbor();
 
     int id = this->board->GetId();
     int stage = this->board->GetStage();
 
-    if (c.GetType() == CARD_TYPE::guild && (id == WONDER_ID::olympia_b && stage >= 3)) {
-        this->cards_played.push_back(c);
-        std::cout << this->id << " -> SUCCESS -> " << "copies guild " << c.GetName() << std::endl;
-        return true;;
+    // first -> guild; second -> total VPs it can give to the current player.
+    std::map<int, int> guild_vps{
+            { CARD_ID::workers, 0 },
+            { CARD_ID::craftsmens, 0 },
+            { CARD_ID::traders, 0 },
+            { CARD_ID::philosophers, 0 },
+            { CARD_ID::spies, 0 },
+            { CARD_ID::magistrates, 0 },
+            { CARD_ID::shipowners, 0 },
+            { CARD_ID::strategists, 0 },
+            { CARD_ID::scientists, 0 },
+            { CARD_ID::builders, 0 },
+    };
+
+    if (id == WONDER_ID::olympia_b && stage >= 3) {
+        std::vector<DMAG::Card> available_guilds;
+        for (DMAG::Card const& card : east->cards_played) {
+            if (card.GetType() == CARD_TYPE::guild) available_guilds.push_back(card);
+        }
+        for (DMAG::Card const& card : west->cards_played) {
+            if (card.GetType() == CARD_TYPE::guild) available_guilds.push_back(card);
+        }
+        // For each guild the neighbors have, calculate the potential VPs it can give
+        // to the current player.
+        // The guild with the most VPs will be the chosen one to be copied.
+        for (DMAG::Card const& guild : available_guilds) {
+            int guild_id = guild.GetId();
+            switch (guild_id) {
+                case CARD_ID::workers:
+                    guild_vps[CARD_ID::workers] = east->AmountOfType(CARD_TYPE::materials) + west->AmountOfType(CARD_TYPE::materials);
+                    break;
+                case CARD_ID::craftsmens:
+                    guild_vps[CARD_ID::craftsmens] = east->AmountOfType(CARD_TYPE::manufactured) + west->AmountOfType(CARD_TYPE::manufactured);
+                    break;
+                case CARD_ID::traders:
+                    guild_vps[CARD_ID::traders] = east->AmountOfType(CARD_TYPE::commercial) + west->AmountOfType(CARD_TYPE::commercial);
+                    break;
+                case CARD_ID::philosophers:
+                    guild_vps[CARD_ID::philosophers] = east->AmountOfType(CARD_TYPE::scientific) + west->AmountOfType(CARD_TYPE::scientific);
+                    break;
+                case CARD_ID::spies:
+                    guild_vps[CARD_ID::spies] = east->AmountOfType(CARD_TYPE::military) + west->AmountOfType(CARD_TYPE::military);
+                    break;
+                case CARD_ID::magistrates:
+                    guild_vps[CARD_ID::magistrates] = east->AmountOfType(CARD_TYPE::civilian) + west->AmountOfType(CARD_TYPE::civilian);
+                    break;
+                case CARD_ID::shipowners:
+                    guild_vps[CARD_ID::shipowners] = this->AmountOfType(CARD_TYPE::materials) + this->AmountOfType(CARD_TYPE::manufactured);
+                    guild_vps[CARD_ID::shipowners] += this->AmountOfType(CARD_TYPE::guild);
+                    break;
+                case CARD_ID::strategists:
+                    guild_vps[CARD_ID::strategists] = east->GetDefeatTokens() + west->GetDefeatTokens();
+                    break;
+                case CARD_ID::scientists:
+                    // Not 100% accurate.
+                    guild_vps[CARD_ID::scientists] = this->AmountOfType(CARD_TYPE::scientific);
+                    break;
+                case CARD_ID::builders:
+                    guild_vps[CARD_ID::builders] = east->GetBoard()->GetStage() + west->GetBoard()->GetStage();
+                    guild_vps[CARD_ID::builders] += this->GetBoard()->GetStage();
+                    break;
+                default:
+                    break;
+            }
+        }
+        std::map<int,int>::iterator best_guild
+            = std::max_element(guild_vps.begin(), guild_vps.end(),[] (const std::pair<int,int>& a, const std::pair<int,int>& b)->bool{ return a.second < b.second; } );
+
+        if (best_guild->second > 0) {
+            for (DMAG::Card const& guild : available_guilds) {
+                // Pushes the chosen guild to the vector of played cards.
+                if (guild.GetId() == best_guild->first) {
+                    this->cards_played.push_back(guild);
+                    std::cout << this->id << " -> SUCCESS -> " << "copies guild " << guild.GetName() << std::endl;
+                    return true;
+                }
+            }
+        }
     }
 
-    std::cout << this->id << " -> FAILURE -> " << "couldn't copy guild " << c.GetName() << std::endl;
+    std::cout << this->id << " -> FAILURE -> " << "couldn't copy guild!" << std::endl;
     return false;
 }
 
