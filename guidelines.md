@@ -44,7 +44,3 @@ ex, atributo "fichas de conflito":
 combos.**. 
 
 # TODO
-## Main
-* Efeitos de Wonders:
-    * BuildDiscardFree: baixa uma carta de graça do descarte LOGO APÓS construir o
-      estágio 2/3 de Halikarnassus B ou o estágio 2 de Halikarnassus A.

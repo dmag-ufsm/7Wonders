@@ -629,6 +629,7 @@ bool Halikarnassos_a::AddStage(Player* p){
         if (p->ProduceResource(RESOURCE::ore, this->cost[RESOURCE::ore]-p_resources[RESOURCE::ore])) {
             this->stage++;
             this->cost[RESOURCE::loom] = 2;
+            p->DiscardFree(true);
             stage_built = true;
         } break;
 
@@ -665,6 +666,7 @@ bool Halikarnassos_b::AddStage(Player* p){
             this->stage++;
             this->wonder_points += 2;
             this->cost[RESOURCE::clay] = 3;
+            p->DiscardFree(true);
             stage_built = true;
         } break;
 
@@ -676,6 +678,7 @@ bool Halikarnassos_b::AddStage(Player* p){
             this->cost[RESOURCE::glass] = 1;
             this->cost[RESOURCE::loom] = 1;
             this->cost[RESOURCE::papyrus] = 1;
+            p->DiscardFree(true);
             stage_built = true;
         } break;
 
@@ -685,6 +688,7 @@ bool Halikarnassos_b::AddStage(Player* p){
             p->ProduceResource(RESOURCE::loom, this->cost[RESOURCE::loom]-p_resources[RESOURCE::loom]) &&
             p->ProduceResource(RESOURCE::papyrus, this->cost[RESOURCE::papyrus]-p_resources[RESOURCE::papyrus])) {
             this->stage++;
+            p->DiscardFree(true);
             stage_built = true;
         } break;
     }

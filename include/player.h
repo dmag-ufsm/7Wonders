@@ -27,6 +27,7 @@ private:
     bool raw_cheap_west;       // Can the player buy raw resources from western neighbor for 1 coin? (West Trading Post)
     bool manuf_cheap;          // Can the player buy manufactured resources from neighbors for 1 coin? (Marketplace)
     bool free_card_once;       // EXTRA check whether the player can build a card for free once per Age or not.
+    bool discard_free;         // Checks if the player can build an extra card from the discard pile.
 
     bool raw_extra;            // The player has an additional raw material. (Caravansery and Alexandria A)
     bool manuf_extra;          // The player has an additional manufactured good. (Forum and Alexandria B)
@@ -109,6 +110,7 @@ public:
     bool CopyGuild(); // At the end of the game.
     bool PlaySeventh();
     void FreeCardOnce(bool flag);
+    void DiscardFree(bool flag);
 
     // Getters:
     int GetId();

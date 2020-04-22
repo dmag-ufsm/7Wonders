@@ -77,7 +77,7 @@ class Game{
             return false;
         }
 
-        void NextTurn(int actual_player_id){
+        void NextTurn(){
 
             // TODO: check if the player has the wonder effects that make
             // possible to play another card in the same round and do it
@@ -401,7 +401,7 @@ class Game{
 
         void Loop(){
             json json_object;
-            std::string command, argument;
+            std::string command, argument, extra;
             while(InGame()){
 
                 WriteGameStatus();
@@ -425,6 +425,9 @@ class Game{
                     command = json_object["command"]["subcommand"];
                     argument = json_object["command"]["argument"];
 
+                    // Only the player with Halikarnassos will have something written on extra.
+                    extra = json_object["command"]["extra"];
+
                     // Turns 6 13 and 20 -> last card in hand card.
                     // If the player doesn't have the ability to play the seventh card,
                     // just skip the turn (i.e. don't do anything).
@@ -443,15 +446,6 @@ class Game{
                         else
                             TryBuildingOrDiscard(player_list[i], selected);
 
-                    } else if (command == "build_discard_free"){
-                        // ONLY AT THE END OF THE TURN WHERE THE WONDER STAGE THAT PERMITS THIS ACTION WAS COMPLETED.
-                        // (halikarnassos_a stage 2 or halikarnassos_b stage >= 1)
-                        Card chosen = GetCardByName(argument);
-                        if (player_list[i]->BuildDiscardFree(chosen, discard_pile))
-                            cout << "<BuildDiscardFree OK>" << endl;
-                        else
-                            cout << "<BuildDiscardFree NOK>" << endl;
-
                     } else if(command == "build_wonder"){
                         Card sacrifice = GetCardByName(argument);
                         if (player_list[i]->BuildWonder(sacrifice))
@@ -469,10 +463,19 @@ class Game{
 
                 // Moves the game to the next turn.
                 // VERY IMPORTANT: call player->ResetUsed() for each player at the end of a turn!
-                for (int i = 0; i < player_list.size(); i++)
+                for (int i = 0; i < player_list.size(); i++) {
                     player_list[i]->ResetUsed(true);
+                    // If extra is not empty, try to build a card from the discard pile for free.
+                    // (will only work if the player has the required stage for Halikarnassos)
+                    if (!extra.empty()) {
+                        Card c = GetCardByName(extra);
+                        if (player_list[i]->BuildDiscardFree(c, discard_pile)) {
+                            cout << "<BuildDiscardFree OK>" << endl;
+                        }
+                    }
+                }
 
-                NextTurn(0); // Have to fix this, and the method.
+                NextTurn();
 
 
                 // TODO: show info

@@ -16,6 +16,7 @@ Player::Player()
     this->raw_cheap_west = false;
     this->manuf_cheap = false;
     this->free_card_once = true; // Olympia 2A -> can build one card for free once per Age.
+    this->discard_free = false;
 
     this->used_tree_farm = -1;
     this->used_forest_cave = -1;
@@ -912,6 +913,11 @@ void Player::FreeCardOnce(bool flag) {
     this->free_card_once = flag;
 }
 
+// Similar as above but for building a free structure from the discard list.
+void Player::DiscardFree(bool flag) {
+    this->discard_free = flag;
+}
+
 // The player can buy resources for 1 coin instead of 2 from neighbors.
 // - automatically called when Olympia A stage 1 is constructed.
 void Player::CanBuyRawCheap(){
@@ -927,7 +933,10 @@ bool Player::BuildDiscardFree(DMAG::Card c, std::vector<DMAG::Card> discard_pile
 
     if ((id == WONDER_ID::halikarnassos_a && stage == 2) ||
         (id == WONDER_ID::halikarnassos_b && stage >= 1)) {
+        if (this->discard_free) {
+            this->discard_free = false;
             return this->BuildStructure(c, discard_pile, true);
+        }
     }
     return false;
 }
