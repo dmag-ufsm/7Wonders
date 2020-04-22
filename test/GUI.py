@@ -226,7 +226,8 @@ def play():
     for i in range(players):
         data['command'] = {
             'subcommand': actions[action_active[i]],
-            'argument': card_selected[i][1]
+            'argument': card_selected[i][1],
+            'extra': ""
         }
         with open(build_folder+'player_'+str(i+1)+'.json', 'w') as f:
             json.dump(data, f)
@@ -250,7 +251,7 @@ def init():
     load_hand_cards()
     load_resources()
     load_played_cards()
-    
+
     root.geometry(str(w_width) + 'x' + str(w_height))
     root.mainloop()
 
