@@ -94,11 +94,11 @@ bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool fr
                         // If it was not possible to produce/buy, revert changes and return.
                         if (!could_produce) {
                             this->resources = resources_bckp;
-                            this->ResetUsed(false);
+                            this->ResetUsed();
                             east->SetResources(resources_east);
-                            east->ResetUsed(false);
+                            east->ResetUsed();
                             west->SetResources(resources_west);
-                            west->ResetUsed(false);
+                            west->ResetUsed();
                             std::cout << this->id << " -> FAILURE -> " << "couldn't produce resources." << std::endl;
                             return false;
                         }
@@ -289,11 +289,11 @@ std::vector<Card> Player::GetPlayableCards(){
             if (push_card) this->cards_playable.push_back(c);
         }
         // Undo all changes on the resource maps.
-        this->ResetUsed(false);
+        this->ResetUsed();
         this->resources = this_bckp;
-        east->ResetUsed(false);
+        east->ResetUsed();
         east->SetResources(east_bckp);
-        west->ResetUsed(false);
+        west->ResetUsed();
         west->SetResources(west_bckp);
     }
 
@@ -376,8 +376,7 @@ bool Player::HasPlayedCard(DMAG::Card c){
 
 // Prepare for the next turn.
 // - called at the end of a turn.
-void Player::ResetUsed(bool decrement) {
-    if (decrement) this->DecrementUsed();
+void Player::ResetUsed() {
     this->used_tree_farm    = -1;
     this->used_forest_cave  = -1;
     this->used_timber_yard  = -1;
@@ -430,6 +429,7 @@ int Player::IncrementOnDemand(int resource, int needed, bool is_neighbor){
     // Ore                  -> clay_pit   || forest_cave || mine        || caravansery
     // Glass, Loom, Papyrus -> forum
 
+    int curr_resource = this->resources[resource];
     int cont = 0;
     if (resource == RESOURCE::wood) {
         if (this->AvailableCard(CARD_ID::tree_farm, resource)) {
@@ -484,21 +484,10 @@ int Player::IncrementOnDemand(int resource, int needed, bool is_neighbor){
         if (this->raw_extra) cont++;
     }
 
-    this->resources[resource] += cont;
-    return (needed - this->resources[resource]); // If this ends up <= 0, the resource was produced.
-}
-
-// The resources we incremented "on demand" for a turn should be decremented.
-// Part of ResetUsed to be called at the end of a turn.
-void Player::DecrementUsed(){
-    if (this->used_tree_farm >= 0)    this->resources[this->used_tree_farm]--;
-    if (this->used_forest_cave >= 0)  this->resources[this->used_forest_cave]--;
-    if (this->used_timber_yard >= 0)  this->resources[this->used_timber_yard]--;
-    if (this->used_excavation >= 0)   this->resources[this->used_excavation]--;
-    if (this->used_mine >= 0)         this->resources[this->used_mine]--;
-    if (this->used_clay_pit >= 0)     this->resources[this->used_clay_pit]--;
-    if (this->used_forum >= 0)        this->resources[this->used_forum]--;
-    if (this->used_caravansery >= 0)  this->resources[this->used_caravansery]--;
+    //this->resources[resource] += cont;
+    //return (needed - this->resources[resource]); // If this ends up <= 0, the resource was produced.
+    curr_resource += cont;
+    return (needed - curr_resource); // If this ends up <= 0, the resource was produced.
 }
 
 // Buys x quantity of a certain resource from any neighbor.
@@ -526,7 +515,6 @@ bool Player::BuyResource(int resource, int quant){
             east->AddResource(east->board->GetProduction(), 1);
             west->AddResource(west->board->GetProduction(), 1);
             //east->DecrementUsed();
-            //std::cout <<  "  -> " << "bought the resource successfully!" << std::endl;
             return true;
         }
     }
@@ -538,7 +526,6 @@ bool Player::BuyResource(int resource, int quant){
             west->AddResource(west->board->GetProduction(), 1);
             east->AddResource(east->board->GetProduction(), 1);
             //west->DecrementUsed();
-            //std::cout <<  "  -> SUCCESS -> " << "bought the resource successfully!" << std::endl;
             return true;
         }
     }
@@ -546,7 +533,7 @@ bool Player::BuyResource(int resource, int quant){
     east->AddResource(east->board->GetProduction(), 1);
     west->AddResource(west->board->GetProduction(), 1);
 
-    //std::cout <<  "  -> FAILURE -> " << "couldn't buy the resource." << std::endl;
+    std::cout <<  "  -> FAILURE -> " << "couldn't buy the resource." << std::endl;
     return false; // Couldn't buy
 }
 

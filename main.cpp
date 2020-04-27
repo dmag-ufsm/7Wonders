@@ -464,7 +464,7 @@ class Game{
                 // Moves the game to the next turn.
                 // VERY IMPORTANT: call player->ResetUsed() for each player at the end of a turn!
                 for (int i = 0; i < player_list.size(); i++) {
-                    player_list[i]->ResetUsed(true);
+                    player_list[i]->ResetUsed();
                     // If extra is not empty, try to build a card from the discard pile for free.
                     // (will only work if the player has the required stage for Halikarnassos)
                     if (!extra.empty()) {
