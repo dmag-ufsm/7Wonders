@@ -79,14 +79,13 @@ public:
     bool AvailableCard(int card_id, int resource);
     bool HasPlayedCard(DMAG::Card c);
     std::vector<DMAG::Card> GetPlayableCards();
-    void ResetUsed(bool decrement);
+    void ResetUsed();
 
     // Resource-related:
     bool ProduceResource(int resource, int quant);
     bool BuyResource(int resource, int quant);
     void AddResource(int resource, int quant);
     int IncrementOnDemand(int resource, int needed, bool is_neighbor);
-    void DecrementUsed();
     bool HasEnoughResource(int resource, int quant);
 
     // Battle-related:
