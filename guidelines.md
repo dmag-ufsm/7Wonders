@@ -44,3 +44,6 @@ ex, atributo "fichas de conflito":
 combos.**. 
 
 # TODO
+
+Leitura de jogo prévio de arquivo
+Escrever sobre as dependências
