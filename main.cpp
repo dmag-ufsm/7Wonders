@@ -507,7 +507,14 @@ class Game{
 };
 
 
-        int main()
+        /*
+         * Args will be used to tell how to load
+         * a new game.
+         * We'll use -f filename to tell a file that
+         * has information about a previously played game
+         * (or just a specific card configuration)
+         */
+        int main(int argc, char **argv)
         {
             Game g;
 
