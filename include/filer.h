@@ -20,31 +20,3 @@ class Filer{
 		json ReadMessages(int player_number);
 		bool ArePlayersReady();
 };
-
-/*
-
-file format for loading previously played games
-3                -> num players
-halikarnassos_b  -> player 1 wonder
-aldebaran_a      -> player 2 wonder
-athenas_b        -> player 3 wonder
-
-Loom						 -> 7 cards for player 1
-Glassworks
-Loom
-Glassworks
-Loom
-Glassworks
-Glassworks
-
-Pedras					 -> 7 cards for player 2
-clay
-papiro
-...
-
-???? 						 -> 7 cards for player n
-
-and continue for all eras
-
-
-*/

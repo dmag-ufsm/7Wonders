@@ -1,25 +1,33 @@
 #include <iostream>
-#include <cstdlib>
 #include <card.h>
 #include <player.h>
-#include <wonder.h>
-#include <resources.h>
+#include <deck.h>
+#include <amqp.h> // The rabbit-mq broker library
 #include <list>
+<<<<<<< Updated upstream
+=======
 #include <vector>
 #include <algorithm>
 #include <string>
 #include <iomanip>
 #include <filer.h>
 #include <algorithm>
+#include <fstream>
 #include <nlohmann/json.hpp>
 
 #define NUM_PLAYERS 3
 
 using json = nlohmann::json;
+>>>>>>> Stashed changes
 
 using namespace std;
 using namespace DMAG;
 
+<<<<<<< Updated upstream
+// define global variables
+Deck d;
+list<Player> player_list;
+=======
 class Game{
     private:
         vector<Player*> player_list;
@@ -33,6 +41,7 @@ class Game{
         Filer fp;
 
     public:
+        bool previously_game_played;
 
         Card GetCardByName(std::string name){
             for(int i = 0; i < 3; ++i){
@@ -43,6 +52,14 @@ class Game{
                 }
             }
             return Card(0, "not found", 0, 0, 0, std::vector<int>(), std::vector<int>());
+        }
+
+        Wonder* GetWonderByName(std::string name){
+            for (auto w: wonders) {
+                if (w->GetName().compare(name) == 0)
+                    return w;
+            }
+            exit(1); //You typed a wonder that does not exist
         }
 
         int GetResourceByName(std::string name){
@@ -77,7 +94,7 @@ class Game{
             return false;
         }
 
-        void NextTurn(){
+        void NextTurn(vector<string> log){
 
             // TODO: check if the player has the wonder effects that make
             // possible to play another card in the same round and do it
@@ -105,7 +122,7 @@ class Game{
                         discard_pile.push_back(cards[i]);
                 }
 
-                GiveCards();
+                GiveCards(log);
             }
             else {
                 Player *player, *p1, *neighbor;
@@ -130,34 +147,60 @@ class Game{
             }
         }
 
-        void GiveCards(){
+
+        /*
+          If using defaults, call as GiveWonders(null, 0);
+          Args:
+          card_names: the ordered list of cards that each player should get
+        */
+        void GiveCards(std::vector<std::string> card_names){
             vector<Card> cards;
             int card_idx = 0;
 
             random_shuffle(deck[era-1].begin(), deck[era-1].end());
 
-            for (Player* & player : player_list) {
-                cards.clear();
-                for (int i = 0; i < 7; i++) {
-                    cards.push_back(deck[era-1][card_idx++]);
+            if(!previously_game_played){
+                for (Player* & player : player_list) {
+                    cards.clear();
+                    for (int i = 0; i < 7; i++) {
+                        cards.push_back(deck[era-1][card_idx++]);
+                    }
+                    player->ReceiveCards(cards);
                 }
-                player->ReceiveCards(cards);
+            }
+            else{
+              for (Player* & player : player_list) {
+                  cards.clear();
+                  for (int i = 0; i < 7; i++) {
+                      cards.push_back(GetCardByName(card_names.front()));
+                      card_names.erase(card_names.begin());
+                  }
+                  player->ReceiveCards(cards);
+              }
             }
         }
 
-        void GiveWonders(){
+
+        void GiveWonders(std::vector<std::string> log){
             bool wonder_availability[7];
             for (int i = 0; i < 7; i++)
                 wonder_availability[i] = true;
 
-            for (Player* & player : player_list) {
-                while (true) {
-                    int n = rand() % 14;
-                    if (wonder_availability[n % 7]) {
-                        player->SetWonder(wonders[n]);
-                        wonder_availability[n % 7] = false;
-                        break;
+            if (!previously_game_played) {
+                for (Player* & player : player_list) {
+                    while (true) {
+                        int n = rand() % 14;
+                        if (wonder_availability[n % 7]) {
+                            player->SetWonder(wonders[n]);
+                            wonder_availability[n % 7] = false;
+                            break;
+                        }
                     }
+                }
+            } else {
+                for (Player* & player : player_list) {
+                    player->SetWonder(GetWonderByName(log.front()));
+                    log.erase(log.begin());
                 }
             }
         }
@@ -283,13 +326,18 @@ class Game{
             // add guild cards to deck (5 cards to 3 players, 6 cards to 4 players, ...)
             srand(time(0));
             random_shuffle(guild_cards.begin(), guild_cards.end());
-            for (int i = 0; i < this->number_of_players + 2; i++) {
+            // if the game is loaded, add all guild cards to 3rd era deck
+            for (int i = 0; i < previously_game_played ? guild_cards.size() : this->number_of_players + 2; i++) {
                 deck[2].push_back(guild_cards[i]);
             }
         }
 
 
-        int NewGame(int _players){
+        int NewGame(int _players, vector<string> log){
+          // same as Init. if _players is zero, will use default settings
+          if(_players == 0)
+            _players = NUM_PLAYERS;
+
             this->number_of_players = _players;
             Player *p;
 
@@ -310,15 +358,24 @@ class Game{
             }
 
             CreateDecks();
-            GiveWonders();
-            GiveCards();
+            GiveWonders(log);
+            GiveCards(log);
 
             return 0;
         }
 
-        void Init(){
-            CreateWonders();
+        // _num_players should be 0 if starting a normal simulation game
+        // If game reads config from file, _num_players should be the number
+        // Of players stated in the file
+        void Init(int _num_players){
+          if(_num_players == 0){
             fp.Init(NUM_PLAYERS);
+          }
+          else{
+            fp.Init(_num_players);
+          }
+          CreateWonders();
+          return;
 
         }
 
@@ -399,7 +456,7 @@ class Game{
             }
         }
 
-        void Loop(){
+        void Loop(vector<string> log){
             json json_object;
             std::string command, argument, extra;
             while(InGame()){
@@ -475,7 +532,7 @@ class Game{
                     }
                 }
 
-                NextTurn();
+                NextTurn(log);
 
 
                 // TODO: show info
@@ -485,28 +542,41 @@ class Game{
 
 
                 //get commands
+>>>>>>> Stashed changes
+
+// Initiate global variables
+
+void game_init(int _players){
+    d = Deck();
+    for(int i = 0; i<_players; i++){
+        player_list.push_back(Player());
+    }
+    return;
+}
+
+void game_loop(){
+
+    // create connection with RabbitMQ
+
+    //show info
+
+    //get commands
+
+<<<<<<< Updated upstream
+    //calculate stuff
+
+    //end game?
+}
+
+int main()
+{
+    game_init(3);
+    game_loop();
+    return 0;
+}
 
 
-            }
-
-            //calculate stuff
-            std::ofstream results;
-            results.open("results.txt");
-
-            for(int i = 0; i< NUM_PLAYERS; ++i){
-                // Copies a neighbor guild before scoring if the player has the ability to do so.
-                player_list[i]->CopyGuild();
-                results << "Player " << i+1 << " score: " << player_list[i]->CalculateScore() << std::endl;
-            }
-
-            results << std::endl;
-            results.close();
-            //end game?
-            // output results after game
-        }
-};
-
-
+=======
         /*
          * Args will be used to tell how to load
          * a new game.
@@ -517,13 +587,33 @@ class Game{
         int main(int argc, char **argv)
         {
             Game g;
+            std::vector<std::string> log;
+            int _number_of_players = NUM_PLAYERS;
 
-            g.Init();
-            g.NewGame(NUM_PLAYERS);
+            std::ifstream file;
+            if(argc > 1){
+                file.open(argv[1]);
+                string line;
+                getline(file, line);
+                _number_of_players = std::stoi(line);
+
+                while(getline(file, line)){
+                  log.push_back(line);
+                }
+
+                g.previously_game_played = true;
+            }
+            else{
+                g.previously_game_played = false;
+            }
+
+            g.Init(_number_of_players);
+            g.NewGame(_number_of_players, log);
 
             //    g.NextTurn(p, 0); //this function is not completed
-            g.Loop();
+            g.Loop(log);
             g.Close();
 
             return 0;
         }
+>>>>>>> Stashed changes
