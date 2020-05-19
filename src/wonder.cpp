@@ -99,6 +99,8 @@ Gizah_b::Gizah_b(){
     this->production = RESOURCE::stone;
     this->effects = {EFFECT::vp, EFFECT::vp, EFFECT::vp, EFFECT::vp};
     this->cost[RESOURCE::wood] = 2;
+    this->stage = 0;
+    this->wonder_points = 0;
 }
 
 bool Gizah_b::AddStage(Player *p){

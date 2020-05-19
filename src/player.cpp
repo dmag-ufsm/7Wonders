@@ -397,22 +397,18 @@ void Player::ResetUsed() {
 // If he can't produce by himself, try buying it from neighbors.
 // - this function is a "step" in BuildStructure.
 bool Player::ProduceResource(int resource, int quant){
-    //std::cout <<  "  -> " << "has " << (int)this->resources[resource] << " needs " << quant << std::endl;
-    // Extra check to verify if the player can build directly without needing to produce.
-    if (this->resources[resource] >= quant) {
-        std::cout <<  "  -> " << "already has the needed resource!" << std::endl;
-        return true;
-    }
-
     // Produce "on demand" resources.
     // Ugly, but hopefully it'll get the job done.
+
+    if (quant <= 0) return true;
+
     int needed = this->IncrementOnDemand(resource, quant, false);
     if (needed <= 0) {
         std::cout <<  "  -> " << "produced the resource successfully!" << std::endl;
         return true;
     }
 
-    // if the player couldn't produce the resource by himself, try buying it from a neighbor.
+    // If the player couldn't produce the resource by himself, try buying the needed quantity it from a neighbor.
     return this->BuyResource(resource, needed);
 }
 
@@ -431,6 +427,8 @@ int Player::IncrementOnDemand(int resource, int needed, bool is_neighbor){
 
     int curr_resource = this->resources[resource];
     int cont = 0;
+    if (curr_resource >= needed && is_neighbor) return 0; // to avoid all the extra checks below if needed
+
     if (resource == RESOURCE::wood) {
         if (this->AvailableCard(CARD_ID::tree_farm, resource)) {
             cont++;
@@ -484,10 +482,9 @@ int Player::IncrementOnDemand(int resource, int needed, bool is_neighbor){
         if (this->raw_extra) cont++;
     }
 
-    //this->resources[resource] += cont;
-    //return (needed - this->resources[resource]); // If this ends up <= 0, the resource was produced.
     curr_resource += cont;
-    return (needed - curr_resource); // If this ends up <= 0, the resource was produced.
+    if (!is_neighbor) curr_resource = cont;
+    return (needed - curr_resource); // If this ends up <= 0, we can produce the needed resource.
 }
 
 // Buys x quantity of a certain resource from any neighbor.
@@ -507,14 +504,14 @@ bool Player::BuyResource(int resource, int quant){
     int needed_east = east->IncrementOnDemand(resource, quant, true);
     int needed_west = west->IncrementOnDemand(resource, quant, true);
 
-    if (needed_east <= 0) { // neeed_east/west <= 0 means that the neightbor has the resource.
+    if (needed_east <= 0) { // needed_ <= 0 means that the neighbor has the resource.
         if (is_raw && (this->raw_cheap_east || this->wonder_raw_cheap)) cost = 1*quant;
         if (this->resources[RESOURCE::coins] >= cost) {
             this->resources[RESOURCE::coins] -= cost;
             east->AddResource(RESOURCE::coins, cost);
             east->AddResource(east->board->GetProduction(), 1);
+            east->ResetUsed();
             west->AddResource(west->board->GetProduction(), 1);
-            //east->DecrementUsed();
             return true;
         }
     }
@@ -524,8 +521,8 @@ bool Player::BuyResource(int resource, int quant){
             this->resources[RESOURCE::coins] -= cost;
             west->AddResource(RESOURCE::coins, cost);
             west->AddResource(west->board->GetProduction(), 1);
+            west->ResetUsed();
             east->AddResource(east->board->GetProduction(), 1);
-            //west->DecrementUsed();
             return true;
         }
     }
