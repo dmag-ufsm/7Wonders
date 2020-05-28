@@ -14,34 +14,18 @@ ex, atributo "fichas de conflito":
 * [Regras rápidas](https://waa.ai/O48z)
 * [Informações sobre cartas e maravilhas (tabuladas)](https://github.com/dmag-ufsm/Game/tree/master/references)
 
-# Problemas encontrados
-* a. O map de recursos está zerando em determinados momentos do jogo (e.g.
-  comércio).
-    * Isso ainda tá acontecendo acontece com moedas :/
-* b. No geral, o comércio está um tanto bugado:
-    * Às vezes os recursos não estão sendo atualizados corretamente, inclusive
-      as moedas. Tem que ver isso aí.
-* c. ~~Alguns recursos estão indo pro valor 255 após algumas jogadas.~~
-    * ~~Acho que isso tem a ver com overflow do ```unsigned char``` sendo usado
-      no map. Sugestão: trocar pra short ou int; talvez em algum cálculo o
-      ```unsigned char``` fique negativo por algum motivo.~~
-      * Troquei a quantidade de recursos de ```unsigned char``` para ```int```, que é o tipo mais usual. 
-      _Provavelmente_ o under/overflow não vai mais ocorrer. Pode não ser o
-      melhor tipo para expressar uma quantidade que não é grande, mas ao menos
-      é o que tipicamente causa menos problemas.
-* d. Algumas vezes recursos ficam com valor negativo.
-    * P: testei várias vezes e ainda não consegui reproduzir isso. Talvez
-          esteja relacionado com o problema (a).
-* e. ~~Depois da sexta rodada a última carta não é descartada.~~
-    * Corrigido. Ainda, a possibilidade de jogar a sétima carta (se o jogador
-      tiver essa habilidade) foi adicionada.
-* f. ~~Algumas cartas aparecem como jogáveis mesmo sem serem jogáveis.~~
-    * ~~Acho que é erro em GetPlayableCards, pois mesmo ao escolhê-las elas não
-      são jogadas.~~
-    * Corrigido (?). Resta fazer mais testes.
+# Problemas encontrados:
+Encontrou algum problema? Abra um
+[issue](https://github.com/dmag-ufsm/Game/issues)! Verifique os issues abertos
+e fechados; não hesite comentar novamente num issue fechado caso encontrar um
+bug supostamente já corrigido.
 
-**Aviso: cuidem as cartas que podem ser construídas de graça em caso de
-combos.**. 
+* Avisos: 
+    * Cuidem as cartas que podem ser construídas de graça em caso de combos.
+      Isso pode ser confundido como bug, mas não é.
+    * Cuidem as cartas repetidas. Quando uma carta é jogada novamente, ela é
+      descartada e o número de moedas do jogador aumenta. Isso pode ser
+      confundido com um bug, mas não é.
 
 # TODO
 
