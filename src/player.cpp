@@ -60,8 +60,10 @@ bool Player::BuildWonder(DMAG::Card c){
 // P: Yes, in case we want to build a free card from the discard pile.
 bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool free_card){
     // Returns false if the card has already been played (cannot play the same card twice).
-    for (DMAG::Card const& card : this->cards_played)
+    for (DMAG::Card const& card : this->cards_played) {
+        std::cout << " -> FAILURE: Card is already played." << std::endl;
         if (c.Equal(card)) return false;
+    }
 
     // Checks if card is in hand.
     size_t i = 0;
@@ -71,6 +73,7 @@ bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool fr
     }
     if (i == cards.size()) {
         // ERROR: Card played was not found in the vector
+        std::cout << " -> FAILURE: Card not found in vector." << std::endl;
         return false;
     }
 
@@ -288,7 +291,7 @@ std::vector<Card> Player::GetPlayableCards(){
             }
             if (push_card) this->cards_playable.push_back(c);
         }
-        // Undo all changes on the resource maps.
+        // Undo all changes on the resource maps in each iteration.
         this->ResetUsed();
         this->resources = this_bckp;
         east->ResetUsed();
@@ -296,6 +299,14 @@ std::vector<Card> Player::GetPlayableCards(){
         west->ResetUsed();
         west->SetResources(west_bckp);
     }
+
+    // In case the break happened, we still need to undo changes.
+    this->ResetUsed();
+    this->resources = this_bckp;
+    east->ResetUsed();
+    east->SetResources(east_bckp);
+    west->ResetUsed();
+    west->SetResources(west_bckp);
 
     return this->cards_playable;
 }
@@ -427,7 +438,7 @@ int Player::IncrementOnDemand(int resource, int needed, bool is_neighbor){
 
     int curr_resource = this->resources[resource];
     int cont = 0;
-    if (curr_resource >= needed && is_neighbor) return 0; // to avoid all the extra checks below if needed
+    if (curr_resource >= needed && is_neighbor) return curr_resource; // to avoid all the extra checks below if needed
 
     if (resource == RESOURCE::wood) {
         if (this->AvailableCard(CARD_ID::tree_farm, resource)) {
@@ -483,52 +494,72 @@ int Player::IncrementOnDemand(int resource, int needed, bool is_neighbor){
     }
 
     curr_resource += cont;
-    if (!is_neighbor) curr_resource = cont;
-    return (needed - curr_resource); // If this ends up <= 0, we can produce the needed resource.
+    if (!is_neighbor) {
+        curr_resource = cont;
+        return (needed - curr_resource); // If this ends up <= 0, WE can produce the needed resource.
+    }
+    else {
+        return curr_resource; // Returns quantity of produced resource (if neighbor).
+    }
 }
 
 // Buys x quantity of a certain resource from any neighbor.
 // - this function is a "step" in BuildStructure.
 bool Player::BuyResource(int resource, int quant){
-    bool is_raw = resource <= 3 ? true : false; // raw materials have code <= 3 in resources.h
+    bool is_raw = resource <= 3 ? true : false; // Raw materials have index <= 3 in resources.h
     int cost = 2*quant;
     cost = !is_raw && this->manuf_cheap ? 1*quant : 2*quant;
+    int old_cost = cost;
 
     Player* east = this->GetEastNeighbor();
     Player* west = this->GetWestNeighbor();
 
+    std::map<int, int> resources_east_bckp = east->GetResources();
+    std::map<int, int> resources_west_bckp = west->GetResources();
+    std::map<int, int> resources_bckp = this->resources;
+
     // Wonder initial resource is not buyable!
     east->AddResource(east->board->GetProduction(), -1);
-    west->AddResource(west->board->GetProduction(), -1);
+    int produced_east = east->IncrementOnDemand(resource, quant, true);
 
-    int needed_east = east->IncrementOnDemand(resource, quant, true);
-    int needed_west = west->IncrementOnDemand(resource, quant, true);
-
-    if (needed_east <= 0) { // needed_ <= 0 means that the neighbor has the resource.
-        if (is_raw && (this->raw_cheap_east || this->wonder_raw_cheap)) cost = 1*quant;
+    // Try buying from eastern neighbor first.
+    if (produced_east > 0) {
+        int q = (quant-produced_east) <= 0 ? quant : produced_east;
+        if (is_raw && (this->raw_cheap_east || this->wonder_raw_cheap)) cost = 1*q;
         if (this->resources[RESOURCE::coins] >= cost) {
             this->resources[RESOURCE::coins] -= cost;
             east->AddResource(RESOURCE::coins, cost);
             east->AddResource(east->board->GetProduction(), 1);
             east->ResetUsed();
-            west->AddResource(west->board->GetProduction(), 1);
-            return true;
+            if (produced_east >= quant) return true; // No need to check western neighbor if eastern has enough.
         }
     }
-    if (needed_west <= 0) {
+
+    quant -= produced_east; // Updates quantity needed
+    cost = old_cost;
+
+    west->AddResource(west->board->GetProduction(), -1);
+    int produced_west = west->IncrementOnDemand(resource, quant, true);
+
+    // Try buying from western neighbor now.
+    if (produced_west >= quant) {
         if (is_raw && (this->raw_cheap_west || this->wonder_raw_cheap)) cost = 1*quant;
         if (this->resources[RESOURCE::coins] >= cost) {
             this->resources[RESOURCE::coins] -= cost;
             west->AddResource(RESOURCE::coins, cost);
             west->AddResource(west->board->GetProduction(), 1);
+            east->AddResource(west->board->GetProduction(), 1);
             west->ResetUsed();
-            east->AddResource(east->board->GetProduction(), 1);
             return true;
         }
     }
 
-    east->AddResource(east->board->GetProduction(), 1);
-    west->AddResource(west->board->GetProduction(), 1);
+    // If everything fails, undo resource map changes.
+    east->ResetUsed();
+    west->ResetUsed();
+    east->resources = resources_east_bckp;
+    west->resources = resources_west_bckp;
+    this->resources = resources_bckp;
 
     std::cout <<  "  -> FAILURE -> " << "couldn't buy the resource." << std::endl;
     return false; // Couldn't buy
