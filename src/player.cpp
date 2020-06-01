@@ -724,44 +724,44 @@ int Player::CalculateGuildScore(){
 
         switch (card.GetId()) {
             case CARD_ID::workers:
-                guild_score = player_east->AmountOfType(CARD_TYPE::materials)
-                            + player_west->AmountOfType(CARD_TYPE::materials);
+                guild_score += player_east->AmountOfType(CARD_TYPE::materials)
+                             + player_west->AmountOfType(CARD_TYPE::materials);
                 break;
 
             case CARD_ID::craftsmens:
-                guild_score = 2 * (player_east->AmountOfType(CARD_TYPE::manufactured)
-                                + player_west->AmountOfType(CARD_TYPE::manufactured));
+                guild_score += 2 * (player_east->AmountOfType(CARD_TYPE::manufactured)
+                             + player_west->AmountOfType(CARD_TYPE::manufactured));
                 break;
 
             case CARD_ID::traders:
-                guild_score = player_east->AmountOfType(CARD_TYPE::commercial)
-                            + player_west->AmountOfType(CARD_TYPE::commercial);
+                guild_score += player_east->AmountOfType(CARD_TYPE::commercial)
+                             + player_west->AmountOfType(CARD_TYPE::commercial);
                 break;
 
             case CARD_ID::philosophers:
-                guild_score = player_east->AmountOfType(CARD_TYPE::scientific)
-                            + player_west->AmountOfType(CARD_TYPE::scientific);
+                guild_score += player_east->AmountOfType(CARD_TYPE::scientific)
+                             + player_west->AmountOfType(CARD_TYPE::scientific);
                 break;
 
             case CARD_ID::spies:
-                guild_score = player_east->AmountOfType(CARD_TYPE::military)
-                            + player_west->AmountOfType(CARD_TYPE::military);
+                guild_score += player_east->AmountOfType(CARD_TYPE::military)
+                             + player_west->AmountOfType(CARD_TYPE::military);
                 break;
 
             case CARD_ID::magistrates:
-                guild_score = player_east->AmountOfType(CARD_TYPE::civilian)
-                            + player_west->AmountOfType(CARD_TYPE::civilian);
+                guild_score += player_east->AmountOfType(CARD_TYPE::civilian)
+                             + player_west->AmountOfType(CARD_TYPE::civilian);
                 break;
 
             case CARD_ID::shipowners:
-                guild_score = this->AmountOfType(CARD_TYPE::materials)
-                            + this->AmountOfType(CARD_TYPE::manufactured)
-                            + this->AmountOfType(CARD_TYPE::guild);
+                guild_score += this->AmountOfType(CARD_TYPE::materials)
+                             + this->AmountOfType(CARD_TYPE::manufactured)
+                             + this->AmountOfType(CARD_TYPE::guild);
                 break;
 
             case CARD_ID::strategists:
-                guild_score = player_east->GetDefeatTokens()
-                            + player_west->GetDefeatTokens();
+                guild_score += player_east->GetDefeatTokens()
+                             + player_west->GetDefeatTokens();
                 break;
 
             case CARD_ID::scientists:
@@ -769,9 +769,9 @@ int Player::CalculateGuildScore(){
                 break;
 
             case CARD_ID::builders:
-                guild_score = player_east->GetBoard()->GetStage()
-                            + player_west->GetBoard()->GetStage()
-                            + this->board->GetStage();
+                guild_score += player_east->GetBoard()->GetStage()
+                             + player_west->GetBoard()->GetStage()
+                             + this->board->GetStage();
                 break;
         }
     }
@@ -786,7 +786,7 @@ int Player::CalculateMilitaryScore(){
 
 // Calculates the number of VPs the player gets from scientific development.
 int Player::CalculateScientificScore(){
-    int gear = 0, tablet = 0, compass = 0;
+    int gear = 0, tablet = 0, compass = 0, sci_extra = 0;
     for (DMAG::Card const& card : this->cards_played) {
         if (card.GetType() != CARD_TYPE::scientific)
             continue;
@@ -811,7 +811,7 @@ int Player::CalculateScientificScore(){
                 tablet++; break;
 
             case CARD_ID::scientists:
-                this->sci_extra++;
+                sci_extra++;
         }
     }
 
@@ -819,16 +819,16 @@ int Player::CalculateScientificScore(){
     int stage = this->board->GetStage();
     if ((id == WONDER_ID::babylon_a && stage >= 2) ||
             (id == WONDER_ID::babylon_b && stage >= 3)) {
-        this->sci_extra++;
+        sci_extra++;
     }
 
     // Choose the most advantageous scientific piece for extra piece:
     // First complete the set if possible. The pieces left over, add to what has more.
-    int remaining_tablets = 0, remaining_compasses = 0, remaining_gears = 0, extra = this->sci_extra;
+    int remaining_tablets = 0, remaining_compasses = 0, remaining_gears = 0, extra = sci_extra;
     if (tablet >= compass && tablet >= gear) {
         remaining_compasses = tablet - compass;
         remaining_gears = tablet - gear;
-        if (remaining_compasses + remaining_gears <= this->sci_extra) {
+        if (remaining_compasses + remaining_gears <= sci_extra) {
             compass += remaining_compasses;
             gear += remaining_gears;
             extra -= remaining_compasses + remaining_gears;

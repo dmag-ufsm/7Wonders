@@ -31,7 +31,6 @@ private:
 
     bool raw_extra;            // The player has an additional raw material. (Caravansery and Alexandria A)
     bool manuf_extra;          // The player has an additional manufactured good. (Forum and Alexandria B)
-    int sci_extra;             // The player has an additional scientific piece. (Scientific Guild and Babylon A and B)
 
     // Possible values:
     // -> -1 (not used)
