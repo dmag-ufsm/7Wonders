@@ -28,6 +28,8 @@ bug supostamente já corrigido.
       confundido com um bug, mas não é.
 
 # TODO
+* Verificar se o estágio da maravilha pode ser construído ou não. Lógica
+  parecida com o que foi feito para checar se uma carta é jogável ou não.
 
 Leitura de jogo prévio de arquivo
 Escrever sobre as dependências
