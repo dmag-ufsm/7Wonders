@@ -44,6 +44,8 @@ img_resources = [None]*players
 lab_resources_v = [None]*players
 img_points = [None]*players
 lab_points_v = [None]*players
+for i in range(len(lab_points_v)):
+    lab_points_v[i] = [None] * 8
 img_played_cards = [None]*players
 img_buttons = [None]*players
 buttons = [None]*players
@@ -148,7 +150,7 @@ def load_vps():
     for i in range(players):
         points = game_json['players'][str(i)]['points']
         img_points[i] = [None]*len(points)
-        lab_points_v[i] = [None] * (len(points)+1)
+        #lab_points_v[i] = [None] * (len(points)+1)
         j = 0
         for pt in points:
             img_points[i][j] = load_image(GAME_ROOT+'/images/resources/vp_' + pt + '.png', size['resource'])
@@ -158,13 +160,14 @@ def load_vps():
 
             x = pad*2 + (w_width/players)*i + img['hand_card'].width() + (5+img['resource'].width())*p[pt] + img['resource'].width()*0.45 + 1
             y = header_h + pad*2 + img['wonder'].height() + img['wonder_stage'].height() + 2.5*img['resource'].height() - 2
+            canvas.delete(lab_points_v[i][j])
             lab_points_v[i][j] = canvas.create_text((x, y), text=points[pt], font=("Verdana", 11))
             j = j + 1
         
-        lab_points_v[i][j] = Label(canvas, bg=bg, text='VPs', font=("Verdana", 9))
+        vp_label = Label(canvas, bg=bg, text='VPs', font=("Verdana", 9))
         x = pad*2 + (w_width/players)*i + img['hand_card'].width() + (5+img['resource'].width())*0
         y = header_h + pad*2 + img['wonder'].height() + img['wonder_stage'].height() + 2*img['resource'].height() + 2
-        lab_points_v[i][j].place(x=x, y=y)
+        vp_label.place(x=x, y=y)
 
 def load_hand_cards():
     global img_hand_cards
@@ -369,3 +372,4 @@ if __name__ == "__main__":
     
     sleep(secs_to_load)
     initGUI()
+    
