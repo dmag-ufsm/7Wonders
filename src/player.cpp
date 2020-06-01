@@ -61,10 +61,7 @@ bool Player::BuildWonder(DMAG::Card c){
 // P: Yes, in case we want to build a free card from the discard pile.
 bool Player::BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool free_card){
     // Returns false if the card has already been played (cannot play the same card twice).
-    for (DMAG::Card const& card : this->cards_played) {
-        std::cout << " -> FAILURE: Card is already played." << std::endl;
-        if (c.Equal(card)) return false;
-    }
+    if (this->HasPlayedCard(c)) return false;
 
     // Checks if card is in hand.
     size_t i = 0;
@@ -274,6 +271,7 @@ std::vector<Card> Player::GetPlayableCards(){
     for (DMAG::Card c : this->cards_hand) {
         bool push_card = true;
         //std::cout << " Checking ---> " << c.GetName() << std::endl;
+        if (this->HasPlayedCard(c)) { continue; }
         // Check if you can play the card directly.
         if (c.CanBePlayed(this->resources) || this->CheckFreeCard(c)) {
             //std::cout << "         Can Play ---> " << c.GetName() << std::endl;
@@ -287,7 +285,7 @@ std::vector<Card> Player::GetPlayableCards(){
                 int quant_needed = resources_needed[it->first];
                 if (quant_needed > 0) {
                     bool could_produce = this->ProduceResource(it->first, quant_needed);
-                    if (!could_produce) { push_card = false; break; }
+                    if (!could_produce) { push_card = false; }
                 }
             }
             if (push_card) this->cards_playable.push_back(c);
