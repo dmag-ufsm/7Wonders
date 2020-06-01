@@ -270,7 +270,7 @@ std::vector<Card> Player::GetPlayableCards(){
     for (DMAG::Card c : this->cards_hand) {
         bool push_card = true;
         //std::cout << " Checking ---> " << c.GetName() << std::endl;
-        if (this->HasPlayedCard(c)) { break; }
+        if (this->HasPlayedCard(c)) { continue; }
         // Check if you can play the card directly.
         if (c.CanBePlayed(this->resources) || this->CheckFreeCard(c)) {
             //std::cout << "         Can Play ---> " << c.GetName() << std::endl;
@@ -284,7 +284,7 @@ std::vector<Card> Player::GetPlayableCards(){
                 int quant_needed = resources_needed[it->first];
                 if (quant_needed > 0) {
                     bool could_produce = this->ProduceResource(it->first, quant_needed);
-                    if (!could_produce) { push_card = false; break; }
+                    if (!could_produce) { push_card = false; }
                 }
             }
             if (push_card) this->cards_playable.push_back(c);
