@@ -22,7 +22,7 @@ int Filer::Init(int player_count){
  */
 
 int Filer::WriteMessage(json message){
-	out_file.open("game_status.json");
+	out_file.open("./io/game_status.json");
 	out_file  << message << std::endl;
 	out_file.close();
 	return 0;
@@ -33,7 +33,7 @@ json Filer::ReadMessages(int player_number){
 	if(player_number >= player_count)
 		return json({});
 	char filename[30];
-	sprintf(filename, "player_%d.json", player_number+1);
+	sprintf(filename, "./io/player_%d.json", player_number+1);
 	player_input.open(filename);
 	player_input >> ret;
 
@@ -42,7 +42,7 @@ json Filer::ReadMessages(int player_number){
 }
 
 bool Filer::ArePlayersReady(){
-	players_ready.open("ready.txt");
+	players_ready.open("./io/ready.txt");
 	std::string ready;
 	for(int i = 0; i < player_count; i++){
 		getline(players_ready, ready);
@@ -54,7 +54,7 @@ bool Filer::ArePlayersReady(){
 	}
 
 	players_ready.close();
-	std::ofstream clear_ready("ready.txt", std::ofstream::out | std::ofstream::trunc);
+	std::ofstream clear_ready("./io/ready.txt", std::ofstream::out | std::ofstream::trunc);
 	clear_ready.close();
 	return true;
 }

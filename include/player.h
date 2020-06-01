@@ -95,7 +95,9 @@ public:
     int CalculateCivilianScore();
     int CalculateCommercialScore();
     int CalculateGuildScore();
+    int CalculateMilitaryScore();
     int CalculateScientificScore();
+    int CalculateWonderScore();
     int CalculateScore();
 
     // Wonder-related effects:
@@ -119,6 +121,7 @@ public:
     std::map<int, int> GetResources();
     DMAG::Player* GetEastNeighbor();
     DMAG::Player* GetWestNeighbor();
+    bool CanBuildHandFree();
 
     // Setters:
     void SetNeighbors(DMAG::Player* east, DMAG::Player* west);
