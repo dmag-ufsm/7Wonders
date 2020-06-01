@@ -29,4 +29,4 @@ set(HEADERS
 
 add_executable(7Wonders ${SOURCES} ${HEADERS})
 
-file(MAKE_DIRECTORY ./build/io ./io)
+file(MAKE_DIRECTORY ./build/io ./io ./logs)

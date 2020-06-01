@@ -302,8 +302,6 @@ def new_turn():
     load_played_cards()
 
 def play():
-    debug = False
-
     for i in range(players):
         if card_selected[i][0] == -1:
             messagebox.showinfo('Player '+str(i), 'Select a card')
@@ -312,8 +310,6 @@ def play():
             messagebox.showinfo('Player '+str(i), 'Select a playable card')
             return
 
-    if debug:
-        print('playing era ' + str(game_json['game']['era']) + ' turn ' + str(game_json['game']['turn']) + '...')
     file_ready = open(IO_DIR+'/ready.txt', 'w')
     data = {}
     for i in range(players):
@@ -325,15 +321,9 @@ def play():
         with open(IO_DIR+'/player_'+str(i+1)+'.json', 'w') as f:
             json.dump(data, f)
         file_ready.write('ready\n')
-        if debug:
-            print('player', i, actions[action_active[i]], card_selected[i][1])
     file_ready.close()
-    if debug:
-        print('loading next turn...')
     sleep(secs_to_load)
     new_turn()
-    if debug:
-        print('done\n')
 
 def initGUI():
     global root, game_json

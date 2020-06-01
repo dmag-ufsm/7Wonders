@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <ctime>
 #include <card.h>
 #include <player.h>
 #include <wonder.h>
@@ -319,7 +320,6 @@ class Game{
         void Init(){
             CreateWonders();
             fp.Init(NUM_PLAYERS);
-
         }
 
         void Close(){
@@ -404,20 +404,12 @@ class Game{
             fp.WriteMessage(status);
         }
 
-        void TryBuildingOrDiscard(Player* p, Card selected){
-            if(p->BuildStructure(selected, p->GetHandCards(), false)) {
-                cout << "<BuildStructure OK>" << endl;
-            } else {
-                cout << "<BuildStructure NOK>" << endl;
-                cout << "<Discarding Card Instead>" << endl;
-                p->Discard(selected);
-                discard_pile.push_back(selected);
-            }
-        }
-
         void Loop(){
             json json_object;
             std::string command, argument, extra;
+            std::vector<DMAG::Card> hand_cards_bkp;
+            fp.StartLog(time(0));
+
             while(InGame()){
 
                 WriteGameStatus();
@@ -451,30 +443,41 @@ class Game{
                         if (!player_list[i]->PlaySeventh()) continue;
                     }
 
+                    Card card_played = GetCardByName(argument);
+                    hand_cards_bkp = player_list[i]->GetHandCards();
+
                     if (command == "build_structure"){
-                        Card selected = GetCardByName(argument);
-                        TryBuildingOrDiscard(player_list[i], selected);
+                        if(player_list[i]->BuildStructure(card_played, player_list[i]->GetHandCards(), false)) {
+                            cout << "<BuildStructure OK>" << endl;
+                        } else {
+                            cout << "<BuildStructure NOK>" << endl;
+                            command = "discard";
+                        }
 
                     } else if (command == "build_hand_free"){
-                        Card selected = GetCardByName(argument);
-                        if (player_list[i]->BuildHandFree(selected))
-                            cout << "BuildHandFree OK>" << endl;
-                        else
-                            TryBuildingOrDiscard(player_list[i], selected);
+                        if (player_list[i]->BuildHandFree(card_played)) {
+                            cout << "<BuildHandFree OK>" << endl;
+                        } else {
+                            cout << "<BuildHandFree NOK>" << endl;
+                            command = "discard";
+                        }
 
                     } else if(command == "build_wonder"){
-                        Card sacrifice = GetCardByName(argument);
-                        if (player_list[i]->BuildWonder(sacrifice))
+                        if (player_list[i]->BuildWonder(card_played)) {
                             cout << "<BuildWonder OK>" << endl;
-                        else
+                        } else {
                             cout << "<BuildWonder NOK>" << endl;
-
-                    } else if(command == "discard"){
-                        Card discard = GetCardByName(argument);
-                        player_list[i]->Discard(discard); //Gives player 3 coins.
-                        cout << "<Discard OK>" << endl;
-                        discard_pile.push_back(discard);
+                            command = "discard";
+                        }
                     }
+                    
+                    if (command == "discard"){
+                        player_list[i]->Discard(card_played); //Gives player 3 coins.
+                        cout << "<Discard OK>" << endl;
+                        discard_pile.push_back(card_played);
+                    }
+
+                    fp.WriteLog(era, turn, player_list[i]->GetId(), hand_cards_bkp, command, argument);
                 }
 
                 // Moves the game to the next turn.
@@ -523,24 +526,23 @@ class Game{
 };
 
 
-        /*
-         * Args will be used to tell how to load
-         * a new game.
-         * We'll use -f filename to tell a file that
-         * has information about a previously played game
-         * (or just a specific card configuration)
-         */
-        int main(int argc, char **argv)
-        {
-            Game g;
+/*
+    * Args will be used to tell how to load
+    * a new game.
+    * We'll use -f filename to tell a file that
+    * has information about a previously played game
+    * (or just a specific card configuration)
+    */
+int main(int argc, char **argv)
+{
+    Game g;
 
-            g.Init();
-            g.NewGame(NUM_PLAYERS);
+    g.Init();
+    g.NewGame(NUM_PLAYERS);
 
-            //    g.NextTurn(p, 0); //this function is not completed
-            g.Loop();
-            g.Close();
+    //    g.NextTurn(p, 0); //this function is not completed
+    g.Loop();
+    g.Close();
 
-            return 0;
-        }
-
+    return 0;
+}
