@@ -262,7 +262,7 @@ class Game{
             // Guild
             std::vector<DMAG::Card> guild_cards;
             guild_cards.push_back(Card(CARD_ID::workers, "Workers Guild", CARD_TYPE::guild, 3, CARD_ID::none, {1, 2, 1, 1, 0, 0, 0, 0}, {0, 0, 0, 0, 0}));
-            guild_cards.push_back(Card(CARD_ID::craftsmens, "Craftsmens Guild", CARD_TYPE::guild, 3, CARD_ID::none, {0, 2, 0, 2, 0, 0, 0, 0}, {0, 0, 0, 0, 0}));
+            guild_cards.push_back(Card(CARD_ID::craftsmens, "Craftmens Guild", CARD_TYPE::guild, 3, CARD_ID::none, {0, 2, 0, 2, 0, 0, 0, 0}, {0, 0, 0, 0, 0}));
             guild_cards.push_back(Card(CARD_ID::traders, "Traders Guild", CARD_TYPE::guild, 3, CARD_ID::none, {0, 0, 0, 0, 1, 1, 1, 0}, {0, 0, 0, 0, 0}));
             guild_cards.push_back(Card(CARD_ID::philosophers, "Philosophers Guild", CARD_TYPE::guild, 3, CARD_ID::none, {0, 0, 3, 0, 1, 0, 1, 0}, {0, 0, 0, 0, 0}));
             guild_cards.push_back(Card(CARD_ID::spies, "Spies Guild", CARD_TYPE::guild, 3, CARD_ID::none, {0, 0, 3, 0, 0, 1, 0, 0}, {0, 0, 0, 0, 0}));
@@ -345,31 +345,38 @@ class Game{
 
             status["game"]["era"] = era;
             status["game"]["turn"] = turn;
+            status["game"]["clockwise"] = (era == 1 || era == 3);
 
             for (int i = 0; i < number_of_players; i++) {
                 wonder = player_list[i]->GetBoard();
                 status["players"][to_string(i)]["wonder_id"] = wonder->GetId();
                 status["players"][to_string(i)]["wonder_name"] = wonder->GetName();
                 status["players"][to_string(i)]["wonder_stage"] = wonder->GetStage();
+                status["players"][to_string(i)]["can_build_hand_free"] = player_list[i]->CanBuildHandFree();
+                status["players"][to_string(i)]["can_build_wonder"] = true; // ToDo: have enough resources to build a wonder stage?
 
+                // hand cards
                 cards = player_list[i]->GetHandCards();
                 card_names.clear();
                 for (DMAG::Card c : cards)
                     card_names.push_back(c.GetName());
                 status["players"][to_string(i)]["cards_hand"] = card_names;
 
+                // played cards
                 cards = player_list[i]->GetPlayedCards();
                 card_names.clear();
                 for (DMAG::Card c : cards)
                     card_names.push_back(c.GetName());
                 status["players"][to_string(i)]["cards_played"] = card_names;
 
+                // playable cards
                 cards = player_list[i]->GetPlayableCards();
                 card_names.clear();
                 for (DMAG::Card c : cards)
                     card_names.push_back(c.GetName());
                 status["players"][to_string(i)]["cards_playable"] = card_names;
 
+                // resources
                 resources = player_list[i]->GetResources();
                 status["players"][to_string(i)]["resources"]["wood"] = resources[RESOURCE::wood];
                 status["players"][to_string(i)]["resources"]["ore"] = resources[RESOURCE::ore];
@@ -383,6 +390,15 @@ class Game{
                 status["players"][to_string(i)]["resources"]["tablet"] = resources[RESOURCE::tablet];
                 status["players"][to_string(i)]["resources"]["coins"] = resources[RESOURCE::coins];
                 status["players"][to_string(i)]["resources"]["shields"] = resources[RESOURCE::shields];
+
+                // victory points
+                status["players"][to_string(i)]["points"]["civilian"] = player_list[i]->CalculateCivilianScore();
+                status["players"][to_string(i)]["points"]["commercial"] = player_list[i]->CalculateCommercialScore();
+                status["players"][to_string(i)]["points"]["guild"] = player_list[i]->CalculateGuildScore();
+                status["players"][to_string(i)]["points"]["military"] = player_list[i]->CalculateMilitaryScore();
+                status["players"][to_string(i)]["points"]["scientific"] = player_list[i]->CalculateScientificScore();
+                status["players"][to_string(i)]["points"]["wonder"] = player_list[i]->CalculateWonderScore();
+                status["players"][to_string(i)]["points"]["total"] = player_list[i]->CalculateScore();
             }
 
             fp.WriteMessage(status);
