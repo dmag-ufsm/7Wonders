@@ -1,6 +1,7 @@
 #include <player.h>
 #include <algorithm>
 #include <iostream>
+#include <math.h>
 
 namespace DMAG {
 Player::Player()
@@ -706,6 +707,8 @@ int Player::CalculateCommercialScore(){
         }
     }
 
+    comm_score += floor(this->resources[RESOURCE::coins] / 3);
+
     return comm_score;
 }
 
@@ -774,6 +777,11 @@ int Player::CalculateGuildScore(){
     }
 
     return guild_score;
+}
+
+// Calculates the number of VPs the player gets from battles.
+int Player::CalculateMilitaryScore(){
+    return this->victory_tokens - this->defeat_tokens;
 }
 
 // Calculates the number of VPs the player gets from scientific development.
@@ -856,19 +864,23 @@ int Player::CalculateScientificScore(){
     return (gear * gear) + (tablet * tablet) + (compass * compass) + (completed_sets * points_per_set_completed);
 }
 
+int Player::CalculateWonderScore(){
+    if (this->board->GetStage() > 0)
+        return this->board->GetWonderPoints();
+    return 0;
+}
+
 // Calculates the player's TOTAL score using the methods defined above.
 int Player::CalculateScore(){
-    int treasury_score = static_cast<int>(this->resources[RESOURCE::coins]/3); // 1 VP for every 3 coins
     int civil_score = this->CalculateCivilianScore();
     int commercial_score = this->CalculateCommercialScore();
     int guild_score = this->CalculateGuildScore();
     int science_score = this->CalculateScientificScore();
+    int military_score = this->CalculateMilitaryScore();
+    int wonder_score = this->CalculateWonderScore();
 
-    int total_score = treasury_score + civil_score + commercial_score + guild_score +
-                       science_score + this->victory_tokens - this->defeat_tokens;
-
-    if (this->board->GetStage() > 0)
-        total_score += this->board->GetWonderPoints();
+    int total_score = civil_score + commercial_score + guild_score +
+                      science_score + military_score + wonder_score;
 
     this->victory_points = total_score;
 
@@ -956,11 +968,9 @@ bool Player::BuildDiscardFree(DMAG::Card c, std::vector<DMAG::Card> discard_pile
 
 // Builds a card from the hand for free, once per Age, if the player has the requirements.
 bool Player::BuildHandFree(DMAG::Card c){
-    if (this->board->GetId() == WONDER_ID::olympia_a && this->board->GetStage() >= 2) {
-        if (this->free_card_once) {
-            this->free_card_once = false; // now the player won't be able to build for free in the same Age
-            return this->BuildStructure(c, this->cards_hand, true);
-        }
+    if (this->CanBuildHandFree()) {
+        this->free_card_once = false; // now the player won't be able to build for free in the same Age
+        return this->BuildStructure(c, this->cards_hand, true);
     }
     return false;
 }
@@ -1085,6 +1095,10 @@ DMAG::Player* Player::GetEastNeighbor() {
 
 DMAG::Player* Player::GetWestNeighbor() {
     return this->player_west;
+}
+
+bool Player::CanBuildHandFree() {
+    return (this->board->GetId() == WONDER_ID::olympia_a && this->board->GetStage() >= 2 && this->free_card_once);
 }
 
 void Player::SetNeighbors(DMAG::Player* east, DMAG::Player* west){
