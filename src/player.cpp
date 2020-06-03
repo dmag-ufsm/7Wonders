@@ -18,6 +18,7 @@ Player::Player()
     this->manuf_cheap = false;
     this->free_card_once = true; // Olympia 2A -> can build one card for free once per Age.
     this->discard_free = false;
+    this->can_build_wonder = false;
 
     this->used_tree_farm = -1;
     this->used_forest_cave = -1;
@@ -42,18 +43,39 @@ Player::Player()
 bool Player::BuildWonder(DMAG::Card c){
     // 1) Build Wonder stage if possible.
     // 2) If the stage was built, remove card 'c' from the hand.
-    if (this->board->AddStage(this)) {
-        size_t i = 0;
-        for (i = 0; i < this->cards_hand.size(); i++) {
-            if (this->cards_hand[i].Equal(c)) break;
+    if (this->can_build_wonder) {
+        if (this->board->AddStage(this)) { // This extra if is not really needed now that we have can_build_wonder, but it doesn't hurt.
+            size_t i = 0;
+            for (i = 0; i < this->cards_hand.size(); i++) {
+                if (this->cards_hand[i].Equal(c)) break;
+            }
+            this->cards_hand.erase(this->cards_hand.begin()+i);
+            std::cout << this->id << " -> SUCCESS -> " << "builds a " << this->board->GetName() << " stage!" << std::endl;
+            return true;
         }
-        this->cards_hand.erase(this->cards_hand.begin()+i);
-        std::cout << this->id << " -> SUCCESS -> " << "builds a " << this->board->GetName() << " stage!" << std::endl;
-        return true;
     }
 
     std::cout << this->id << " -> FAILURE -> " << "couldn't build the next " << this->board->GetName() << " stage." << std::endl;
     return false;
+}
+
+bool Player::CanBuildWonder() {
+    Player* east = this->GetEastNeighbor();
+    Player* west = this->GetWestNeighbor();
+    std::map<int, int> resources_east = east->GetResources();
+    std::map<int, int> resources_west = west->GetResources();
+    std::map<int, int> resources_bckp = this->resources;
+
+    this->can_build_wonder = this->board->CanAddStage(this);
+
+    this->resources = resources_bckp;
+    this->ResetUsed();
+    east->SetResources(resources_east);
+    east->ResetUsed();
+    west->SetResources(resources_west);
+    west->ResetUsed();
+
+    return this->can_build_wonder;
 }
 
 // Play a card.

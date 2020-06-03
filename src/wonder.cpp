@@ -39,6 +39,11 @@ bool Wonder::AddStage(Player* p) {
     return false;
 }
 
+bool Wonder::CanAddStage(Player* p) {
+    std::cout << "Shouldn't execute this!" << std::endl;
+    return false;
+}
+
 /*
  * Every Wonder has its own constructor and AddStage() method.
  * Therefore, the Player class won't have to deal with (most) wonder-specific
@@ -84,6 +89,29 @@ bool Gizah_a::AddStage(Player *p){
         if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone]-p_resources[RESOURCE::stone])) {
             this->stage++;
             this->wonder_points += 7;
+            stage_built = true;
+        } break;
+    }
+
+    return stage_built;
+}
+
+// Cold run of AddStage.
+bool Gizah_a::CanAddStage(Player *p){
+    std::map<int, int> p_resources = p->GetResources();
+    bool stage_built = false;
+
+    switch (this->stage) {
+    case 0:
+        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone]-p_resources[RESOURCE::stone])) {
+            stage_built = true;
+        } break;
+    case 1:
+        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood]-p_resources[RESOURCE::wood])) {
+            stage_built = true;
+        } break;
+    case 2:
+        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone]-p_resources[RESOURCE::stone])) {
             stage_built = true;
         } break;
     }
@@ -149,6 +177,33 @@ bool Gizah_b::AddStage(Player *p){
     return stage_built;
 }
 
+bool Gizah_b::CanAddStage(Player *p){
+    std::map<int, int> p_resources = p->GetResources();
+    bool stage_built = false;
+
+    switch (this->stage) {
+    case 0:
+        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood]-p_resources[RESOURCE::wood])) {
+            stage_built = true;
+        } break;
+    case 1:
+        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone]-p_resources[RESOURCE::stone])) {
+            stage_built = true;
+        } break;
+    case 2:
+        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay]-p_resources[RESOURCE::clay])) {
+            stage_built = true;
+        } break;
+    case 4:
+        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone]-p_resources[RESOURCE::stone]) &&
+            p->ProduceResource(RESOURCE::papyrus, this->cost[RESOURCE::papyrus]-p_resources[RESOURCE::papyrus])) {
+            stage_built = true;
+        } break;
+    }
+
+    return stage_built;
+}
+
 // BABYLON A
 
 Babylon_a::Babylon_a(){
@@ -186,6 +241,28 @@ bool Babylon_a::AddStage(Player* p){
         if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay]-p_resources[RESOURCE::clay])) {
             this->stage++;
             this->wonder_points += 7;
+            stage_built = true;
+        } break;
+    }
+
+    return stage_built;
+}
+
+bool Babylon_a::CanAddStage(Player* p){
+    std::map<int, int> p_resources = p->GetResources();
+    bool stage_built = false;
+
+    switch (this->stage) {
+    case 0:
+        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay]-p_resources[RESOURCE::clay])) {
+            stage_built = true;
+        } break;
+    case 1:
+        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood]-p_resources[RESOURCE::wood])) {
+            stage_built = true;
+        } break;
+    case 2:
+        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay]-p_resources[RESOURCE::clay])) {
             stage_built = true;
         } break;
     }
@@ -243,6 +320,31 @@ bool Babylon_b::AddStage(Player* p){
     return stage_built;
 }
 
+bool Babylon_b::CanAddStage(Player* p){
+    std::map<int, int> p_resources = p->GetResources();
+    bool stage_built = false;
+
+    switch (this->stage) {
+    case 0:
+        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay]-p_resources[RESOURCE::clay]) &&
+            p->ProduceResource(RESOURCE::loom, this->cost[RESOURCE::loom]-p_resources[RESOURCE::loom])) {
+            stage_built = true;
+        } break;
+    case 1:
+        if (p->ProduceResource(RESOURCE::glass, this->cost[RESOURCE::glass]-p_resources[RESOURCE::glass]) &&
+            p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood]-p_resources[RESOURCE::wood])) {
+            stage_built = true;
+        } break;
+    case 2:
+        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay]-p_resources[RESOURCE::clay]) &&
+            p->ProduceResource(RESOURCE::papyrus, this->cost[RESOURCE::papyrus]-p_resources[RESOURCE::papyrus])) {
+            stage_built = true;
+        } break;
+    }
+
+    return stage_built;
+}
+
 // OLYMPIA A
 
 Olympia_a::Olympia_a(){
@@ -280,6 +382,28 @@ bool Olympia_a::AddStage(Player* p){
         if (p->ProduceResource(RESOURCE::ore, this->cost[RESOURCE::ore]-p_resources[RESOURCE::ore])) {
             this->stage++;
             this->wonder_points += 7;
+            stage_built = true;
+        } break;
+    }
+
+    return stage_built;
+}
+
+bool Olympia_a::CanAddStage(Player* p){
+    std::map<int, int> p_resources = p->GetResources();
+    bool stage_built = false;
+
+    switch (this->stage) {
+    case 0:
+        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood]-p_resources[RESOURCE::wood])) {
+            stage_built = true;
+        } break;
+    case 1:
+        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone]-p_resources[RESOURCE::stone])) {
+            stage_built = true;
+        } break;
+    case 2:
+        if (p->ProduceResource(RESOURCE::ore, this->cost[RESOURCE::ore]-p_resources[RESOURCE::ore])) {
             stage_built = true;
         } break;
     }
@@ -333,6 +457,29 @@ bool Olympia_b::AddStage(Player* p){
     return stage_built;
 }
 
+bool Olympia_b::CanAddStage(Player* p){
+    std::map<int, int> p_resources = p->GetResources();
+    bool stage_built = false;
+
+    switch (this->stage) {
+    case 0:
+        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood]-p_resources[RESOURCE::wood])) {
+            stage_built = true;
+        } break;
+    case 1:
+        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone]-p_resources[RESOURCE::stone])) {
+            stage_built = true;
+        } break;
+    case 2:
+        if (p->ProduceResource(RESOURCE::ore, this->cost[RESOURCE::ore]-p_resources[RESOURCE::ore]) &&
+            p->ProduceResource(RESOURCE::loom, this->cost[RESOURCE::loom]-p_resources[RESOURCE::loom])) {
+            stage_built = true;
+        } break;
+    }
+
+    return stage_built;
+}
+
 // RHODOS A
 
 Rhodos_a::Rhodos_a(){
@@ -371,6 +518,28 @@ bool Rhodos_a::AddStage(Player* p){
         if (p->ProduceResource(RESOURCE::ore, this->cost[RESOURCE::ore]-p_resources[RESOURCE::ore])) {
             this->stage++;
             this->wonder_points += 7;
+            stage_built = true;
+        } break;
+    }
+
+    return stage_built;
+}
+
+bool Rhodos_a::CanAddStage(Player* p){
+    std::map<int, int> p_resources = p->GetResources();
+    bool stage_built = false;
+
+    switch (this->stage) {
+    case 0:
+        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood]-p_resources[RESOURCE::wood])) {
+            stage_built = true;
+        } break;
+    case 1:
+        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay]-p_resources[RESOURCE::clay])) {
+            stage_built = true;
+        } break;
+    case 2:
+        if (p->ProduceResource(RESOURCE::ore, this->cost[RESOURCE::ore]-p_resources[RESOURCE::ore])) {
             stage_built = true;
         } break;
     }
@@ -418,6 +587,24 @@ bool Rhodos_b::AddStage(Player* p){
     return stage_built;
 }
 
+bool Rhodos_b::CanAddStage(Player* p){
+    std::map<int, int> p_resources = p->GetResources();
+    bool stage_built = false;
+
+    switch (this->stage) {
+    case 0:
+        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone]-p_resources[RESOURCE::stone])) {
+            stage_built = true;
+        } break;
+    case 1:
+        if (p->ProduceResource(RESOURCE::ore, this->cost[RESOURCE::ore]-p_resources[RESOURCE::ore])) {
+            stage_built = true;
+        } break;
+    }
+
+    return stage_built;
+}
+
 // EPHESOS A
 
 Ephesos_a::Ephesos_a(){
@@ -456,6 +643,28 @@ bool Ephesos_a::AddStage(Player* p){
         if (p->ProduceResource(RESOURCE::papyrus, this->cost[RESOURCE::papyrus]-p_resources[RESOURCE::papyrus])) {
             this->stage++;
             this->wonder_points += 7;
+            stage_built = true;
+        } break;
+    }
+
+    return stage_built;
+}
+
+bool Ephesos_a::CanAddStage(Player* p){
+    std::map<int, int> p_resources = p->GetResources();
+    bool stage_built = false;
+
+    switch (this->stage) {
+    case 0:
+        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone]-p_resources[RESOURCE::stone])) {
+            stage_built = true;
+        } break;
+    case 1:
+        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood]-p_resources[RESOURCE::wood])) {
+            stage_built = true;
+        } break;
+    case 2:
+        if (p->ProduceResource(RESOURCE::papyrus, this->cost[RESOURCE::papyrus]-p_resources[RESOURCE::papyrus])) {
             stage_built = true;
         } break;
     }
@@ -515,6 +724,30 @@ bool Ephesos_b::AddStage(Player* p){
     return stage_built;
 }
 
+bool Ephesos_b::CanAddStage(Player* p){
+    std::map<int, int> p_resources = p->GetResources();
+    bool stage_built = false;
+
+    switch (this->stage) {
+    case 0:
+        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone]-p_resources[RESOURCE::stone])) {
+            stage_built = true;
+        } break;
+    case 1:
+        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood]-p_resources[RESOURCE::wood])) {
+            stage_built = true;
+        } break;
+    case 2:
+        if (p->ProduceResource(RESOURCE::glass, this->cost[RESOURCE::glass]-p_resources[RESOURCE::glass]) &&
+            p->ProduceResource(RESOURCE::loom, this->cost[RESOURCE::loom]-p_resources[RESOURCE::loom]) &&
+            p->ProduceResource(RESOURCE::papyrus, this->cost[RESOURCE::papyrus]-p_resources[RESOURCE::papyrus])) {
+            stage_built = true;
+        } break;
+    }
+
+    return stage_built;
+}
+
 // ALEXANDRIA A
 
 Alexandria_a::Alexandria_a(){
@@ -559,6 +792,28 @@ bool Alexandria_a::AddStage(Player* p){
     return stage_built;
 }
 
+bool Alexandria_a::CanAddStage(Player* p){
+    std::map<int, int> p_resources = p->GetResources();
+    bool stage_built = false;
+
+    switch (this->stage) {
+    case 0:
+        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone]-p_resources[RESOURCE::stone])) {
+            stage_built = true;
+        } break;
+    case 1:
+        if (p->ProduceResource(RESOURCE::ore, this->cost[RESOURCE::ore]-p_resources[RESOURCE::ore])) {
+            stage_built = true;
+        } break;
+    case 2:
+        if (p->ProduceResource(RESOURCE::glass, this->cost[RESOURCE::glass]-p_resources[RESOURCE::glass])) {
+            stage_built = true;
+        } break;
+    }
+
+    return stage_built;
+}
+
 // ALEXANDRIA B
 
 Alexandria_b::Alexandria_b(){
@@ -595,6 +850,28 @@ bool Alexandria_b::AddStage(Player* p){
         if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone]-p_resources[RESOURCE::stone])) {
             this->stage++;
             this->wonder_points += 7;
+            stage_built = true;
+        } break;
+    }
+
+    return stage_built;
+}
+
+bool Alexandria_b::CanAddStage(Player* p){
+    std::map<int, int> p_resources = p->GetResources();
+    bool stage_built = false;
+
+    switch (this->stage) {
+    case 0:
+        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay]-p_resources[RESOURCE::clay])) {
+            stage_built = true;
+        } break;
+    case 1:
+        if (p->ProduceResource(RESOURCE::wood, this->cost[RESOURCE::wood]-p_resources[RESOURCE::wood])) {
+            stage_built = true;
+        } break;
+    case 2:
+        if (p->ProduceResource(RESOURCE::stone, this->cost[RESOURCE::stone]-p_resources[RESOURCE::stone])) {
             stage_built = true;
         } break;
     }
@@ -647,6 +924,28 @@ bool Halikarnassos_a::AddStage(Player* p){
     return stage_built;
 }
 
+bool Halikarnassos_a::CanAddStage(Player* p){
+    std::map<int, int> p_resources = p->GetResources();
+    bool stage_built = false;
+
+    switch (this->stage) {
+    case 0:
+        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay]-p_resources[RESOURCE::clay])) {
+            stage_built = true;
+        } break;
+    case 1:
+        if (p->ProduceResource(RESOURCE::ore, this->cost[RESOURCE::ore]-p_resources[RESOURCE::ore])) {
+            stage_built = true;
+        } break;
+    case 2:
+        if (p->ProduceResource(RESOURCE::loom, this->cost[RESOURCE::loom]-p_resources[RESOURCE::loom])) {
+            stage_built = true;
+        } break;
+    }
+
+    return stage_built;
+}
+
 // HALIKARNASSOS B
 
 Halikarnassos_b::Halikarnassos_b(){
@@ -691,6 +990,30 @@ bool Halikarnassos_b::AddStage(Player* p){
             p->ProduceResource(RESOURCE::papyrus, this->cost[RESOURCE::papyrus]-p_resources[RESOURCE::papyrus])) {
             this->stage++;
             p->DiscardFree(true);
+            stage_built = true;
+        } break;
+    }
+
+    return stage_built;
+}
+
+bool Halikarnassos_b::CanAddStage(Player* p){
+    std::map<int, int> p_resources = p->GetResources();
+    bool stage_built = false;
+
+    switch (this->stage) {
+    case 0:
+        if (p->ProduceResource(RESOURCE::ore, this->cost[RESOURCE::ore]-p_resources[RESOURCE::ore])) {
+            stage_built = true;
+        } break;
+    case 1:
+        if (p->ProduceResource(RESOURCE::clay, this->cost[RESOURCE::clay]-p_resources[RESOURCE::clay])) {
+            stage_built = true;
+        } break;
+    case 2:
+        if (p->ProduceResource(RESOURCE::glass, this->cost[RESOURCE::glass]-p_resources[RESOURCE::glass]) &&
+            p->ProduceResource(RESOURCE::loom, this->cost[RESOURCE::loom]-p_resources[RESOURCE::loom]) &&
+            p->ProduceResource(RESOURCE::papyrus, this->cost[RESOURCE::papyrus]-p_resources[RESOURCE::papyrus])) {
             stage_built = true;
         } break;
     }

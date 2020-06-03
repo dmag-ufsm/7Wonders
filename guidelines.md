@@ -30,6 +30,9 @@ bug supostamente já corrigido.
 # TODO
 * Verificar se o estágio da maravilha pode ser construído ou não. Lógica
   parecida com o que foi feito para checar se uma carta é jogável ou não.
+    * Done! Para verificar se um jogador pode construir ou não o estágio
+    da maravilha no turno atual, basta verificar o estado da variável
+    ```player[i]->can_build_wonder```.
 
-Leitura de jogo prévio de arquivo
-Escrever sobre as dependências
+* Leitura de jogo prévio de arquivo
+* Escrever sobre as dependências

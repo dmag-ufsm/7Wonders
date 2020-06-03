@@ -422,6 +422,9 @@ class Game{
                     for (DMAG::Card const& card : player_list[i]->GetPlayableCards()) {
                         cout << "  (" << i << ") " << card.GetName() << endl;
                     }
+                    if (player_list[i]->CanBuildWonder()) {
+                        cout << "> Player " << i << " CAN build a wonder stage! " << endl;
+                    } else cout << "> Player " << i << " CANNOT build a wonder stage! " << endl;
                 }
 
                 cout << "<Waiting players...>" << endl;
@@ -470,7 +473,7 @@ class Game{
                             command = "discard";
                         }
                     }
-                    
+
                     if (command == "discard"){
                         player_list[i]->Discard(card_played); //Gives player 3 coins.
                         cout << "<Discard OK>" << endl;
