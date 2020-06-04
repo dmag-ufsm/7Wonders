@@ -105,6 +105,7 @@ public:
     int GetWonderPoints() const;
     std::vector<int> GetEffects() const;
     virtual bool AddStage(Player* p);
+    virtual bool CanAddStage(Player* p);
 };
 
 // I went with snake_case because it's clearer in this case.
@@ -114,6 +115,7 @@ class Gizah_a : public Wonder
 public:
     Gizah_a();
     bool AddStage(Player* p) override;
+    bool CanAddStage(Player* p) override;
 };
 
 class Gizah_b : public Wonder
@@ -121,6 +123,7 @@ class Gizah_b : public Wonder
 public:
     Gizah_b();
     bool AddStage(Player* p) override;
+    bool CanAddStage(Player* p) override;
 };
 
 class Babylon_a : public Wonder
@@ -128,6 +131,7 @@ class Babylon_a : public Wonder
 public:
     Babylon_a();
     bool AddStage(Player* p) override;
+    bool CanAddStage(Player* p) override;
 };
 
 class Babylon_b : public Wonder
@@ -135,6 +139,7 @@ class Babylon_b : public Wonder
 public:
     Babylon_b();
     bool AddStage(Player* p) override;
+    bool CanAddStage(Player* p) override;
 };
 
 class Olympia_a : public Wonder
@@ -142,6 +147,7 @@ class Olympia_a : public Wonder
 public:
     Olympia_a();
     bool AddStage(Player* p) override;
+    bool CanAddStage(Player* p) override;
 };
 
 class Olympia_b : public Wonder
@@ -149,6 +155,7 @@ class Olympia_b : public Wonder
 public:
     Olympia_b();
     bool AddStage(Player* p) override;
+    bool CanAddStage(Player* p) override;
 };
 
 class Rhodos_a : public Wonder
@@ -156,6 +163,7 @@ class Rhodos_a : public Wonder
 public:
     Rhodos_a();
     bool AddStage(Player* p) override;
+    bool CanAddStage(Player* p) override;
 };
 
 class Rhodos_b : public Wonder
@@ -163,6 +171,7 @@ class Rhodos_b : public Wonder
 public:
     Rhodos_b();
     bool AddStage(Player* p) override;
+    bool CanAddStage(Player* p) override;
 };
 
 class Ephesos_a : public Wonder
@@ -170,6 +179,7 @@ class Ephesos_a : public Wonder
 public:
     Ephesos_a();
     bool AddStage(Player* p) override;
+    bool CanAddStage(Player* p) override;
 };
 
 class Ephesos_b : public Wonder
@@ -177,6 +187,7 @@ class Ephesos_b : public Wonder
 public:
     Ephesos_b();
     bool AddStage(Player* p) override;
+    bool CanAddStage(Player* p) override;
 };
 
 class Alexandria_a : public Wonder
@@ -184,6 +195,7 @@ class Alexandria_a : public Wonder
 public:
     Alexandria_a();
     bool AddStage(Player* p) override;
+    bool CanAddStage(Player* p) override;
 };
 
 class Alexandria_b : public Wonder
@@ -191,6 +203,7 @@ class Alexandria_b : public Wonder
 public:
     Alexandria_b();
     bool AddStage(Player* p) override;
+    bool CanAddStage(Player* p) override;
 };
 
 class Halikarnassos_a : public Wonder
@@ -198,6 +211,7 @@ class Halikarnassos_a : public Wonder
 public:
     Halikarnassos_a();
     bool AddStage(Player* p) override;
+    bool CanAddStage(Player* p) override;
 };
 
 class Halikarnassos_b : public Wonder
@@ -205,6 +219,7 @@ class Halikarnassos_b : public Wonder
 public:
     Halikarnassos_b();
     bool AddStage(Player* p) override;
+    bool CanAddStage(Player* p) override;
 };
 
 }

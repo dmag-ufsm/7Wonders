@@ -28,6 +28,7 @@ private:
     bool manuf_cheap;          // Can the player buy manufactured resources from neighbors for 1 coin? (Marketplace)
     bool free_card_once;       // EXTRA check whether the player can build a card for free once per Age or not.
     bool discard_free;         // Checks if the player can build an extra card from the discard pile.
+    bool can_build_wonder;     // Checks if the player can build the next stage of a Wonder each round.
 
     bool raw_extra;            // The player has an additional raw material. (Caravansery and Alexandria A)
     bool manuf_extra;          // The player has an additional manufactured good. (Forum and Alexandria B)
@@ -68,6 +69,7 @@ public:
 
     // Card-related:
     bool BuildWonder(DMAG::Card c);
+    bool CanBuildWonder();
     bool BuildStructure(DMAG::Card c, std::vector<DMAG::Card> cards, bool _free_card);
     bool CheckFreeCard(DMAG::Card c);
     std::vector<DMAG::Card> GetHandCards();
