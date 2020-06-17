@@ -340,6 +340,7 @@ class Game{
             json status;
             std::vector<DMAG::Card> cards;
             std::vector<std::string> card_names;
+            std::vector<int> card_ids;
             std::map<int, int> resources;
             DMAG::Wonder* wonder;
 
@@ -362,6 +363,14 @@ class Game{
                     card_names.push_back(c.GetName());
                 status["players"][to_string(i)]["cards_hand"] = card_names;
 
+                // card IDS
+                card_ids.clear();
+                for(DMAG::Card c: cards)
+                    card_ids.push_back(c.GetId());
+                status["players"][to_string(i)]["cards_hand_id"] = card_ids;
+
+
+
                 // played cards
                 cards = player_list[i]->GetPlayedCards();
                 card_names.clear();
@@ -375,6 +384,13 @@ class Game{
                 for (DMAG::Card c : cards)
                     card_names.push_back(c.GetName());
                 status["players"][to_string(i)]["cards_playable"] = card_names;
+
+                // Playable cards ids
+                // this is for simpler bot usage
+                card_ids.clear();
+                for(DMAG::Card c: cards)
+                    card_ids.push_back(c.GetId());
+                status["players"][to_string(i)]["cards_playable_id"] = card_ids;
 
                 // resources
                 resources = player_list[i]->GetResources();
