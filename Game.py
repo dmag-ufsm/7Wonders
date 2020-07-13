@@ -302,7 +302,12 @@ def new_turn():
     load_played_cards()
 
 def play():
+    global bots
+
     for i in range(players):
+        if i < bots:
+            continue
+
         if card_selected[i][0] == -1:
             messagebox.showinfo('Player '+str(i), 'Select a card')
             return
@@ -318,8 +323,11 @@ def play():
             'argument': card_selected[i][1],
             'extra': ""
         }
-        with open(IO_DIR+'/player_'+str(i+1)+'.json', 'w') as f:
-            json.dump(data, f)
+        
+        if i >= bots:
+            with open(IO_DIR+'/player_'+str(i+1)+'.json', 'w') as f:
+                json.dump(data, f)
+
         file_ready.write('ready\n')
     file_ready.close()
     sleep(secs_to_load)
@@ -356,10 +364,16 @@ class Game(Thread):
         subprocess.call(self.exe_path)
 
 if __name__ == "__main__":
-    if not 'startGame=0' in sys.argv:
-        game = Game(BUILD_DIR+'/7Wonders')
-        game.start()
-    
+    if len(sys.argv) < 2:   
+        print('Execute $ ' + sys.argv[0] + ' <num_bots>')
+
+    global bots
+    bots = int(sys.argv[1])
+
+#    if not 'startGame=0' in sys.argv:
+    game = Game(BUILD_DIR+'/7Wonders')
+    game.start()
+   
     sleep(secs_to_load)
     initGUI()
     
