@@ -809,11 +809,15 @@ int Player::CalculateMilitaryScore(){
 // Calculates the number of VPs the player gets from scientific development.
 int Player::CalculateScientificScore(){
     int gear = 0, tablet = 0, compass = 0, sci_extra = 0;
+
     for (DMAG::Card const& card : this->cards_played) {
-        if (card.GetType() != CARD_TYPE::scientific)
+        int card_type = card.GetType();
+        int card_id = card.GetId();
+
+        if (card_type != CARD_TYPE::scientific && card_id != CARD_ID::scientists)
             continue;
 
-        switch (card.GetId()) {
+        switch (card_id) {
             case CARD_ID::workshop:
             case CARD_ID::laboratory:
             case CARD_ID::observatory:
@@ -833,7 +837,7 @@ int Player::CalculateScientificScore(){
                 tablet++; break;
 
             case CARD_ID::scientists:
-                sci_extra++;
+                sci_extra++; break;
         }
     }
 
