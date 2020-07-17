@@ -96,8 +96,11 @@ class Game{
                 cout << "-----------------------------------------------------------------\n";
                 if(era < 4)
                     cout << "Nova era: "<< era << endl;
-                else
+                else{
                     cout << "End of game" << endl;
+                    return;
+                }
+                    
                 // transfer the remaining card in each player's hand to the discarded card list
                 for (Player* & player : player_list) {
                     vector<Card> cards = player->GetHandCards();
@@ -354,7 +357,8 @@ class Game{
                 status["players"][to_string(i)]["wonder_name"] = wonder->GetName();
                 status["players"][to_string(i)]["wonder_stage"] = wonder->GetStage();
                 status["players"][to_string(i)]["can_build_hand_free"] = player_list[i]->CanBuildHandFree();
-                status["players"][to_string(i)]["can_build_wonder"] = true; // ToDo: have enough resources to build a wonder stage?
+                // status["players"][to_string(i)]["can_build_wonder"] = true; // ToDo: have enough resources to build a wonder stage?
+                status["players"][to_string(i)]["can_build_wonder"] = player_list[i]->CanBuildWonder();
 
                 // hand cards
                 cards = player_list[i]->GetHandCards();
@@ -417,14 +421,14 @@ class Game{
                 status["players"][to_string(i)]["points"]["total"] = player_list[i]->CalculateScore();
             }
 
-            fp.WriteMessage(status);
+            fp.WriteMessage(status, "./io/game_status.json");
         }
 
         void Loop(){
             json json_object;
             std::string command, argument, extra;
             std::vector<DMAG::Card> hand_cards_bkp;
-            fp.StartLog(time(0));
+            // fp.StartLog(time(0));
 
             while(InGame()){
 
@@ -496,7 +500,7 @@ class Game{
                         discard_pile.push_back(card_played);
                     }
 
-                    fp.WriteLog(era, turn, player_list[i]->GetId(), hand_cards_bkp, command, argument);
+                    // fp.WriteLog(era, turn, player_list[i]->GetId(), hand_cards_bkp, command, argument);
                 }
 
                 // Moves the game to the next turn.
@@ -539,8 +543,11 @@ class Game{
 
             results << std::endl;
             results.close();
+
             //end game?
             // output results after game
+            // match_log_results after end game
+            fp.WriteMatchLog(player_list, time(0));
         }
 };
 
