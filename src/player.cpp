@@ -550,9 +550,11 @@ bool Player::BuyResource(int resource, int quant){
         if (this->resources[RESOURCE::coins] >= cost) {
             this->resources[RESOURCE::coins] -= cost;
             east->AddResource(RESOURCE::coins, cost);
-            east->AddResource(east->board->GetProduction(), 1);
             east->ResetUsed();
-            if (produced_east >= quant) return true; // No need to check western neighbor if eastern has enough.
+            if (produced_east >= quant) {
+                east->AddResource(east->board->GetProduction(), 1);
+                return true; // No need to check western neighbor if eastern has enough.
+            }
         }
     }
 
