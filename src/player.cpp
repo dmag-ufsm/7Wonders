@@ -531,11 +531,6 @@ int Player::IncrementOnDemand(int resource, int needed, bool is_neighbor){
 // Buys x quantity of a certain resource from any neighbor.
 // - this function is a "step" in BuildStructure.
 bool Player::BuyResource(int resource, int quant){
-    bool is_raw = resource <= 3 ? true : false; // Raw materials have index <= 3 in resources.h
-    int cost = 2*quant;
-    cost = !is_raw && this->manuf_cheap ? 1*quant : 2*quant;
-    int old_cost = cost;
-
     Player* east = this->GetEastNeighbor();
     Player* west = this->GetWestNeighbor();
 
@@ -543,41 +538,20 @@ bool Player::BuyResource(int resource, int quant){
     std::map<int, int> resources_west_bckp = west->resources;
     std::map<int, int> resources_bckp = this->resources;
 
-    // Wonder initial resource is not buyable!
-    //east->AddResource(east->board->GetProduction(), -1);
-    int produced_east = east->IncrementOnDemand(resource, quant, true);
-
-    // Try buying from eastern neighbor first.
-    if (produced_east > 0) {
-        int q = (quant-produced_east) <= 0 ? quant : produced_east;
-        if (is_raw && (this->raw_cheap_east || this->wonder_raw_cheap)) cost = 1*q;
-        if (this->resources[RESOURCE::coins] >= cost) {
-            this->resources[RESOURCE::coins] -= cost;
-            east->AddResource(RESOURCE::coins, cost);
-            east->ResetUsed();
-            if (produced_east >= quant) {
-                //east->AddResource(east->board->GetProduction(), 1);
-                return true; // No need to check western neighbor if eastern has enough.
-            }
+    // Player will choose to buy from cheapest neighbor first.
+    if (this->raw_cheap_west) {
+        int q = this->BuyFromNeighbor(resource, quant, this->raw_cheap_west, west);
+        if (q == 0) return true;
+        else {
+            if (this->BuyFromNeighbor(resource, q, this->raw_cheap_east, east) == 0)
+                return true;
         }
-    }
-
-    quant -= produced_east; // Updates quantity needed
-    cost = old_cost;
-
-    //west->AddResource(west->board->GetProduction(), -1);
-    int produced_west = west->IncrementOnDemand(resource, quant, true);
-
-    // Try buying from western neighbor now.
-    if (produced_west >= quant) {
-        if (is_raw && (this->raw_cheap_west || this->wonder_raw_cheap)) cost = 1*quant;
-        if (this->resources[RESOURCE::coins] >= cost) {
-            this->resources[RESOURCE::coins] -= cost;
-            west->AddResource(RESOURCE::coins, cost);
-            //west->AddResource(west->board->GetProduction(), 1);
-            //east->AddResource(west->board->GetProduction(), 1);
-            west->ResetUsed();
-            return true;
+    } else {
+        int q = this->BuyFromNeighbor(resource, quant, this->raw_cheap_east, east);
+        if (q == 0) return true;
+        else {
+            if (this->BuyFromNeighbor(resource, q, this->raw_cheap_west, west) == 0)
+                return true;
         }
     }
 
@@ -588,8 +562,35 @@ bool Player::BuyResource(int resource, int quant){
     west->resources = resources_west_bckp;
     this->resources = resources_bckp;
 
-    std::cout <<  "  -> FAILURE -> " << "couldn't buy the resource." << std::endl;
+    //std::cout <<  "  -> FAILURE -> " << "couldn't buy the resource." << std::endl;
     return false; // Couldn't buy
+}
+
+// Buys quantity quant of a resource from a specific neighbor.
+// Returns 0 if the neighbor could produce the required quantity; otherwise returns updated quantity.
+int Player::BuyFromNeighbor(int resource, int quant, bool cheap_neighbor, DMAG::Player* neighbor) {
+    bool is_raw = resource <= 3 ? true : false; // Raw materials have index <= 3 in resources.h
+    int cost = 2*quant;
+    cost = !is_raw && this->manuf_cheap ? 1*quant : cost;
+
+    int produced = neighbor->IncrementOnDemand(resource, quant, true);
+
+    if (produced > 0) {
+        int q = (quant-produced) <= 0 ? quant : produced;
+        if (is_raw && (cheap_neighbor || this->wonder_raw_cheap)) cost = 1*q;
+        if (this->resources[RESOURCE::coins] >= cost) {
+            this->resources[RESOURCE::coins] -= cost;
+            neighbor->AddResource(RESOURCE::coins, cost);
+            neighbor->ResetUsed();
+            //std::cout << "Player " << this->id << " bought from Player " << neighbor->id << std::endl;
+            if (produced >= quant) {
+                return 0;
+            }
+            quant -= produced;
+        }
+    }
+
+    return quant;
 }
 
 // Adds x quantity of a certain resource.
