@@ -35,6 +35,10 @@ class Game{
 
     public:
 
+        /*
+         * Goes through the list of card names, and return an
+         * instance to the matching card.
+         */
         Card GetCardByName(std::string name){
             for(int i = 0; i < 3; ++i){
                 for(auto c: deck[i]){
@@ -46,6 +50,9 @@ class Game{
             return Card(0, "not found", 0, 0, 0, std::vector<int>(), std::vector<int>());
         }
 
+        /*
+         * Returns an ENUM to the matching resource
+         */
         int GetResourceByName(std::string name){
             if (name == "Wood") return RESOURCE::wood;
             if (name == "Ore") return RESOURCE::ore;
@@ -60,6 +67,9 @@ class Game{
             return -1;
         }
 
+        /*
+         * Initializes the game variables.
+         */
         Game(){
             this->number_of_players = NUM_PLAYERS;
             this->era = 1;
@@ -67,9 +77,13 @@ class Game{
             //deck[this->era - 1] = Deck(this->era, this->number_of_players);
             //this->discard_pile = Deck();
 
+            // Initiate global variables
         }
-        // Initiate global variables
 
+
+        /*
+         * Returns true if the turn counter is less than 21
+         */
         bool InGame(){
 
             if(turn < 21) // Total number of turns in a game
@@ -78,6 +92,11 @@ class Game{
             return false;
         }
 
+        /*
+         * Advances the turn, making players exchange cards,
+         * or, if at the end of an era, giving 7 new cards to
+         * each player.
+         */
         void NextTurn(){
 
             // TODO: check if the player has the wonder effects that make
@@ -134,6 +153,9 @@ class Game{
             }
         }
 
+        /*
+         * Gives 7 cards to each player.
+         */
         void GiveCards(){
             vector<Card> cards;
             int card_idx = 0;
@@ -149,6 +171,9 @@ class Game{
             }
         }
 
+        /*
+         * Gives 1 wonder to each player
+         */
         void GiveWonders(){
             bool wonder_availability[7];
             for (int i = 0; i < 7; i++)
@@ -166,6 +191,9 @@ class Game{
             }
         }
 
+        /*
+         * Populates the wonders list.
+         */
         void CreateWonders(){
             wonders.push_back(new Gizah_a());
             wonders.push_back(new Babylon_a());
@@ -183,6 +211,9 @@ class Game{
             wonders.push_back(new Halikarnassos_b());
         }
 
+        /*
+         * Populates the cards list
+         */
         void CreateDecks(){
             std::vector<DMAG::Card> cards;
 
