@@ -450,6 +450,15 @@ class Game{
                 status["players"][to_string(i)]["points"]["scientific"] = player_list[i]->CalculateScientificScore();
                 status["players"][to_string(i)]["points"]["wonder"] = player_list[i]->CalculateWonderScore();
                 status["players"][to_string(i)]["points"]["total"] = player_list[i]->CalculateScore();
+
+                // Amount resources by type
+                status["players"][to_string(i)]["amount"]["civilian"] = player_list[i]->CalculateAmountCivilianCards();
+                status["players"][to_string(i)]["amount"]["commercial"] = player_list[i]->CalculateAmountCommercialCards();
+                status["players"][to_string(i)]["amount"]["military"] = player_list[i]->CalculateAmountMilitaryCards();
+                status["players"][to_string(i)]["amount"]["guild"] = player_list[i]->CalculateAmountGuildCards();
+                status["players"][to_string(i)]["amount"]["scientific"] = player_list[i]->CalculateAmountScientificCards();
+                status["players"][to_string(i)]["amount"]["raw_material"] = player_list[i]->CalculateAmountRawMaterial();
+                status["players"][to_string(i)]["amount"]["manufactured_goods"] = player_list[i]->CalculateAmountManufacturedGood();
             }
 
             fp.WriteMessage(status, "./io/game_status.json");

@@ -920,6 +920,71 @@ int Player::CalculateScore(){
     return this->victory_points;
 }
 
+//////////////////////////////////
+// AMOUNT RESOURCES BY TYPE///////
+//////////////////////////////////
+int Player::CalculateAmountCivilianCards(){
+    int amount = 0;
+    for(DMAG::Card const& card : this->cards_played) {
+        if(card.GetType() != CARD_TYPE::civilian) continue;
+        amount += 1;
+    }
+    return amount;
+}
+
+int Player::CalculateAmountMilitaryCards(){
+    int amount = 0;
+    for(DMAG::Card const& card : this->cards_played){
+        if(card.GetType() != CARD_TYPE::military) continue;
+        amount += 1;
+    }
+    return amount;
+}
+
+int Player::CalculateAmountScientificCards(){
+    int amount = 0;
+    for(DMAG::Card const& card : this->cards_played) {
+        if(card.GetType() != CARD_TYPE::scientific) continue;
+        amount += 1;
+    }
+    return amount;
+}
+
+int Player::CalculateAmountGuildCards(){
+    int amount = 0;
+    for(DMAG::Card const& card: this->cards_played){
+        if(card.GetType() != CARD_TYPE::guild) continue;
+        amount += 1;
+    }
+    return amount;
+}
+
+int Player::CalculateAmountCommercialCards(){
+    int amount = 0;
+    for(DMAG::Card const& card : this->cards_played){
+        if(card.GetType() != CARD_TYPE::commercial) continue;
+        amount += 1;
+    }
+    return amount;
+}
+
+int Player::CalculateAmountRawMaterial(){
+    int amount = 0;
+    for(DMAG::Card const& card : this->cards_played){
+        if(card.GetType() != CARD_TYPE::materials) continue;
+        amount += 1;
+    }
+    return amount;
+}
+
+int Player::CalculateAmountManufacturedGood(){
+    int amount = 0;
+    for(DMAG::Card const& card : this->cards_played){
+        if(card.GetType() != CARD_TYPE::manufactured) continue;
+        amount += 1;
+    }
+    return amount;
+}
 
 ////////////////////////////
 // WONDER-RELATED EFFECTS //

@@ -85,6 +85,7 @@ public:
     // Resource-related:
     bool ProduceResource(int resource, int quant);
     bool BuyResource(int resource, int quant);
+    int BuyFromNeighbor(int resource, int quant, bool cheap_neighbor, DMAG::Player* neighbor);
     void AddResource(int resource, int quant);
     int IncrementOnDemand(int resource, int needed, bool is_neighbor);
     bool HasEnoughResource(int resource, int quant);
@@ -100,6 +101,15 @@ public:
     int CalculateScientificScore();
     int CalculateWonderScore();
     int CalculateScore();
+
+    // Amount resources related
+    int CalculateAmountCivilianCards();
+    int CalculateAmountMilitaryCards();
+    int CalculateAmountScientificCards();
+    int CalculateAmountGuildCards();
+    int CalculateAmountCommercialCards();
+    int CalculateAmountRawMaterial();
+    int CalculateAmountManufacturedGood();
 
     // Wonder-related effects:
     bool ChooseExtraManuf(int resource);   // At the end of the game.
