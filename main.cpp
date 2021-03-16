@@ -310,6 +310,12 @@ class Game{
             // insert cards to decks
             for (DMAG::Card const& card : cards) {
                 int amount = card.GetAmount(this->number_of_players);
+
+                //tests
+                // showCardByEra(card, 1);
+                // showCardByEra(card, 2);
+                // showCardByEra(card, 3);
+
                 for (int i = 0; i < amount; i++) {
                     deck[card.GetEra()-1].push_back(card);
                 }
@@ -320,6 +326,12 @@ class Game{
             random_shuffle(guild_cards.begin(), guild_cards.end());
             for (int i = 0; i < this->number_of_players + 2; i++) {
                 deck[2].push_back(guild_cards[i]);
+            }
+        }
+
+        void showCardByEra(Card card, int id){
+            if(card.GetEra() == id) {
+                cout << "ID: " << card.GetId() << " Card: " << card.GetName() << " Era: " << card.GetEra() << endl;
             }
         }
 
@@ -381,6 +393,9 @@ class Game{
             status["game"]["era"] = era;
             status["game"]["turn"] = turn;
             status["game"]["clockwise"] = (era == 1 || era == 3);
+            
+            status["game"]["finished"] = false;
+            status["game"]["winner_id"] = -1;
 
             for (int i = 0; i < number_of_players; i++) {
                 wonder = player_list[i]->GetBoard();
@@ -459,6 +474,20 @@ class Game{
                 status["players"][to_string(i)]["amount"]["scientific"] = player_list[i]->CalculateAmountScientificCards();
                 status["players"][to_string(i)]["amount"]["raw_material"] = player_list[i]->CalculateAmountRawMaterial();
                 status["players"][to_string(i)]["amount"]["manufactured_goods"] = player_list[i]->CalculateAmountManufacturedGood();
+            }
+
+            
+            if(era == 4 && turn == 21) {
+                
+                status["game"]["finished"] = true;
+
+                if(player_list[0]->CalculateScore() >= player_list[1]->CalculateScore() && player_list[0]->CalculateScore() >= player_list[2]->CalculateScore()) {
+                    status["game"]["winner_id"] = 0;
+                } else if(player_list[1]->CalculateScore() >= player_list[0]->CalculateScore() && player_list[1]->CalculateScore() >= player_list[2]->CalculateScore()){
+                    status["game"]["winner_id"] = 1;
+                } else {
+                    status["game"]["winner_id"]  = 2;
+                }
             }
 
             fp.WriteMessage(status, "./io/game_status.json");
@@ -580,6 +609,8 @@ class Game{
                 player_list[i]->CopyGuild();
                 results << "Player " << i+1 << " score: " << player_list[i]->CalculateScore() << std::endl;
             }
+
+            WriteGameStatus();
 
             results << std::endl;
             results.close();
